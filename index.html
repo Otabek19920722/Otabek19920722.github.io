@@ -1,0 +1,2250 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>YouTube Tahlil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: app shell — fixed left rail with tools, sticky top bar, content column that always puts the verdict (score, tips) before the evidence (charts, tables) */
+:root{
+  --bg:#F1F2F6; --surface:#FFFFFF; --surface-2:#F7F8FB; --surface-3:#E9ECF2;
+  --ink:#12141C; --ink-2:#3D4354; --muted:#717889; --line:#E1E4EB; --line-2:#CFD4DE;
+  --accent:#EE4F2A; --accent-2:#D9411E; --accent-ink:#FFFFFF; --accent-soft:#FDE5DD;
+  --d1:#0B93A7; --d2:#6A52F2; --d3:#C98A06; --d4:#1F9D63;
+  --hot:#DF4220; --hot-bg:#FCE3DA; --warm:#A86F06; --warm-bg:#FAEFCF;
+  --good:#16834F; --good-bg:#DCF2E6; --bad:#C3332C; --bad-bg:#FBE1DF;
+  --shadow:0 1px 2px rgba(18,20,28,.05),0 6px 20px -8px rgba(18,20,28,.10);
+  --shadow-lg:0 2px 4px rgba(18,20,28,.05),0 18px 40px -12px rgba(18,20,28,.18);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Onest","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:16px; --r-sm:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E0D15; --surface:#16151F; --surface-2:#1C1B27; --surface-3:#262433;
+  --ink:#EFEEF6; --ink-2:#C6C4D4; --muted:#8F8CA4; --line:#2A2839; --line-2:#3A3850;
+  --accent:#FF6B47; --accent-2:#FF8566; --accent-ink:#1A0F0B; --accent-soft:#3A1C14;
+  --d1:#3CC8D8; --d2:#9D8BFF; --d3:#F2B33D; --d4:#3DD68C;
+  --hot:#FF7B57; --hot-bg:#3B1C13; --warm:#F2B33D; --warm-bg:#332610;
+  --good:#3DD68C; --good-bg:#11301F; --bad:#FF6B6B; --bad-bg:#3A1617;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px -10px rgba(0,0,0,.5);
+  --shadow-lg:0 2px 4px rgba(0,0,0,.35),0 24px 48px -16px rgba(0,0,0,.6);
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0E0D15; --surface:#16151F; --surface-2:#1C1B27; --surface-3:#262433;
+  --ink:#EFEEF6; --ink-2:#C6C4D4; --muted:#8F8CA4; --line:#2A2839; --line-2:#3A3850;
+  --accent:#FF6B47; --accent-2:#FF8566; --accent-ink:#1A0F0B; --accent-soft:#3A1C14;
+  --d1:#3CC8D8; --d2:#9D8BFF; --d3:#F2B33D; --d4:#3DD68C;
+  --hot:#FF7B57; --hot-bg:#3B1C13; --warm:#F2B33D; --warm-bg:#332610;
+  --good:#3DD68C; --good-bg:#11301F; --bad:#FF6B6B; --bad-bg:#3A1617;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px -10px rgba(0,0,0,.5);
+  --shadow-lg:0 2px 4px rgba(0,0,0,.35),0 24px 48px -16px rgba(0,0,0,.6);
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.ic{flex:none;display:block}
+[hidden]{display:none!important}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:252px minmax(0,1fr);min-height:100%}
+.rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;padding:22px 14px 18px;background:var(--surface);border-right:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:11px;padding:0 8px;text-decoration:none;color:var(--ink)}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);box-shadow:0 6px 16px -6px color-mix(in srgb,var(--accent) 70%,transparent)}
+.logo b{font:800 18px/1 var(--f-display);letter-spacing:-.02em;display:block}
+.logo small{font-size:11.5px;color:var(--muted);display:block;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-group{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:12px 12px 6px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--ink-2);text-decoration:none;font-weight:500;font-size:14.5px;transition:background .15s,color .15s}
+.nav a:hover{background:var(--surface-2);color:var(--ink)}
+.nav a[aria-current=page]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.nav a[aria-current=page] .ic{color:var(--accent)}
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:0 6px}
+.qmeter{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px}
+.qmeter .t{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);font-weight:600}
+.qmeter .t b{font:600 13px var(--f-mono);color:var(--ink)}
+.qbar{height:7px;border-radius:4px;background:var(--surface-3);overflow:hidden}
+.qbar i{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--d4),var(--d1));transition:width .4s}
+.qbar.warn i{background:linear-gradient(90deg,var(--d3),var(--hot))}
+.qmeter p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.4}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;display:flex;align-items:center;gap:14px;padding-block:14px;padding-inline:32px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.topbar h1{margin:0;font:700 21px/1.15 var(--f-display);letter-spacing:-.015em}
+.topbar p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.topbar .tt{min-width:0;flex:1}
+.top-actions{display:flex;align-items:center;gap:8px}
+.iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:var(--ink-2)}
+.iconbtn:hover{color:var(--ink);border-color:var(--line-2)}
+.content{padding-inline:32px;padding-block:24px 70px;display:flex;flex-direction:column;gap:22px;max-width:1320px;width:100%}
+.view{display:flex;flex-direction:column;gap:22px}
+
+@media (max-width:960px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:sticky;top:0;z-index:30;height:auto;flex-direction:row;align-items:center;gap:10px;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .logo small,.logo b,.nav-group,.rail-foot{display:none}
+  .nav{flex-direction:row;gap:4px}
+  .nav a{white-space:nowrap;padding:8px 11px;font-size:13.5px}
+  .topbar{position:static;padding-inline:16px}
+  .content{padding-inline:16px}
+}
+
+/* ---------- primitives ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:20px 22px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grow{flex:1 1 260px;min-width:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;padding:11px 18px;font-weight:700;font-size:14.5px;cursor:pointer;background:var(--accent);color:var(--accent-ink);white-space:nowrap;transition:transform .08s,background .15s;text-decoration:none}
+.btn:hover{background:var(--accent-2)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55;cursor:progress}
+.btn.sec{background:var(--surface-3);color:var(--ink)}
+.btn.sec:hover{background:var(--line-2)}
+.btn.line{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+.btn.line:hover{background:var(--surface-2)}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:9px}
+.btn.danger{background:var(--bad-bg);color:var(--bad)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>label,.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.inp,select.inp,textarea.inp{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;min-width:0;transition:border-color .15s,background .15s}
+.inp:focus{border-color:var(--accent);background:var(--surface);outline:none}
+select.inp{padding-right:30px}
+.inp-num{width:100px}
+.formbar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.pill{text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--surface-3);color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--good-bg);color:var(--good)}
+.pill.no{background:var(--bad-bg);color:var(--bad)}
+.pill.warn{background:var(--warm-bg);color:var(--warm)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 11px;border-radius:99px;background:var(--surface-3);color:var(--ink-2);border:0;cursor:default;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.chip b{font:600 11px var(--f-mono);color:var(--muted)}
+button.chip{cursor:pointer}
+button.chip:hover{background:var(--accent-soft);color:var(--accent)}
+.seg{display:inline-flex;background:var(--surface-3);border-radius:11px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:7px 13px;border-radius:9px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-h h2{margin:0;font:700 19px/1.2 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
+.sec-h p{margin:3px 0 0;font-size:13.5px;color:var(--muted)}
+.card h3{margin:0;font:700 16px/1.25 var(--f-display);letter-spacing:-.005em}
+.card h3+p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+
+.status{font-size:14px;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.status.info{background:var(--surface-3);color:var(--ink-2)}
+.status.error{background:var(--bad-bg);color:var(--bad);font-weight:600}
+.status.loading{background:var(--surface-3);color:var(--ink-2)}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--accent);animation:sp .8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.skel{border-radius:var(--r);background:linear-gradient(100deg,var(--surface) 30%,var(--surface-2) 50%,var(--surface) 70%);background-size:300% 100%;animation:sk 1.4s ease-in-out infinite;border:1px solid var(--line)}
+@keyframes sk{from{background-position:100% 0}to{background-position:0 0}}
+
+.banner-note{display:flex;gap:10px;align-items:center;padding:12px 16px;border-radius:12px;background:var(--warm-bg);color:var(--warm);font-weight:600;font-size:14px;flex-wrap:wrap}
+
+/* ---------- KPI tiles ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.kpi{padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;overflow:hidden}
+.kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:7px}
+.kpi .v{font:600 24px/1.2 var(--f-mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em;overflow-wrap:anywhere}
+.kpi .s{font-size:12.5px;color:var(--muted);line-height:1.4}
+.kpi .spark{margin-top:4px}
+.delta{font:600 12px var(--f-mono);padding:2px 7px;border-radius:6px}
+.delta.up{background:var(--good-bg);color:var(--good)}
+.delta.down{background:var(--bad-bg);color:var(--bad)}
+.delta.flat{background:var(--surface-3);color:var(--muted)}
+
+/* ---------- channel hero ---------- */
+.chero{overflow:hidden}
+.chero .bnr{height:150px;background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 55%,var(--d2)),color-mix(in srgb,var(--d1) 70%,var(--surface)));position:relative}
+.chero .bnr img{width:100%;height:100%;object-fit:cover;display:block}
+.chero .body{display:flex;gap:20px;padding:0 24px 22px;flex-wrap:wrap;align-items:flex-end}
+.ava{position:relative;z-index:1;width:96px;height:96px;border-radius:50%;flex:none;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:800 36px var(--f-display);overflow:hidden;border:4px solid var(--surface);margin-top:-44px;box-shadow:var(--shadow)}
+.ava img{width:100%;height:100%;object-fit:cover}
+.ava.sm{width:40px;height:40px;font-size:16px;border-width:0;margin:0;box-shadow:none}
+.ava.xs{width:28px;height:28px;font-size:12px;border-width:0;margin:0;box-shadow:none}
+.chero .who{flex:1 1 280px;min-width:0;padding-top:14px}
+.chero h2{margin:0;font:800 28px/1.1 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.chero h2 a{color:inherit;text-decoration:none}
+.chero .meta{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-size:13.5px;margin-top:6px}
+.chero .desc{margin:10px 0 0;color:var(--ink-2);font-size:13.5px;max-width:72ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line}
+.chero .desc.open{-webkit-line-clamp:unset;display:block}
+.chero .acts{display:flex;gap:8px;flex-wrap:wrap}
+.how{border-top:1px dashed var(--line);padding-top:10px}
+.how summary{cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:600;color:var(--muted);list-style:none}
+.how summary::-webkit-details-marker{display:none}
+.how[open] summary,.how summary:hover{color:var(--ink)}
+.how-b{margin-top:8px;display:flex;flex-direction:column}
+.hstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--line);background:var(--surface-2)}
+.hstats>div{padding:14px 24px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--line);min-width:0}
+.hstats>div:last-child{border-right:0}
+.hstats small{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.hstats b{font:600 20px/1.2 var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- score ring ---------- */
+.scorecard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center}
+.ring{position:relative;width:148px;height:148px;flex:none}
+.ring svg{display:block}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .num b{font-family:var(--f-display);font-weight:800;line-height:1;letter-spacing:-.03em;display:block}
+.ring .num small{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-top:4px}
+.subbars{display:flex;flex-direction:column;gap:11px;min-width:0}
+.sb .t{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600}
+.sb .t span:last-child{font-family:var(--f-mono);color:var(--muted);font-weight:500}
+.sb .tr{height:8px;border-radius:4px;background:var(--surface-3);overflow:hidden;margin-top:5px}
+.sb .tr i{display:block;height:100%;border-radius:4px}
+.sb small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+@media (max-width:560px){.scorecard{grid-template-columns:1fr;justify-items:center}.subbars{width:100%}}
+
+/* ---------- tips ---------- */
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.tip{display:flex;gap:12px;padding:14px 16px;border-radius:13px;background:var(--surface-2);border:1px solid var(--line);align-items:flex-start}
+.tip .ti{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:none}
+.tip.good .ti{background:var(--good-bg);color:var(--good)}
+.tip.warn .ti{background:var(--warm-bg);color:var(--warm)}
+.tip.bad .ti{background:var(--bad-bg);color:var(--bad)}
+.tip.info .ti{background:var(--accent-soft);color:var(--accent)}
+.tip p{margin:0;font-size:14px;line-height:1.45}
+.tip p b{font-weight:700}
+
+/* ---------- video cards ---------- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.vc{display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.vc:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.vc .th{display:block;aspect-ratio:16/9;max-width:100%;background:linear-gradient(135deg,var(--surface-3),color-mix(in srgb,var(--d2) 18%,var(--surface-3)));position:relative;overflow:hidden}
+.vc .th img{width:100%;height:100%;object-fit:cover;display:block}
+.vc .th .tl{position:absolute;left:9px;top:9px;display:flex;gap:6px}
+.vc .th .dur{position:absolute;right:8px;bottom:8px;background:rgba(10,10,14,.82);color:#fff;font:600 11.5px var(--f-mono);padding:2px 6px;border-radius:5px}
+.vc .th .rank{background:rgba(10,10,14,.82);color:#fff;font:700 12px var(--f-mono);padding:3px 8px;border-radius:6px}
+.vc .bd{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.vc .t{font-weight:600;font-size:14.5px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink);text-decoration:none}
+.vc a.t:hover{color:var(--accent)}
+.vc .m{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+.vc .m .mono{color:var(--ink-2)}
+.vc .ft{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:6px}
+.vc .chn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.score{display:inline-flex;align-items:center;gap:4px;font:600 12px var(--f-mono);padding:3px 8px;border-radius:99px;background:var(--surface-3);color:var(--muted);white-space:nowrap}
+.vc .th .score{background:rgba(10,10,14,.78);color:#fff}
+.score.hot{background:var(--hot-bg);color:var(--hot)}
+.score.warm{background:var(--warm-bg);color:var(--warm)}
+.score.low{color:var(--bad)}
+.vc .th .score.hot{background:var(--hot);color:#fff}
+.vc .th .score.warm{background:var(--d3);color:#1a1205}
+.linkbtn{border:0;background:none;color:var(--accent);font-weight:700;font-size:12.5px;cursor:pointer;padding:2px 0;display:inline-flex;gap:4px;align-items:center;white-space:nowrap}
+
+/* ---------- charts ---------- */
+.chart{position:relative;width:100%;min-width:0}
+.chart svg{display:block;overflow:visible}
+.chart text{fill:var(--muted);font:500 11px var(--f-mono)}
+.chart text.halo{paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round;fill:var(--ink-2);font-weight:600}
+.ideas-deep{max-height:300px;overflow:auto;padding-right:4px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.legend i.ln{width:16px;height:3px;border-radius:2px}
+#tip{position:fixed;z-index:100;pointer-events:none;max-width:300px;background:var(--ink);color:var(--bg);padding:9px 11px;border-radius:10px;font-size:12.5px;line-height:1.4;box-shadow:var(--shadow-lg)}
+#tip b{display:block;font-weight:700;margin-bottom:3px}
+#tip .mono{color:inherit;opacity:.85}
+
+.heat{display:grid;grid-template-columns:34px repeat(6,minmax(0,1fr));gap:4px;font-size:11.5px}
+.heat .hd{color:var(--muted);text-align:center;font:500 10.5px var(--f-mono);padding-bottom:2px}
+.heat .rl{color:var(--muted);font-weight:700;display:flex;align-items:center}
+.heat .c{aspect-ratio:1.7;border-radius:7px;display:grid;place-items:center;font:600 11px var(--f-mono);color:var(--ink-2);background:var(--surface-3);min-height:28px;cursor:default}
+.heat .c.best{outline:2px solid var(--accent);outline-offset:1px}
+.hbars{display:flex;flex-direction:column;gap:10px}
+.hb{display:grid;grid-template-columns:110px minmax(0,1fr) 74px;gap:10px;align-items:center;font-size:13px}
+.hb .l{font-weight:600;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .l small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.hb .tr{height:22px;border-radius:6px;background:var(--surface-3);overflow:hidden}
+.hb .tr i{display:block;height:100%;border-radius:6px;background:var(--d1)}
+.hb.top .tr i{background:var(--accent)}
+.hb .v{font:600 12.5px var(--f-mono);text-align:right}
+.cols{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:18px}
+.cols .cl{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%;min-width:0}
+.cols .cl i{display:block;width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:var(--d2);min-height:3px;position:relative}
+.cols .cl em{font:600 11px var(--f-mono);font-style:normal;color:var(--ink-2)}
+.cols .cl small{font-size:11px;color:var(--muted);white-space:nowrap}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start}
+.two.eq{align-items:stretch}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.feat{display:flex;flex-direction:column;gap:8px}
+.fr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.fr:last-child{border-bottom:0}
+.fr small{display:block;color:var(--muted);font-size:12px}
+
+/* ---------- table ---------- */
+.dt-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dt-search{max-width:320px}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13.5px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;background:var(--surface-2);font-weight:700}
+th:hover{color:var(--ink)}
+th.num,td.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+th[data-dir=asc]::after{content:" ↑";color:var(--accent)} th[data-dir=desc]::after{content:" ↓";color:var(--accent)}
+tbody tr:hover td{background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.vt{min-width:320px}
+td.vt .in{display:flex;gap:12px;align-items:center}
+td.vt img,td.vt .ph{width:104px;aspect-ratio:16/9;border-radius:7px;object-fit:cover;flex:none;background:var(--surface-3)}
+td.vt a,td.vt span.tt{color:var(--ink);text-decoration:none;font-weight:600;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+td.vt a:hover{color:var(--accent)}
+td .sub{font-size:12px;color:var(--muted)}
+.more{display:flex;justify-content:center;margin-top:12px}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
+.empty .ei{width:52px;height:52px;border-radius:14px;background:var(--surface-3);display:grid;place-items:center;color:var(--muted)}
+.empty b{color:var(--ink);font-size:15px}
+
+/* ---------- home ---------- */
+.hero{position:relative;overflow:hidden;padding:34px 34px 30px;background:
+  radial-gradient(600px 220px at 100% 0%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%),
+  radial-gradient(500px 240px at 0% 100%,color-mix(in srgb,var(--d1) 14%,transparent),transparent 70%),var(--surface)}
+.hero h2{margin:0;font:800 clamp(28px,4vw,42px)/1.05 var(--f-display);letter-spacing:-.03em;text-wrap:balance;max-width:20ch}
+.hero h2 em{font-style:normal;color:var(--accent)}
+.hero p{margin:10px 0 0;color:var(--ink-2);max-width:60ch}
+.omni{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;max-width:760px}
+.omni .inp{flex:1 1 300px;padding:15px 16px;font-size:16px;border-radius:13px;background:var(--surface)}
+.omni .btn{padding:15px 22px;border-radius:13px}
+.detect{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.detect span{font-size:12.5px;padding:4px 10px;border-radius:99px;background:var(--surface-3);color:var(--muted);font-weight:600;transition:all .15s}
+.detect span.on{background:var(--accent);color:var(--accent-ink)}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tool{display:flex;flex-direction:column;gap:10px;padding:18px;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s,border-color .15s}
+.tool:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--line-2)}
+.tool .ti{width:42px;height:42px;border-radius:12px;display:grid;place-items:center}
+.tool b{font:700 16px var(--f-display)}
+.tool p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.tool .cost{margin-top:auto;font:600 11.5px var(--f-mono);color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:st}
+.step{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:13px;background:var(--surface-2);border:1px solid var(--line)}
+.step .n{width:28px;height:28px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;font:700 13px var(--f-mono);flex:none}
+.step.done .n{background:var(--good);color:#fff}
+.step p{margin:0;font-size:13.5px}
+.step p b{display:block;font-size:14px}
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line);min-width:0}
+.li:last-child{border-bottom:0}
+.li .tx{flex:1;min-width:0}
+.li .tx b{display:block;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .tx small{color:var(--muted);font-size:12.5px}
+
+/* ---------- compare ---------- */
+.cmp th.ch,.cmp td{min-width:150px}
+.cmp td.metric{font-weight:600;min-width:180px;font-family:var(--f-body)}
+.cmp td.metric small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.cmpcell{display:flex;flex-direction:column;gap:5px}
+.cmpcell .tr{height:6px;border-radius:3px;background:var(--surface-3);overflow:hidden}
+.cmpcell .tr i{display:block;height:100%;border-radius:3px}
+.cmpcell.win b{color:var(--good)}
+.cmpcell b{font:600 14px var(--f-mono)}
+.chhead{display:flex;align-items:center;gap:9px}
+.chhead span{font:700 13.5px var(--f-body);text-transform:none;letter-spacing:0;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+
+/* ---------- gauge ---------- */
+.gauge-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:560px){.gauge-wrap{grid-template-columns:1fr;justify-items:center}}
+
+/* ---------- video detail ---------- */
+.vhero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.vhero{grid-template-columns:1fr}}
+.vthumb{aspect-ratio:16/9;max-width:100%;border-radius:var(--r);overflow:hidden;background:var(--surface-3);position:relative}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb .dur{position:absolute;right:12px;bottom:12px;background:rgba(10,10,14,.85);color:#fff;font:600 13px var(--f-mono);padding:3px 8px;border-radius:6px}
+.vtitle{margin:0;font:700 22px/1.25 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
+.descbox{white-space:pre-wrap;font-size:13.5px;color:var(--ink-2);max-height:220px;overflow:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0;font-family:var(--f-body);overflow-wrap:anywhere}
+.cmt{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.cmt:last-child{border-bottom:0}
+.cmt .tx{min-width:0;flex:1}
+.cmt .tx b{font-size:13px}
+.cmt .tx p{margin:3px 0 0;font-size:14px;overflow-wrap:anywhere;white-space:pre-line}
+.cmt .lk{font:600 12px var(--f-mono);color:var(--muted);white-space:nowrap}
+
+/* ---------- preview mock ---------- */
+.pv-wrap{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1000px){.pv-wrap{grid-template-columns:1fr}}
+.drop{border:2px dashed var(--line-2);border-radius:14px;padding:22px;text-align:center;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop img{max-width:100%;border-radius:10px;aspect-ratio:16/9;object-fit:cover}
+.counter{font:600 12px var(--f-mono);color:var(--muted);text-align:right}
+.counter.bad{color:var(--bad)}
+.yt{border-radius:var(--r);padding:20px;font-family:Roboto,"Segoe UI",Arial,sans-serif;overflow:hidden}
+.yt.l{background:#ffffff;color:#0f0f0f}
+.yt.d{background:#0f0f0f;color:#f1f1f1}
+.yt .g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 14px}
+.yt.m .g{grid-template-columns:minmax(0,1fr);max-width:400px;margin:0 auto;gap:18px}
+.yt .c{min-width:0;border-radius:14px;transition:box-shadow .2s}
+.yt .c.me{box-shadow:0 0 0 3px var(--accent);padding:6px;margin:-6px}
+.yt .c .im{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#d9d9d9;position:relative}
+.yt.d .c .im{background:#272727}
+.yt.m .c .im{border-radius:0}
+.yt .c .im img{width:100%;height:100%;object-fit:cover;display:block}
+.yt .c .im .dr{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.8);color:#fff;font-size:12px;font-weight:500;padding:1px 5px;border-radius:4px}
+.yt .c .rw{display:flex;gap:12px;margin-top:12px}
+.yt .c .av{width:36px;height:36px;border-radius:50%;flex:none;background:#c4c4c4;display:grid;place-items:center;font-weight:700;color:#fff;font-size:14px;overflow:hidden}
+.yt .c .av img{width:100%;height:100%;object-fit:cover}
+.yt .c .tt{font-size:16px;font-weight:500;line-height:22px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.yt.m .c .tt{font-size:14px;line-height:20px}
+.yt .c .mt{font-size:14px;color:#606060;margin-top:4px;line-height:20px}
+.yt.d .c .mt{color:#aaa}
+.yt.m .c .mt{font-size:12px;line-height:18px}
+@media (max-width:700px){.yt .g{grid-template-columns:minmax(0,1fr)}}
+.check{display:flex;flex-direction:column;gap:2px}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:7px 0}
+.ck .m{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex:none;margin-top:1px}
+.ck.y .m{background:var(--good-bg);color:var(--good)}
+.ck.n .m{background:var(--bad-bg);color:var(--bad)}
+.ck.o .m{background:var(--surface-3);color:var(--muted)}
+.ck small{display:block;color:var(--muted);font-size:12px}
+
+/* ---------- tracker ---------- */
+.trk td .chhead span{max-width:220px}
+
+/* ---------- toasts ---------- */
+#toasts{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:120;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.toast{background:var(--ink);color:var(--bg);padding:11px 15px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);display:flex;gap:9px;align-items:center;animation:tin .25s ease-out}
+.toast.err{background:var(--bad);color:#fff}
+@keyframes tin{from{transform:translateY(8px);opacity:0}}
+
+.kbd{font:600 11px var(--f-mono);padding:2px 6px;border-radius:5px;background:var(--surface-3);color:var(--ink-2)}
+.costtbl{width:100%;min-width:0;font-size:13.5px}
+.costtbl td{padding:8px 4px;border-bottom:1px dashed var(--line)}
+.costtbl td:last-child{text-align:right;font-family:var(--f-mono);white-space:nowrap}
+.costtbl tr:hover td{background:none}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="logo" href="#home" aria-label="YouTube Tahlil — bosh sahifa">
+      <span class="logo-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-6 4 3 6-8"/><path d="M15 6h3v3"/></svg></span>
+      <span><b>YouTube Tahlil</b><small>Ijodkor uchun tahlil studiyasi</small></span>
+    </a>
+    <nav class="nav" id="nav"></nav>
+    <div class="rail-foot">
+      <div class="qmeter" title="YouTube kuniga 10 000 birlik bepul beradi">
+        <div class="t"><span>Bugungi bepul limit</span><b id="qText">0</b></div>
+        <div class="qbar" id="qBarWrap"><i id="qBar"></i></div>
+        <p id="qNote">Koreya vaqti bilan har kuni ~16:00 da yangilanadi</p>
+      </div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div class="tt"><h1 id="pgTitle">Bosh sahifa</h1><p id="pgSub"></p></div>
+      <div class="top-actions">
+        <a class="pill" id="keyPill" href="#settings">Kalit kiritilmagan</a>
+        <button class="iconbtn" id="themeBtn" type="button" title="Mavzuni almashtirish" aria-label="Mavzuni almashtirish"></button>
+      </div>
+    </header>
+    <div class="content" id="views"></div>
+  </main>
+</div>
+<div id="tip" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+<script>
+"use strict";
+/* =========================================================
+   YouTube Tahlil — core: helpers, storage, API, analysis
+   ========================================================= */
+const NS='http://www.w3.org/2000/svg';
+const $=sel=>document.querySelector(sel);
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  if(attrs) for(const [k,v] of Object.entries(attrs)){
+    if(v==null||v===false) continue;
+    if(k==='class') e.className=v;
+    else if(k==='text') e.textContent=v;
+    else if(k==='style') e.style.cssText=v;
+    else if(k.startsWith('on')&&typeof v==='function') e.addEventListener(k.slice(2),v);
+    else if(k==='value') e.value=v;
+    else e.setAttribute(k,v===true?'':v);
+  }
+  for(const c of kids.flat(9)){ if(c==null||c===false) continue; e.append(c.nodeType?c:document.createTextNode(String(c))); }
+  return e;
+}
+function sv(tag,attrs,...kids){
+  const e=document.createElementNS(NS,tag);
+  if(attrs) for(const [k,v] of Object.entries(attrs)){
+    if(v==null||v===false) continue;
+    if(k==='text') e.textContent=v;
+    else if(k.startsWith('on')&&typeof v==='function') e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v);
+  }
+  for(const c of kids.flat(9)){ if(c==null||c===false) continue; e.append(c.nodeType?c:document.createTextNode(String(c))); }
+  return e;
+}
+const ICON={
+  home:'M3 11l9-8 9 8M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5',
+  bar:'M4 20V11M10 20V5M16 20v-8M21 20H3',
+  play:'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM10 9v6l5-3z',
+  search:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-5-5',
+  flame:'M12 3c.8 3.2 5 5.3 5 10.2A5 5 0 0 1 7 13c0-2.3 1.2-4 2.7-5.2.1 2 1 3.2 2.3 3.4C11.4 8.8 11.2 6 12 3z',
+  columns:'M3 4h7v16H3zM14 9h7v11h-7z',
+  eye:'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+  image:'M4 5h16v14H4zM4 16l5-5 4 4 2-2 5 5M15.5 8.5h.01',
+  gear:'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1',
+  key:'M7.5 14.5a4 4 0 1 1 3.1-1.6L20 22M16 18l2-2M18.5 20.5l2-2',
+  download:'M12 3v12M7 10l5 5 5-5M4 20h16',
+  refresh:'M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7',
+  plus:'M12 5v14M5 12h14',
+  trash:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',
+  copy:'M9 9h11v11H9zM5 15H4V4h11v1',
+  ext:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',
+  sun:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  moon:'M20 14.5A8.5 8.5 0 1 1 9.5 4a6.6 6.6 0 0 0 10.5 10.5z',
+  auto:'M12 3a9 9 0 1 0 0 18zM12 3a9 9 0 0 1 0 18',
+  bookmark:'M6 3h12v18l-6-4.5L6 21z',
+  check:'M5 12.5l4.5 4.5L19 7',
+  x:'M6 6l12 12M18 6L6 18',
+  up:'M12 19V5M6 11l6-6 6 6',
+  down:'M12 5v14M6 13l6 6 6-6',
+  spark:'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z',
+  comment:'M4 5h16v11H9l-5 4z',
+  clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
+  ruler:'M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2',
+  tag:'M3 12V4h8l10 10-8 8zM7.5 8h.01',
+  info:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v5M12 8h.01',
+  bolt:'M13 2L4 14h7l-1 8 9-12h-7z',
+  users:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M16 3.5a4 4 0 0 1 0 7.5M22 21a7 7 0 0 0-4-6.3',
+  heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',
+  money:'M3 6h18v12H3zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 9v.01M18 15v.01',
+  calendar:'M4 5h16v16H4zM4 10h16M9 3v4M15 3v4',
+  upload:'M12 15V3M7 8l5-5 5 5M4 20h16',
+  shuffle:'M3 7h3l9 10h6M18 14l3 3-3 3M3 17h3l3-3.4M14 10.4L15 9h6M18 6l3 3-3 3',
+  film:'M4 4h16v16H4zM8 4v16M16 4v16M4 9h4M4 15h4M16 9h4M16 15h4',
+  type:'M5 6V4h14v2M12 4v16M9 20h6'
+};
+function icon(n,sz=18,sw=1.8){
+  return sv('svg',{viewBox:'0 0 24 24',width:sz,height:sz,fill:'none',stroke:'currentColor','stroke-width':sw,'stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true',class:'ic'},sv('path',{d:ICON[n]||ICON.info}));
+}
+
+/* ---------- format ---------- */
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function compact(n){
+  if(n==null||!isFinite(n)) return '—';
+  const a=Math.abs(n), f=(x,d)=>x.toFixed(d).replace(/\.0$/,'');
+  if(a<1000) return String(Math.round(n));
+  if(a<1e6) return f(n/1e3,a<1e4?1:0)+' ming';
+  if(a<1e9) return f(n/1e6,a<1e7?1:0)+' mln';
+  return f(n/1e9,1)+' mlrd';
+}
+function full(n){ return n==null||!isFinite(n)?'—':Math.round(n).toLocaleString('ru-RU'); }
+function pct(x,d=1){ return x==null||!isFinite(x)?'—':(x*100).toFixed(d).replace(/\.0$/,'')+'%'; }
+function money(x){ if(x==null||!isFinite(x)) return '—'; if(x<10) return '$'+x.toFixed(2).replace(/\.00$/,''); if(x<1000) return '$'+Math.round(x); return '$'+compact(x); }
+const MON=['yan','fev','mar','apr','may','iyn','iyl','avg','sen','okt','noy','dek'];
+const WD=['Du','Se','Ch','Pa','Ju','Sh','Ya'];
+const WDF=['Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba','Yakshanba'];
+function dateUz(d){ return d.getDate()+'-'+MON[d.getMonth()]+', '+d.getFullYear(); }
+function ago(d){
+  const hrs=(Date.now()-d)/36e5, days=hrs/24;
+  if(hrs<1) return 'hozirgina';
+  if(hrs<24) return Math.floor(hrs)+' soat oldin';
+  if(days<30) return Math.floor(days)+' kun oldin';
+  if(days<365) return Math.floor(days/30)+' oy oldin';
+  return (days/365).toFixed(1).replace(/\.0$/,'')+' yil oldin';
+}
+function dur(s){
+  if(!s) return '—';
+  const hh=Math.floor(s/3600), m=Math.floor(s%3600/60), sec=s%60, p=x=>String(x).padStart(2,'0');
+  return hh?`${hh}:${p(m)}:${p(sec)}`:`${m}:${p(sec)}`;
+}
+function parseDur(iso){
+  const m=/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso||'');
+  if(!m) return 0;
+  return (+m[1]||0)*86400+(+m[2]||0)*3600+(+m[3]||0)*60+(+m[4]||0);
+}
+function median(a){ a=a.filter(x=>x!=null&&isFinite(x)); if(!a.length) return null; const s=[...a].sort((x,y)=>x-y), i=s.length>>1; return s.length%2?s[i]:(s[i-1]+s[i])/2; }
+function quant(a,q){ a=a.filter(x=>x!=null&&isFinite(x)); if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); return s[Math.min(s.length-1,Math.floor(q*(s.length-1)))]; }
+function sum(a){ return a.reduce((x,y)=>x+(y||0),0); }
+function d10(d){ return d.toISOString().slice(0,10); }
+function safeName(s){ return String(s||'fayl').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,60); }
+
+/* ---------- storage ---------- */
+const store={
+  get(k,def){ try{ const v=localStorage.getItem('ytt_'+k); return v==null?def:JSON.parse(v); }catch(e){ return def; } },
+  set(k,v){ try{ localStorage.setItem('ytt_'+k,JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem('ytt_'+k); }catch(e){} }
+};
+const NICHES={
+  vlog:{l:'Vlog / kundalik hayot',min:0.5,max:2},
+  edu:{l:"Ta'lim / qo'llanma",min:2,max:6},
+  fin:{l:'Moliya / biznes',min:5,max:15},
+  tech:{l:'Texnologiya',min:3,max:8},
+  game:{l:"O'yinlar",min:0.5,max:2},
+  music:{l:'Musiqa',min:0.3,max:1.5},
+  ent:{l:"Ko'ngilochar",min:0.5,max:2.5},
+  custom:{l:"O'zim kiritaman",min:null,max:null}
+};
+function keyLoad(){ let k=store.get('key',null); if(!k){ try{ k=JSON.parse(sessionStorage.getItem('ytt_key')||'null'); }catch(e){} } return k; }
+function keySave(k,remember){
+  store.del('key'); try{ sessionStorage.removeItem('ytt_key'); }catch(e){}
+  if(!k) return;
+  if(remember) store.set('key',k); else { try{ sessionStorage.setItem('ytt_key',JSON.stringify(k)); }catch(e){} }
+}
+const S={
+  key:keyLoad(),
+  set:Object.assign({theme:'auto',niche:'vlog',rpmMin:0.5,rpmMax:2,sMin:0.03,sMax:0.08},store.get('settings',{})),
+  saved:store.get('saved',[]),
+  recent:store.get('recent',[])
+};
+if(!S.key){ try{ const old=localStorage.getItem('yt_key'); if(old){ S.key=old; store.set('key',old); } }catch(e){} }
+function saveSettings(){ store.set('settings',S.set); }
+function saveSaved(){ store.set('saved',S.saved); }
+function pushRecent(item){
+  S.recent=[item,...S.recent.filter(r=>!(r.type===item.type&&r.ref===item.ref))].slice(0,10);
+  store.set('recent',S.recent);
+}
+
+/* ---------- quota ---------- */
+function ptDay(){ return new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'}); }
+function quotaGet(){ const q=store.get('quota',{}); return q.day===ptDay()?q.used:0; }
+function quotaAdd(n){ store.set('quota',{day:ptDay(),used:quotaGet()+n}); quotaShow(); }
+function quotaShow(){
+  const u=quotaGet();
+  $('#qText').textContent=full(u)+' / 10 000';
+  $('#qBar').style.width=Math.min(100,u/100)+'%';
+  $('#qBarWrap').classList.toggle('warn',u>7500);
+}
+
+/* ---------- toasts, tooltip, copy, download ---------- */
+function toast(msg,tone){
+  const t=h('div',{class:'toast'+(tone==='err'?' err':'')},icon(tone==='err'?'info':'check',16,2.2),msg);
+  $('#toasts').append(t); setTimeout(()=>t.remove(),2800);
+}
+const tipEl=()=>$('#tip');
+function showTip(e,nodes){ const t=tipEl(); t.replaceChildren(...[nodes].flat()); t.hidden=false; moveTip(e); }
+function moveTip(e){
+  const t=tipEl(); if(t.hidden) return;
+  const r=t.getBoundingClientRect();
+  let x=e.clientX+14, y=e.clientY+16;
+  if(x+r.width>innerWidth-8) x=e.clientX-r.width-14;
+  if(y+r.height>innerHeight-8) y=e.clientY-r.height-14;
+  t.style.left=Math.max(8,x)+'px'; t.style.top=Math.max(8,y)+'px';
+}
+function hideTip(){ tipEl().hidden=true; }
+function tipOn(el,fn){
+  el.addEventListener('mouseenter',e=>showTip(e,fn()));
+  el.addEventListener('mousemove',moveTip);
+  el.addEventListener('mouseleave',hideTip);
+  return el;
+}
+async function copy(text){
+  try{ await navigator.clipboard.writeText(text); toast('Nusxalandi'); }
+  catch(e){
+    const ta=h('textarea',{style:'position:fixed;left:-9999px'}); ta.value=text; document.body.append(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand('copy'); }catch(_){}
+    ta.remove(); toast(ok?'Nusxalandi':"Nusxalab bo'lmadi",ok?null:'err');
+  }
+}
+function download(name,text,type){
+  const url=URL.createObjectURL(new Blob([text],{type:type||'text/plain;charset=utf-8'}));
+  const a=h('a',{href:url,download:name}); document.body.append(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+function csv(name,head,rows){
+  const esc=x=>{ const s=x==null?'':String(x); return /[",;\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+  download(name,'﻿'+[head,...rows].map(r=>r.map(esc).join(',')).join('\r\n'),'text/csv;charset=utf-8');
+  toast('Fayl yuklab olindi');
+}
+
+/* ---------- API ---------- */
+class AppErr extends Error{ constructor(msg,code){ super(msg); this.code=code; } }
+const NO_KEY="Avval YouTube API kalitini kiriting — bu bepul va 10 daqiqa oladi.";
+function errText(reason,msg){
+  const r=(reason||'')+' '+(msg||'');
+  if(/keyInvalid|API key not valid|API_KEY_INVALID/i.test(r)) return "API kalit noto'g'ri. Google Cloud'dan kalitni qaytadan nusxalab, Sozlamalarga kiriting.";
+  if(/quotaExceeded|dailyLimitExceeded|rateLimitExceeded/i.test(r)) return "Bugungi bepul limit tugadi. Koreya vaqti bilan taxminan 16:00–17:00 da yangilanadi.";
+  if(/accessNotConfigured|SERVICE_DISABLED|has not been used/i.test(r)) return "YouTube Data API v3 yoqilmagan. Google Cloud → APIs & Services → Library → YouTube Data API v3 → ENABLE.";
+  if(/API_KEY_SERVICE_BLOCKED/i.test(r)) return "Kalit boshqa API uchun cheklangan. Kalit sozlamasida YouTube Data API v3 ni belgilang.";
+  if(/REFERRER|referer/i.test(r)) return "Kalitda veb-sayt cheklovi bor. Google Cloud'da kalitning 'Application restrictions' bandini None qiling.";
+  if(/commentsDisabled/i.test(r)) return "Bu videoda izohlar o'chirilgan.";
+  if(/videoChartNotFound|notFound/i.test(r)) return "Bu mamlakat uchun bunday toifa topilmadi. Boshqa toifani tanlang.";
+  return "YouTube xatosi: "+(msg||reason||"noma'lum");
+}
+const memCache=new Map();
+const API_META={fresh:false,cachedAt:null};
+function apiTTL(path,params){ if(path==='search') return 24*3600e3; if(params.chart) return 3600e3; if(path==='commentThreads') return 12*3600e3; return 6*3600e3; }
+/* persistent cache (IndexedDB) — repeat analyses cost no quota */
+let idbP=null;
+function idb(){
+  if(idbP) return idbP;
+  idbP=new Promise(res=>{ try{ const r=indexedDB.open('ytt',1); r.onupgradeneeded=()=>r.result.createObjectStore('c',{keyPath:'k'}); r.onsuccess=()=>res(r.result); r.onerror=()=>res(null); r.onblocked=()=>res(null); }catch(e){ res(null); } });
+  return idbP;
+}
+async function cacheGet(k){ const db=await idb(); if(!db) return null; return new Promise(res=>{ try{ const q=db.transaction('c').objectStore('c').get(k); q.onsuccess=()=>res(q.result||null); q.onerror=()=>res(null); }catch(e){ res(null); } }); }
+async function cachePut(k,j){ const db=await idb(); if(!db) return; try{ db.transaction('c','readwrite').objectStore('c').put({k,t:Date.now(),j}); }catch(e){} }
+async function cachePrune(){ const db=await idb(); if(!db) return; try{ const q=db.transaction('c','readwrite').objectStore('c').openCursor(); q.onsuccess=()=>{ const c=q.result; if(!c) return; if(Date.now()-c.value.t>3*864e5) c.delete(); c.continue(); }; }catch(e){} }
+async function cacheClear(){ memCache.clear(); const db=await idb(); if(!db) return; try{ db.transaction('c','readwrite').objectStore('c').clear(); }catch(e){} }
+async function withApi(fresh,fn){ API_META.fresh=!!fresh; API_META.cachedAt=null; try{ return await fn(); } finally{ API_META.fresh=false; } }
+async function api(path,params,cost,opt){
+  opt=opt||{};
+  if(!S.key) throw new AppErr(NO_KEY,'nokey');
+  const u=new URL('https://www.googleapis.com/youtube/v3/'+path);
+  for(const [k,v] of Object.entries(params)) if(v!==undefined&&v!==null&&v!=='') u.searchParams.set(k,v);
+  const ck=u.toString(), ttl=apiTTL(path,params);
+  if(!(opt.fresh||API_META.fresh)){
+    let hit=memCache.get(ck);
+    if(!hit){ hit=await cacheGet(ck); if(hit) memCache.set(ck,hit); }
+    if(hit&&Date.now()-hit.t<ttl){ API_META.cachedAt=API_META.cachedAt==null?hit.t:Math.min(API_META.cachedAt,hit.t); return hit.j; }
+  }
+  u.searchParams.set('key',S.key);
+  let r;
+  try{ r=await fetch(u); }catch(e){ throw new AppErr("YouTube'ga ulanib bo'lmadi. Internetni tekshiring yoki faylni kompyuteringizda Chrome orqali oching.",'net'); }
+  const j=await r.json().catch(()=>({}));
+  quotaAdd(cost);
+  if(!r.ok||j.error){
+    const e=j.error||{};
+    const reason=(e.errors&&e.errors[0]&&e.errors[0].reason)||(e.details&&e.details[0]&&e.details[0].reason)||e.status;
+    throw new AppErr(errText(reason,e.message),reason);
+  }
+  memCache.set(ck,{t:Date.now(),j}); cachePut(ck,j);
+  return j;
+}
+
+/* ---------- mappers & fetchers ---------- */
+function bestThumb(t){ t=t||{}; return (t.medium||t.high||t.default||{}).url||''; }
+function mapVideo(v){
+  const s=v.statistics||{}, sn=v.snippet||{}, cd=v.contentDetails||{};
+  return {
+    id:v.id, title:sn.title||'', desc:sn.description||'', published:new Date(sn.publishedAt),
+    channelId:sn.channelId, channelTitle:sn.channelTitle||'', categoryId:sn.categoryId,
+    views:+s.viewCount||0, likes:s.likeCount!=null?+s.likeCount:null, comments:s.commentCount!=null?+s.commentCount:null,
+    durSec:parseDur(cd.duration), tags:sn.tags||[], thumb:bestThumb(sn.thumbnails),
+    thumbHi:((sn.thumbnails||{}).maxres||(sn.thumbnails||{}).high||(sn.thumbnails||{}).medium||{}).url||'',
+    live:sn.liveBroadcastContent, lang:sn.defaultAudioLanguage||sn.defaultLanguage||''
+  };
+}
+function mapChannel(c){
+  const sn=c.snippet||{}, st=c.statistics||{}, b=(c.brandingSettings||{}).image||{};
+  return {
+    id:c.id, title:sn.title||'', handle:sn.customUrl||'', desc:sn.description||'', country:sn.country||'',
+    created:new Date(sn.publishedAt), thumb:bestThumb(sn.thumbnails),
+    banner:b.bannerExternalUrl?b.bannerExternalUrl+'=w1600-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj':'',
+    subs:st.hiddenSubscriberCount?null:+st.subscriberCount, views:+st.viewCount||0, videoCount:+st.videoCount||0,
+    uploads:((c.contentDetails||{}).relatedPlaylists||{}).uploads
+  };
+}
+function parseChannelInput(s){
+  s=String(s||'').trim(); let m;
+  try{ s=decodeURIComponent(s); }catch(e){}
+  if((m=s.match(/channel\/(UC[\w-]{20,})/))) return {id:m[1]};
+  if((m=s.match(/^(UC[\w-]{20,})$/))) return {id:m[1]};
+  if((m=s.match(/@([^\/?#\s]+)/))) return {handle:'@'+m[1]};
+  if((m=s.match(/youtube\.com\/(?:c|user)\/([^\/?#]+)/))) return {user:m[1]};
+  return {search:s};
+}
+function parseVideoInput(s){
+  s=String(s||'').trim(); let m;
+  if((m=s.match(/(?:v=|youtu\.be\/|shorts\/|live\/|embed\/)([\w-]{11})/))) return m[1];
+  if(/^[\w-]{11}$/.test(s)&&/[\d_A-Z-]/.test(s)) return s;
+  return null;
+}
+function detectInput(s){
+  s=String(s||'').trim();
+  if(!s) return null;
+  if(parseVideoInput(s)) return 'video';
+  if(/@|\/channel\/|youtube\.com\/(c|user)\/|^UC[\w-]{22}$/.test(s)) return 'channel';
+  return 'keyword';
+}
+const CH_PARTS='snippet,statistics,contentDetails,brandingSettings';
+async function resolveChannel(inp){
+  const p=parseChannelInput(inp);
+  let j;
+  if(p.id) j=await api('channels',{part:CH_PARTS,id:p.id},1);
+  else if(p.handle) j=await api('channels',{part:CH_PARTS,forHandle:p.handle},1);
+  else if(p.user){ j=await api('channels',{part:CH_PARTS,forUsername:p.user},1); if(!j.items||!j.items.length) p.search=p.user; }
+  if((!j||!j.items||!j.items.length)&&(p.search||p.handle)){
+    const sr=await api('search',{part:'snippet',type:'channel',q:p.search||p.handle,maxResults:1},100);
+    const id=sr.items&&sr.items[0]&&sr.items[0].id.channelId;
+    if(id) j=await api('channels',{part:CH_PARTS,id},1);
+  }
+  if(!j||!j.items||!j.items.length) throw new AppErr("Kanal topilmadi. @nom yoki kanal havolasini to'g'ri yozganingizni tekshiring.");
+  return mapChannel(j.items[0]);
+}
+async function getVideos(ids,onProg){
+  const out=[];
+  for(let i=0;i<ids.length;i+=50){
+    const j=await api('videos',{part:'snippet,statistics,contentDetails',id:ids.slice(i,i+50).join(','),maxResults:50},1);
+    out.push(...(j.items||[]).map(mapVideo));
+    onProg&&onProg(Math.min(ids.length,i+50),ids.length);
+  }
+  return out;
+}
+async function getUploads(ch,count,onProg){
+  let ids=[], tok;
+  while(ch.uploads&&ids.length<count){
+    const j=await api('playlistItems',{part:'contentDetails',playlistId:ch.uploads,maxResults:50,pageToken:tok},1);
+    ids.push(...(j.items||[]).map(i=>i.contentDetails.videoId));
+    onProg&&onProg('list',ids.length);
+    tok=j.nextPageToken; if(!tok) break;
+  }
+  return getVideos(ids.slice(0,count),(a,b)=>onProg&&onProg('vid',a,b));
+}
+async function getChannelsMap(ids){
+  const out={};
+  ids=[...new Set(ids.filter(Boolean))];
+  for(let i=0;i<ids.length;i+=50){
+    const j=await api('channels',{part:'snippet,statistics,contentDetails',id:ids.slice(i,i+50).join(',')},1);
+    for(const c of j.items||[]) out[c.id]=mapChannel(c);
+  }
+  return out;
+}
+/* YouTube autocomplete (free, no quota) via JSONP */
+let sgN=0;
+function suggest(q,hl){
+  return new Promise(res=>{
+    if(!q||!q.trim()) return res([]);
+    const cb='__ytsg'+(++sgN); let done=false;
+    const sc=document.createElement('script');
+    const clean=()=>{ try{ delete window[cb]; }catch(e){ window[cb]=undefined; } sc.remove(); };
+    window[cb]=d=>{ done=true; let arr=(d&&d[1])||[]; res(arr.map(x=>Array.isArray(x)?x[0]:x).filter(x=>typeof x==='string')); clean(); };
+    sc.src='https://suggestqueries.google.com/complete/search?client=youtube&ds=yt&hl='+encodeURIComponent(hl||'ko')+'&q='+encodeURIComponent(q)+'&callback='+cb;
+    sc.charset='utf-8';
+    sc.onerror=()=>{ if(!done){ done=true; res([]); clean(); } };
+    setTimeout(()=>{ if(!done){ done=true; res([]); clean(); } },4500);
+    document.head.append(sc);
+  });
+}
+
+/* ---------- analysis ---------- */
+const STOP=new Set(("va bilan uchun bu u men sen biz siz ular qanday nima edi ham bir ikki eng juda emas kerak qilish nega yoki lekin shu oz o'z bo'ladi bo'lgan haqida mening sizning yana endi faqat har hamma " +
+ "the a an to of in on for and or is are i you my your with how what this that it at from by be we me vs do does not no new part ep full video videos official " +
+ "и в на с по для что как это не а я ты мы вы из к о от за у " +
+ "이 그 저 및 수 것 더 제 의 를 을 은 는 가 에 와 과 로 도 만 한 하는 하기 있는 그리고 진짜 ").split(/\s+/));
+function words(t){
+  return (String(t||'').toLowerCase().match(/[\p{L}\p{N}][\p{L}\p{N}'’ʻʼ]*/gu)||[])
+    .map(w=>w.replace(/['’ʻʼ]+$/,''))
+    .filter(w=>!STOP.has(w)&&!/^\d+$/.test(w)&&(/[ㄱ-힝]/.test(w)?w.length>=2:w.length>=3));
+}
+/* Views grow roughly like age^0.4 over a video's life; we use it to compare
+   a 3-day-old and a 2-year-old video fairly ("30-day equivalent" views). */
+const AGE_K=0.4;
+function ageNorm(v){ const a=clamp(v.age,3,3650); return v.views*Math.pow(30/a,AGE_K); }
+function views30(v){ return v.age<=30?v.views:v.views*(1-Math.pow((v.age-30)/v.age,AGE_K)); }
+function enrich(vids){
+  const now=Date.now();
+  for(const v of vids){
+    v.age=Math.max(1/24,(now-v.published)/864e5);
+    v.vpd=v.views/Math.max(1,v.age);
+    v.vph=v.views/Math.max(1,v.age*24);
+    v.eng=v.views?((v.likes||0)+(v.comments||0))/v.views:0;
+    v.likeRate=v.views&&v.likes!=null?v.likes/v.views:null;
+    const tx=((v.title||'')+' '+(v.desc||'')+' '+(v.tags||[]).join(' ')).toLowerCase();
+    v.isShort=v.durSec>0&&(v.durSec<=60||(v.durSec<=180&&/#shorts?\b|#쇼츠|#short|shorts/.test(tx)));
+    v.isNew=v.age<3;
+    v.norm=ageNorm(v);
+    v.wd=(v.published.getDay()+6)%7;
+    v.hr=v.published.getHours();
+  }
+  const mature=vids.filter(v=>v.age>=7);
+  const base=median((mature.length>=5?mature:vids).map(v=>v.views))||1;
+  const pool=vids.filter(v=>v.age>=3);
+  const nbase=median((pool.length>=5?pool:vids).map(v=>v.norm))||1;
+  for(const v of vids) v.score=v.norm/nbase;
+  vids._nbase=nbase;
+  return base;
+}
+function scoreCls(x){ return x>=5?'hot':x>=2?'warm':x<0.5?'low':''; }
+const DUR_B=[
+  {l:'Shorts',s:'≤ 1 daq',a:0,b:60},{l:'Qisqa',s:'1–3 daq',a:61,b:180},{l:"O'rta",s:'3–8 daq',a:181,b:480},
+  {l:'Standart',s:'8–15 daq',a:481,b:900},{l:'Uzun',s:'15–30 daq',a:901,b:1800},{l:'Juda uzun',s:'30+ daq',a:1801,b:1e9}];
+function titleFeatures(vids){
+  const F=[
+    {k:'num',l:'Raqam bor',d:'masalan: "5 ta", "2026"',t:x=>/\d/.test(x)},
+    {k:'q',l:'Savol belgisi',d:'"?" bilan',t:x=>/[?？]/.test(x)},
+    {k:'br',l:'Qavs yoki [ ]',d:'(...) yoki [...]',t:x=>/[(\[【「]/.test(x)},
+    {k:'emo',l:'Emoji',d:'sarlavhada emoji',t:x=>/\p{Extended_Pictographic}/u.test(x)},
+    {k:'caps',l:'KATTA HARFLI so\'z',d:'kamida bitta to\'liq katta so\'z',t:x=>/\b[A-ZА-ЯЎҚҒҲ]{3,}\b/.test(x)},
+    {k:'long',l:'Uzun sarlavha',d:'60 belgidan ko\'p',t:x=>x.length>60},
+    {k:'bar',l:'"|" ajratgich',d:'sarlavhada | belgisi',t:x=>/[|｜]/.test(x)}];
+  const pool=vids.filter(v=>v.age>=3);
+  return F.map(f=>{
+    const yes=pool.filter(v=>f.t(v.title)), no=pool.filter(v=>!f.t(v.title));
+    const my=median(yes.map(v=>v.score)), mn=median(no.map(v=>v.score));
+    return {...f,ny:yes.length,nn:no.length,lift:yes.length>=3&&no.length>=3&&mn?my/mn-1:null};
+  });
+}
+function topWordsByScore(vids,min){
+  const m={};
+  for(const v of vids){ for(const w of new Set(words(v.title))){ (m[w]=m[w]||[]).push(v.score); } }
+  return Object.entries(m).filter(([,a])=>a.length>=(min||3)).map(([w,a])=>({w,n:a.length,s:median(a)})).sort((a,b)=>b.s-a.s);
+}
+function tagFreq(vids){
+  const m={};
+  for(const v of vids) for(const t of v.tags||[]){ const k=t.toLowerCase().trim(); if(k) m[k]=(m[k]||0)+1; }
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+}
+function channelReport(ch,vids){
+  const base=enrich(vids);
+  const byDate=[...vids].sort((a,b)=>a.published-b.published);
+  const mature=byDate.filter(v=>v.age>=3);
+  const perWeek=vids.filter(v=>v.age<=90).length/(90/7);
+  const rec=mature.slice(-10), prev=mature.slice(-30,-10);
+  const momentum=rec.length>=5&&prev.length>=5?median(rec.map(v=>v.norm))/median(prev.map(v=>v.norm)):null;
+  const engM=median(vids.filter(v=>v.views>100).map(v=>v.eng))||0;
+  const hitRate=vids.length?vids.filter(v=>v.score>=2).length/vids.length:0;
+  const shorts=vids.filter(v=>v.isShort), longs=vids.filter(v=>!v.isShort);
+  // heatmap 7x6
+  const heat=Array.from({length:7},()=>Array.from({length:6},()=>[]));
+  for(const v of mature) heat[v.wd][Math.floor(v.hr/4)].push(v.score);
+  // durations
+  const durs=DUR_B.map(b=>{ const g=mature.filter(v=>v.durSec>=b.a&&v.durSec<=b.b); return {...b,n:g.length,med:median(g.map(v=>v.score))}; });
+  // months (last 12)
+  const now=new Date(), months=[];
+  for(let i=11;i>=0;i--){ const d=new Date(now.getFullYear(),now.getMonth()-i,1); months.push({y:d.getFullYear(),m:d.getMonth(),n:0,v:[]}); }
+  for(const v of vids){ const mo=months.find(x=>x.y===v.published.getFullYear()&&x.m===v.published.getMonth()); if(mo){ mo.n++; mo.v.push(v.views); } }
+  // earnings
+  const monthly=monthlyViews(ch,vids);
+  // health
+  const parts=[
+    {k:'Muntazamlik',v:clamp(perWeek/3,0,1)*25,d:perWeek.toFixed(1)+' ta video / hafta',c:'var(--d1)'},
+    {k:'Faollik',v:clamp(engM/0.06,0,1)*25,d:pct(engM)+' layk + izoh',c:'var(--d2)'},
+    {k:"O'sish sur'ati",v:momentum==null?12.5:clamp((momentum-0.5)/1,0,1)*25,d:momentum==null?"ma'lumot kam":(momentum>=1?'+':'')+pct(momentum-1,0)+' oxirgi videolarda',c:'var(--d4)'},
+    {k:'Hit videolar',v:clamp(hitRate/0.2,0,1)*25,d:pct(hitRate,0)+' video 2× dan yuqori',c:'var(--accent)'}];
+  const health=Math.round(sum(parts.map(p=>p.v)));
+  const tf=titleFeatures(vids);
+  const tw=topWordsByScore(vids,3);
+  const tags=tagFreq(vids);
+  const rep={ch,vids,base,byDate,perWeek,momentum,engM,hitRate,shorts,longs,heat,durs,months,monthly,parts,health,tf,tw,tags};
+  rep.tips=makeTips(rep);
+  return rep;
+}
+function grade(x){ return x>=80?['A',"Zo'r",'var(--good)']:x>=65?['B','Yaxshi','var(--d4)']:x>=50?['C',"O'rtacha",'var(--d3)']:x>=35?['D','Past','var(--hot)']:['E','Juda past','var(--bad)']; }
+function makeTips(r){
+  const T=[];
+  const b=x=>h('b',{text:x});
+  // best slot
+  let best=null;
+  r.heat.forEach((row,d)=>row.forEach((c,s)=>{ if(c.length>=2){ const m=median(c); if(!best||m>best.m) best={d,s,m,n:c.length}; } }));
+  if(best) T.push({tone:'info',ic:'clock',p:['Eng yaxshi yuklash vaqti: ',b(`${WDF[best.d]}, ${String(best.s*4).padStart(2,'0')}:00–${String(best.s*4+4).padStart(2,'0')}:00`),` — shu vaqtda chiqqan ${best.n} ta video odatda kanal o'rtachasidan ${best.m.toFixed(1)}× natija bergan.`]});
+  // best duration
+  const db=r.durs.filter(x=>x.n>=3).sort((a,b2)=>b2.med-a.med)[0];
+  if(db) T.push({tone:'info',ic:'ruler',p:["Eng yaxshi ishlaydigan uzunlik: ",b(`${db.l} (${db.s})`),` — bunday videolar odatda kanal o'rtachasidan ${db.med.toFixed(1)}× natija beradi.`]});
+  // momentum
+  if(r.momentum!=null){
+    if(r.momentum>=1.2) T.push({tone:'good',ic:'up',p:["Kanal o'smoqda: oxirgi 10 video oldingilardan ",b(pct(r.momentum-1,0)+" ko'p"),' ko\'rilgan. Shu yo\'nalishni davom ettiring.']});
+    else if(r.momentum<=0.8) T.push({tone:'bad',ic:'down',p:["Oxirgi videolar oldingilardan ",b(pct(1-r.momentum,0)+' kam'),' ko\'rilmoqda. Outlier videolardagi mavzularga qayting.']});
+  }
+  // frequency
+  if(r.perWeek<1) T.push({tone:'warn',ic:'calendar',p:['Yuklash tezligi past: haftasiga ',b(r.perWeek.toFixed(1)+' ta'),'. Muntazam (haftasiga 1–3 ta) yuklash algoritmga yordam beradi.']});
+  else if(r.perWeek>=3) T.push({tone:'good',ic:'calendar',p:['Yuklash muntazam: haftasiga ',b(r.perWeek.toFixed(1)+' ta'),' video.']});
+  // title feature
+  const tf=r.tf.filter(f=>f.lift!=null&&Math.abs(f.lift)>=0.25).sort((a,c)=>Math.abs(c.lift)-Math.abs(a.lift))[0];
+  if(tf) T.push({tone:tf.lift>0?'good':'warn',ic:'type',p:[`Sarlavhada "${tf.l.toLowerCase()}" bo'lgan videolar `,b((tf.lift>0?'+':'')+pct(tf.lift,0)),tf.lift>0?' ko\'proq ko\'rilgan.':' kamroq ko\'rilgan.']});
+  // top topic
+  const top=[...r.vids].sort((a,c)=>c.score-a.score)[0];
+  if(top&&top.score>=3) T.push({tone:'good',ic:'flame',p:['Eng kuchli mavzu: ',b('«'+top.title.slice(0,70)+(top.title.length>70?'…':'')+'»'),` — odatiydan ${top.score.toFixed(1)}× ko'p. Shunga o'xshash video qiling.`]});
+  // shorts vs long
+  if(r.shorts.length>=3&&r.longs.length>=3){
+    const ms=median(r.shorts.filter(v=>v.age>=7).map(v=>v.views)), ml=median(r.longs.filter(v=>v.age>=7).map(v=>v.views));
+    const enough=r.shorts.filter(v=>v.age>=7).length>=3&&r.longs.filter(v=>v.age>=7).length>=3;
+    if(enough&&ms&&ml) T.push({tone:'info',ic:'film',p:['Shorts odatda ',b(compact(ms)),', uzun videolar ',b(compact(ml)),' ko\'rish oladi.']});
+  }
+  // engagement
+  if(r.engM>=0.06) T.push({tone:'good',ic:'heart',p:['Tomoshabinlar faol: ',b(pct(r.engM)),' (yaxshi ko\'rsatkich 4–6%).']});
+  else if(r.engM<0.02&&r.vids.length>5) T.push({tone:'warn',ic:'heart',p:['Faollik past: ',b(pct(r.engM)),'. Videoda savol bering va izoh yozishga chaqiring.']});
+  return T.slice(0,6);
+}
+/* Monthly views: real numbers from tracker snapshots when available,
+   otherwise a model based on each video's age. */
+function monthlyViews(ch,vids){
+  let lv=0,sv=0;
+  for(const v of vids){ const g=views30(v); if(v.isShort) sv+=g; else lv+=g; }
+  const fetched=sum(vids.map(v=>v.views)), rest=Math.max(0,(ch.views||0)-fetched);
+  if(rest>0&&vids.length){
+    const ta=Math.max(...vids.map(v=>v.age))+180, g=rest*(1-Math.pow((ta-30)/ta,AGE_K)), sh=lv/((lv+sv)||1);
+    lv+=g*sh; sv+=g*(1-sh);
+  }
+  const longShare=lv/((lv+sv)||1);
+  const s=(typeof S!=='undefined'&&S.saved||[]).find(x=>x.id===ch.id);
+  if(s&&s.snaps.length>=2){
+    const a=s.snaps[0], b=s.snaps[s.snaps.length-1], days=(b.t-a.t)/864e5;
+    if(days>=0.9&&b.views>=a.views){ const m=(b.views-a.views)/days*30; return {lv:m*longShare,sv:m*(1-longShare),v:m,method:'track',days}; }
+  }
+  return {lv,sv,v:lv+sv,method:'model'};
+}
+function earnings(longViews,shortViews){
+  return {min:longViews/1000*S.set.rpmMin+shortViews/1000*S.set.sMin, max:longViews/1000*S.set.rpmMax+shortViews/1000*S.set.sMax};
+}
+
+/* =========================================================
+   UI components & charts
+   ========================================================= */
+function statusEl(){ const e=h('div',{hidden:true}); return e; }
+function setStatus(el,type,msg,extra){
+  if(!type){ el.hidden=true; el.replaceChildren(); return; }
+  el.hidden=false; el.className='status '+type;
+  el.replaceChildren(type==='loading'?h('span',{class:'spin'}):icon(type==='error'?'info':'info',18), h('span',{text:msg}), extra||null);
+}
+function errorStatus(el,e){
+  const nokey=e&&e.code==='nokey';
+  setStatus(el,'error',e instanceof AppErr?e.message:"Kutilmagan xato: "+(e&&e.message),
+    nokey?h('a',{class:'btn sm',href:'#settings',text:'Kalitni kiritish'}):null);
+}
+async function busy(btn,fn){
+  const old=[...btn.childNodes]; btn.disabled=true;
+  btn.replaceChildren(h('span',{class:'spin',style:'border-top-color:currentColor'}),'Yuklanmoqda…');
+  try{ return await fn(); } finally{ btn.disabled=false; btn.replaceChildren(...old); }
+}
+function howTo(title,rows,note){
+  return h('details',{class:'how'},h('summary',null,icon('info',15,2),title),
+    h('div',{class:'how-b'},rows.map(([a,b])=>h('div',{class:'fr'},h('div',null,a,h('small',{text:b})))),note?h('p',{class:'hint',text:note}):null));
+}
+function cacheNote(out,rerun){
+  if(API_META.cachedAt==null) return;
+  out.prepend(h('div',{class:'status info'},icon('clock',17,2),
+    h('span',null,h('b',{text:'Saqlangan natija'}),` · ${ago(new Date(API_META.cachedAt))} olingan — bepul limit sarflanmadi.`),
+    h('button',{class:'btn sec sm',type:'button',style:'margin-left:auto',onclick:rerun},icon('refresh',14,2),'Yangilash')));
+}
+function secHead(title,sub,right){ return h('div',{class:'sec-h'},h('div',null,h('h2',{text:title}),sub?h('p',{text:sub}):null),right||null); }
+function kpi(k,v,s,opts){
+  opts=opts||{};
+  return h('div',{class:'card kpi'},
+    h('div',{class:'k'},opts.icon?icon(opts.icon,14,2):null,k),
+    h('div',{class:'row',style:'gap:8px;flex-wrap:nowrap;min-width:0'},h('div',{class:'v',text:v,title:opts.title||null}),opts.delta||null),
+    s?h('div',{class:'s',text:s}):null,
+    opts.spark?h('div',{class:'spark'},opts.spark):null);
+}
+function deltaChip(r){
+  if(r==null||!isFinite(r)) return null;
+  const c=r>0.05?'up':r<-0.05?'down':'flat';
+  return h('span',{class:'delta '+c,text:(r>0?'+':'')+pct(r,0)});
+}
+function scoreChip(x,label){
+  if(x==null||!isFinite(x)) return h('span',{class:'score',text:'—'});
+  return h('span',{class:'score '+scoreCls(x),title:label||"Odatiy ko'rishga nisbatan necha barobar",text:(x>=9.95?Math.round(x):x.toFixed(1))+'×'});
+}
+function emptyBox(ic,title,text,action){
+  return h('div',{class:'card empty'},h('div',{class:'ei'},icon(ic,24)),h('b',{text:title}),text?h('p',{class:'hint',style:'max-width:52ch',text}):null,action||null);
+}
+function skeletonReport(){
+  return h('div',{class:'stack'},h('div',{class:'skel',style:'height:230px'}),
+    h('div',{class:'kpis'},[1,2,3,4].map(()=>h('div',{class:'skel',style:'height:110px'}))),
+    h('div',{class:'skel',style:'height:320px'}));
+}
+function avatar(src,name,cls){
+  const a=h('div',{class:'ava '+(cls||'')});
+  if(src){ const im=h('img',{src,alt:'',loading:'lazy',referrerpolicy:'no-referrer'}); im.onerror=()=>{ im.remove(); a.textContent=(name||'?').trim()[0]||'?'; }; a.append(im); }
+  else a.textContent=(name||'?').trim()[0]||'?';
+  return a;
+}
+function thumbImg(src,alt){
+  if(!src) return null;
+  const im=h('img',{src,alt:alt||'',loading:'lazy',referrerpolicy:'no-referrer'});
+  im.onerror=()=>im.remove();
+  return im;
+}
+function ytUrl(id){ return 'https://www.youtube.com/watch?v='+id; }
+/* video card */
+function videoCard(v,o){
+  o=o||{};
+  const real=!o.sample;
+  const th=h(real?'a':'div',{class:'th',href:real?ytUrl(v.id):null,target:real?'_blank':null,rel:'noopener'},
+    thumbImg(v.thumb,v.title),
+    h('div',{class:'tl'},o.rank?h('span',{class:'rank',text:'#'+o.rank}):null,o.score!==false?scoreChip(o.scoreVal!=null?o.scoreVal:v.score,o.scoreLabel):null),
+    v.durSec?h('span',{class:'dur',text:dur(v.durSec)}):null);
+  const meta=[h('span',null,h('span',{class:'mono',text:compact(v.views)}),' ko\'rish'),h('span',{text:ago(v.published)})];
+  if(o.vph) meta.push(h('span',null,icon('bolt',12,2),' ',h('span',{class:'mono',text:compact(v.vph)}),'/soat'));
+  return h('div',{class:'card vc'},th,
+    h('div',{class:'bd'},
+      real?h('a',{class:'t',href:ytUrl(v.id),target:'_blank',rel:'noopener',text:v.title}):h('div',{class:'t',text:v.title}),
+      h('div',{class:'m'},meta),
+      h('div',{class:'ft'},
+        o.channel?h('span',{class:'chn',text:v.channelTitle+(v.subs!=null?' · '+compact(v.subs)+' obunachi':'')}):h('span'),
+        real?h('button',{class:'linkbtn',type:'button',onclick:()=>go('video',v.id)},icon('bar',13,2.2),'Tahlil'):null)));
+}
+/* sortable, searchable table */
+function dataTable(cols,rows,o){
+  o=o||{};
+  let sort=o.sort||{k:cols[1]?cols[1].k:cols[0].k,d:'desc'}, q='', shown=o.page||25, filt=o.filter||null;
+  const wrap=h('div');
+  const body=h('div');
+  const bar=h('div',{class:'dt-bar'},
+    h('input',{class:'inp dt-search',type:'search',placeholder:"Jadvaldan qidirish…",'aria-label':'Jadvaldan qidirish',oninput:e=>{ q=e.target.value.toLowerCase(); shown=o.page||25; draw(); }}),
+    o.right||null);
+  wrap.append(bar,body);
+  const val=(v,c)=>{ const x=c.v?c.v(v):v[c.k]; return x instanceof Date?+x:(typeof x==='string'?x.toLowerCase():(x==null?-Infinity:x)); };
+  function draw(){
+    let rs=rows.filter(r=>(!filt||filt(r))&&(!q||(r.title||'').toLowerCase().includes(q)||(r.channelTitle||'').toLowerCase().includes(q)));
+    const col=cols.find(c=>c.k===sort.k)||cols[0];
+    rs.sort((a,b)=>{ const x=val(a,col),y=val(b,col); return (x<y?-1:x>y?1:0)*(sort.d==='asc'?1:-1); });
+    if(!rs.length){ body.replaceChildren(h('div',{class:'card empty'},h('b',{text:"Hech narsa topilmadi"}),h('p',{class:'hint',text:"Filtrni yoki qidiruvni o'zgartirib ko'ring."}))); return; }
+    const tbl=h('table',null,
+      h('thead',null,h('tr',null,cols.map(c=>h('th',{class:c.n?'num':null,'data-dir':sort.k===c.k?sort.d:null,tabindex:'0',scope:'col',
+        onclick:()=>{ sort={k:c.k,d:sort.k===c.k&&sort.d==='desc'?'asc':'desc'}; draw(); },
+        onkeydown:e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.currentTarget.click(); } },text:c.l})))),
+      h('tbody',null,rs.slice(0,shown).map(r=>h('tr',null,cols.map(c=>{ const out=c.f?c.f(r):r[c.k]; return out&&out.tagName==='TD'?out:h('td',{class:c.n?'num':null},out); })))));
+    body.replaceChildren(h('div',{class:'tscroll'},tbl),
+      rs.length>shown?h('div',{class:'more'},h('button',{class:'btn line sm',type:'button',onclick:()=>{ shown+=50; draw(); },text:`Yana ko'rsatish (${rs.length-shown} ta qoldi)`})):null);
+  }
+  draw();
+  return {el:wrap,setFilter(f){ filt=f; draw(); },redraw:draw};
+}
+function vtCell(v,o){
+  o=o||{};
+  const real=!o.sample;
+  return h('td',{class:'vt'},h('div',{class:'in'},
+    v.thumb?thumbImg(v.thumb):h('div',{class:'ph'}),
+    h('div',{style:'min-width:0'},
+      real?h('a',{href:ytUrl(v.id),target:'_blank',rel:'noopener',text:v.title}):h('span',{class:'tt',text:v.title}),
+      o.channel?h('div',{class:'sub',text:v.channelTitle}):null)));
+}
+/* ---------- responsive chart registry ---------- */
+const charts=new Set();
+function responsive(host,draw){
+  const run=()=>{ const w=host.clientWidth||host.parentElement&&host.parentElement.clientWidth||760; host.replaceChildren(draw(Math.max(280,w))); };
+  host._draw=run; charts.add(host);
+  requestAnimationFrame(run);
+  return host;
+}
+let rzT;
+window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ for(const c of charts){ if(!c.isConnected){ charts.delete(c); continue; } if(c.offsetParent) c._draw(); } },150); });
+
+/* sparkline */
+function sparkline(vals,o){
+  o=o||{}; const w=o.w||160, hh=o.h||36;
+  vals=vals.filter(v=>v!=null&&isFinite(v));
+  if(vals.length<2) return null;
+  const mn=Math.min(...vals), mx=Math.max(...vals), rg=mx-mn||1;
+  const xs=o.xs&&o.xs.length===vals.length?o.xs:null, x0=xs?xs[0]:0, xr=xs?(xs[xs.length-1]-x0)||1:1;
+  const pts=vals.map((v,i)=>[(xs?(xs[i]-x0)/xr:i/(vals.length-1))*(w-4)+2, hh-3-(v-mn)/rg*(hh-8)]);
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const col=o.color||'var(--d1)';
+  const last=pts[pts.length-1];
+  return sv('svg',{viewBox:`0 0 ${w} ${hh}`,width:'100%',height:hh,preserveAspectRatio:'none',style:'display:block;max-width:'+w+'px'},
+    sv('path',{d:d+` L${last[0]} ${hh} L${pts[0][0]} ${hh} Z`,fill:col,opacity:.12,stroke:'none'}),
+    sv('path',{d,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round','vector-effect':'non-scaling-stroke'}),
+    sv('circle',{cx:last[0],cy:last[1],r:3,fill:col}));
+}
+/* ring gauge */
+function ring(value,label,color,size){
+  size=size||148; const r=size/2-11, c=2*Math.PI*r;
+  return h('div',{class:'ring',style:`width:${size}px;height:${size}px`},
+    sv('svg',{width:size,height:size,viewBox:`0 0 ${size} ${size}`},
+      sv('circle',{cx:size/2,cy:size/2,r,fill:'none',stroke:'var(--surface-3)','stroke-width':12}),
+      sv('circle',{cx:size/2,cy:size/2,r,fill:'none',stroke:color,'stroke-width':12,'stroke-linecap':'round',
+        'stroke-dasharray':`${(c*clamp(value,0,100)/100).toFixed(1)} ${c.toFixed(1)}`,transform:`rotate(-90 ${size/2} ${size/2})`})),
+    h('div',{class:'num'},h('div',null,h('b',{style:`font-size:${Math.round(size*0.28)}px`,text:String(Math.round(value))}),size>=100?h('small',{text:label}):null)));
+}
+function subBar(k,val,max,d,color){
+  return h('div',{class:'sb'},h('div',{class:'t'},h('span',{text:k}),h('span',{text:Math.round(val)+' / '+max})),
+    h('div',{class:'tr'},h('i',{style:`width:${clamp(val/max*100,0,100)}%;background:${color}`})),d?h('small',{text:d}):null);
+}
+/* performance scatter: each video views (log) over publish date */
+function perfChart(vids,base,o){
+  o=o||{};
+  const host=h('div',{class:'chart'});
+  return responsive(host,W=>{
+    const H=o.h||300, m={l:62,r:14,t:16,b:30};
+    const vs=vids.filter(v=>v.views>=0);
+    if(vs.length<2) return h('p',{class:'hint',text:"Grafik uchun video yetarli emas."});
+    const t0=Math.min(...vs.map(v=>+v.published)), t1=Math.max(...vs.map(v=>+v.published));
+    const pad=(t1-t0)*0.03||864e5;
+    const x=t=>m.l+(t-(t0-pad))/((t1+pad)-(t0-pad))*(W-m.l-m.r);
+    const vmin=Math.max(1,Math.min(...vs.map(v=>v.views||1))), vmax=Math.max(10,...vs.map(v=>v.views));
+    const lo=Math.floor(Math.log10(vmin)), hi=Math.ceil(Math.log10(vmax))+(Math.log10(vmax)%1===0?0.15:0);
+    const y=v=>m.t+(1-(Math.log10(Math.max(1,v))-lo)/(hi-lo))*(H-m.t-m.b);
+    const g=sv('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':"Videolar ko'rishlari vaqt bo'yicha"});
+    // y grid
+    const ticks=[];
+    for(let p=lo;p<=Math.floor(hi);p++){ ticks.push(10**p); if(hi-lo<=3&&10**p*3<=10**hi) ticks.push(3*10**p); }
+    for(const tv of ticks){ const yy=y(tv); if(yy<m.t-1||yy>H-m.b+1) continue;
+      g.append(sv('line',{x1:m.l,x2:W-m.r,y1:yy,y2:yy,stroke:'var(--line)','stroke-width':1}));
+      g.append(sv('text',{x:m.l-8,y:yy+4,'text-anchor':'end',text:compact(tv)})); }
+    // x ticks: months
+    const span=t1-t0, n=Math.max(2,Math.min(6,Math.floor((W-m.l)/110)));
+    for(let i=0;i<=n;i++){ const t=t0+span*i/n, d=new Date(t), xx=x(t);
+      g.append(sv('text',{x:xx,y:H-8,'text-anchor':i===0?'start':i===n?'end':'middle',text:MON[d.getMonth()]+" '"+String(d.getFullYear()).slice(2)})); }
+    // median line
+    const yb=y(base);
+    g.append(sv('line',{x1:m.l,x2:W-m.r,y1:yb,y2:yb,stroke:'var(--muted)','stroke-dasharray':'5 5','stroke-width':1.2}));
+    g.__lbl=sv('text',{x:W-m.r-4,y:yb-7,'text-anchor':'end',class:'halo',text:"odatiy: "+compact(base)});
+    // rolling median
+    const sorted=[...vs].sort((a,b)=>a.published-b.published), win=Math.max(3,Math.min(9,Math.round(sorted.length/8)));
+    const rm=sorted.map((v,i)=>{ const s=sorted.slice(Math.max(0,i-win+1),i+1); return [x(+v.published),y(median(s.map(z=>z.views))||1)]; });
+    const rmv=rm.slice(win-1);
+    if(rmv.length>3) g.append(sv('path',{d:rmv.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),fill:'none',stroke:'var(--d2)','stroke-width':2.4,'stroke-linejoin':'round',opacity:.9}));
+    // dots
+    for(const v of sorted){
+      const cls=scoreCls(v.score), col=cls==='hot'?'var(--hot)':cls==='warm'?'var(--d3)':cls==='low'?'var(--muted)':'var(--d1)';
+      const r=cls==='hot'?6.5:cls==='warm'?5.5:4.2;
+      const dot=sv('circle',{cx:x(+v.published),cy:y(v.views),r,fill:v.isShort?'var(--surface)':col,stroke:col,'stroke-width':v.isShort?2:1.2,'fill-opacity':v.isShort?1:.85,style:'cursor:pointer'});
+      tipOn(dot,()=>[h('b',{text:v.title}),h('div',{class:'mono',text:`${full(v.views)} ko'rish · ${v.score.toFixed(1)}×`}),h('div',{text:dateUz(v.published)+(v.isShort?' · Shorts':'')+' · '+dur(v.durSec)})]);
+      if(!o.sample) dot.addEventListener('click',()=>window.open(ytUrl(v.id),'_blank','noopener'));
+      g.append(dot);
+    }
+    g.append(g.__lbl);
+    return g;
+  });
+}
+function perfLegend(){
+  return h('div',{class:'legend'},
+    h('span',null,h('i',{style:'background:var(--hot)'}),'5× va undan yuqori'),
+    h('span',null,h('i',{style:'background:var(--d3)'}),'2–5×'),
+    h('span',null,h('i',{style:'background:var(--d1)'}),'odatiy'),
+    h('span',null,h('i',{style:'background:var(--surface);border:2px solid var(--d1);box-sizing:border-box'}),'Shorts'),
+    h('span',null,h('i',{class:'ln',style:'background:var(--d2)'}),"o'rtacha yo'nalish"));
+}
+/* heatmap */
+function heatmap(heat){
+  const meds=heat.map(r=>r.map(c=>c.length?median(c):null));
+  const all=meds.flat().filter(v=>v!=null), mx=Math.max(1,...all);
+  let best=null; meds.forEach((r,d)=>r.forEach((m,s)=>{ if(m!=null&&heat[d][s].length>=2&&(!best||m>best.m)) best={d,s,m}; }));
+  const g=h('div',{class:'heat'});
+  g.append(h('div'));
+  for(let s=0;s<6;s++) g.append(h('div',{class:'hd',text:String(s*4).padStart(2,'0')+'–'+String(s*4+4).padStart(2,'0')}));
+  meds.forEach((r,d)=>{
+    g.append(h('div',{class:'rl',text:WD[d]}));
+    r.forEach((m,s)=>{
+      const n=heat[d][s].length, k=m==null?0:Math.sqrt(m/mx);
+      const c=h('div',{class:'c'+(best&&best.d===d&&best.s===s?' best':''),style:m==null?'':`background:color-mix(in srgb,var(--d1) ${Math.round(12+k*78)}%,var(--surface-3));color:${k>0.55?'#fff':'var(--ink-2)'}`,text:n?String(n):''});
+      tipOn(c,()=>[h('b',{text:`${WDF[d]}, ${String(s*4).padStart(2,'0')}:00–${String(s*4+4).padStart(2,'0')}:00`}),h('div',{text:n?`${n} ta video · kanal o'rtachasidan ${m.toFixed(1)}×`:"Bu vaqtda video yuklanmagan"})]);
+      g.append(c);
+    });
+  });
+  return {el:g,best};
+}
+/* horizontal bars */
+function hbars(items,o){
+  o=o||{};
+  const mx=Math.max(1,...items.map(i=>i.v||0));
+  const top=items.reduce((a,b)=>(b.v||0)>(a?a.v||0:-1)?b:a,null);
+  return h('div',{class:'hbars'},items.map(i=>h('div',{class:'hb'+(i===top&&i.v?' top':'')},
+    h('div',{class:'l'},i.l,i.s?h('small',{text:i.s}):null),
+    h('div',{class:'tr'},h('i',{style:`width:${(i.v||0)/mx*100}%;${i.c?'background:'+i.c:''}`})),
+    h('div',{class:'v',text:i.v==null?'—':(o.fmt||compact)(i.v)}))));
+}
+/* column bars */
+function colBars(items,o){
+  o=o||{};
+  const mx=Math.max(1,...items.map(i=>i.v||0));
+  return h('div',{class:'cols'},items.map(i=>{
+    const col=h('div',{class:'cl'},h('em',{text:i.v?String(i.v):''}),h('i',{style:`height:${(i.v||0)/mx*100}%;${o.color?'background:'+o.color:''}`}),h('small',{text:i.l}));
+    if(i.tip) tipOn(col,i.tip);
+    return col;
+  }));
+}
+/* opportunity gauge semicircle */
+function semiGauge(value,label){
+  const W=220,H=130,r=92,cx=110,cy=114, a0=Math.PI, a1=a0+Math.PI*clamp(value,0,100)/100;
+  const pt=a=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+  const arc=(s,e)=>{ const [x0,y0]=pt(s),[x1,y1]=pt(e); return `M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${e-s>Math.PI?1:0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}`; };
+  const col=value>=65?'var(--good)':value>=45?'var(--d3)':'var(--hot)';
+  return h('div',{style:'position:relative;width:220px;height:140px;flex:none'},
+    sv('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`},
+      sv('path',{d:arc(Math.PI,2*Math.PI-0.0001),fill:'none',stroke:'var(--surface-3)','stroke-width':16,'stroke-linecap':'round'}),
+      value>0?sv('path',{d:arc(Math.PI,Math.max(Math.PI+0.01,a1)),fill:'none',stroke:col,'stroke-width':16,'stroke-linecap':'round'}):null),
+    h('div',{style:'position:absolute;left:0;right:0;top:58px;text-align:center'},
+      h('b',{style:'font:800 40px/1 var(--f-display);letter-spacing:-.03em;display:block',text:String(Math.round(value))}),
+      h('small',{style:'color:var(--muted);font-weight:600;font-size:12px',text:label})));
+}
+
+/* =========================================================
+   Router, Home, Channel, Settings
+   ========================================================= */
+const VIEWS=[
+  {id:'home',l:'Bosh sahifa',i:'home',g:null,t:'Bosh sahifa',s:"Kanal, video yoki kalit so'zni kiriting — qolganini dastur o'zi aniqlaydi"},
+  {id:'channel',l:'Kanal tahlili',i:'bar',g:'Tahlil',t:'Kanal tahlili',s:"Istalgan kanalning kuchli mavzulari, yuklash vaqti va daromadi"},
+  {id:'video',l:'Video tahlili',i:'play',g:'Tahlil',t:'Video tahlili',s:"Teglar, izohlar va videoning kanalga nisbatan natijasi"},
+  {id:'compare',l:'Solishtirish',i:'columns',g:'Tahlil',t:'Kanallarni solishtirish',s:"4 tagacha raqibni yonma-yon ko'ring"},
+  {id:'keyword',l:"Kalit so'z",i:'search',g:'Tadqiqot',t:"Kalit so'z tadqiqoti",s:"Odamlar nimani qidirmoqda va bu mavzuda raqobat qanday"},
+  {id:'trends',l:'Trendlar',i:'flame',g:'Tadqiqot',t:'Trendlar',s:"Hozir mamlakatlar bo'yicha eng ommabop videolar"},
+  {id:'tracker',l:'Kuzatuv',i:'eye',g:'Vositalar',t:'Kanallarni kuzatish',s:"Obunachi va ko'rishlar o'sishini kundan-kunga kuzating"},
+  {id:'preview',l:'Thumbnail sinovi',i:'image',g:'Vositalar',t:'Thumbnail va sarlavha sinovi',s:"Videongiz YouTube lentasida qanday ko'rinishini oldindan ko'ring"},
+  {id:'settings',l:'Sozlamalar',i:'gear',g:'Vositalar',t:'Sozlamalar',s:"API kalit, daromad hisobi, ko'rinish va zaxira"}];
+const V={};
+let pendingArg;
+function buildNav(){
+  const nav=$('#nav'); let g;
+  for(const v of VIEWS){
+    if(v.g!==g&&v.g){ nav.append(h('div',{class:'nav-group',text:v.g})); }
+    g=v.g;
+    nav.append(h('a',{href:'#'+v.id,'data-v':v.id},icon(v.i,18),v.l));
+  }
+}
+function go(id,arg){
+  pendingArg=arg;
+  if(location.hash!=='#'+id) location.hash=id; else route();
+}
+function route(){
+  let id=(location.hash||'#home').slice(1);
+  if(!VIEWS.find(v=>v.id===id)) id='home';
+  const meta=VIEWS.find(v=>v.id===id);
+  for(const v of VIEWS){ if(V[v.id]&&V[v.id].el) V[v.id].el.hidden=v.id!==id; }
+  const view=V[id];
+  if(!view.el){ view.el=h('section',{class:'view','aria-labelledby':'pgTitle'}); $('#views').append(view.el); view.init(view.el); }
+  view.el.hidden=false;
+  $('#pgTitle').textContent=meta.t; $('#pgSub').textContent=meta.s;
+  document.querySelectorAll('#nav a').forEach(a=>{ if(a.dataset.v===id) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  const act=document.querySelector('#nav a[aria-current]'); if(act&&act.scrollIntoView&&innerWidth<960) act.scrollIntoView({inline:'center',block:'nearest'});
+  hideTip();
+  view.show&&view.show();
+  if(pendingArg!==undefined){ const a=pendingArg; pendingArg=undefined; view.run&&view.run(a); }
+  window.scrollTo(0,0);
+  requestAnimationFrame(()=>{ for(const c of charts) if(c.isConnected&&view.el.contains(c)) c._draw(); });
+}
+function keyPillUpdate(ok){
+  const p=$('#keyPill');
+  if(!S.key){ p.className='pill no'; p.replaceChildren(icon('key',13,2),'Kalit kiritilmagan'); }
+  else if(ok===false){ p.className='pill no'; p.replaceChildren(icon('key',13,2),'Kalitda xato'); }
+  else { p.className='pill ok'; p.replaceChildren(icon('check',13,2.4),'Kalit ulangan'); }
+}
+function applyTheme(){
+  const t=S.set.theme;
+  if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t);
+  const b=$('#themeBtn'); b.replaceChildren(icon(t==='dark'?'moon':t==='light'?'sun':'auto',18));
+  b.title=t==='auto'?'Mavzu: avtomatik':t==='dark'?"Mavzu: qorong'i":"Mavzu: yorug'";
+}
+/* saved channels */
+function isSaved(id){ return S.saved.some(s=>s.id===id); }
+function snapChannel(ch){
+  const s=S.saved.find(x=>x.id===ch.id); if(!s) return;
+  Object.assign(s,{title:ch.title,thumb:ch.thumb,handle:ch.handle});
+  const snap={t:Date.now(),subs:ch.subs,views:ch.views,videos:ch.videoCount};
+  const last=s.snaps[s.snaps.length-1];
+  if(last&&Date.now()-last.t<3600e3) s.snaps[s.snaps.length-1]=snap; else s.snaps.push(snap);
+  s.snaps=s.snaps.slice(-500); saveSaved();
+}
+function toggleSave(ch){
+  if(isSaved(ch.id)){ S.saved=S.saved.filter(s=>s.id!==ch.id); saveSaved(); toast('Kuzatuvdan olib tashlandi'); return false; }
+  S.saved.push({id:ch.id,title:ch.title,thumb:ch.thumb,handle:ch.handle,added:Date.now(),snaps:[]}); snapChannel(ch); toast('Kuzatuvga qo\'shildi'); return true;
+}
+const CMP={list:store.get('cmp',[])};
+function addToCompare(ref,label){
+  if(CMP.list.some(x=>x.ref===ref)){ toast('Allaqachon solishtirish ro\'yxatida'); return; }
+  if(CMP.list.length>=4){ toast('Ko\'pi bilan 4 ta kanal','err'); return; }
+  CMP.list.push({ref,label}); store.set('cmp',CMP.list); toast('Solishtirishga qo\'shildi');
+  V.compare.el&&V.compare.drawChips&&V.compare.drawChips();
+}
+
+/* ======================= HOME ======================= */
+V.home={
+  init(el){
+    const det=h('div',{class:'detect'},[['channel','Kanal'],['video','Video'],['keyword',"Kalit so'z"]].map(([t,l])=>h('span',{'data-t':t,text:l})));
+    const inp=h('input',{class:'inp',id:'omniInp',placeholder:"@kanal, video havolasi yoki kalit so'z…",autocomplete:'off','aria-label':"Kanal, video yoki kalit so'z"});
+    const upd=()=>{ const t=detectInput(inp.value); det.querySelectorAll('span').forEach(s=>s.classList.toggle('on',s.dataset.t===t)); };
+    inp.addEventListener('input',upd);
+    const form=h('form',{class:'omni',onsubmit:e=>{ e.preventDefault(); const t=detectInput(inp.value); if(!t){ inp.focus(); return; } go(t,inp.value.trim()); }},
+      inp,h('button',{class:'btn',type:'submit'},icon('search',18,2.2),'Tahlil qilish'));
+    const ex=h('div',{class:'chips',style:'margin-top:14px'},h('span',{class:'hint',style:'align-self:center',text:'Misol:'}),
+      ['@MrBeast','life in korea','한국 생활 브이로그','https://youtu.be/dQw4w9WgXcQ'].map(x=>h('button',{class:'chip',type:'button',onclick:()=>{ inp.value=x; upd(); inp.focus(); },text:x})));
+    el.append(h('div',{class:'card hero'},
+      h('h2',null,'Bugun nimani ',h('em',{text:'tahlil'}),' qilamiz?'),
+      h('p',{text:"Raqiblaringiz qaysi videolar bilan o'sayotganini, qachon yuklash kerakligini va qaysi mavzuda imkoniyat borligini bepul bilib oling."}),
+      form,det,ex));
+    this.setup=h('div'); el.append(this.setup);
+    const tools=[
+      ['channel','bar','var(--d1)','Kanal tahlili',"Salomatlik bali, eng kuchli mavzular, yuklash vaqti va taxminiy daromad.",'≈ 3–6 birlik'],
+      ['video','play','var(--d2)','Video tahlili',"Teglar, izohlar, boblar va videoning kanal odatiysiga nisbatan natijasi.",'≈ 5 birlik'],
+      ['keyword','search','var(--accent)',"Kalit so'z tadqiqoti","YouTube qidiruv takliflari, raqobat va imkoniyat bali.",'≈ 102 birlik · g\'oyalar bepul'],
+      ['trends','flame','var(--hot)','Trendlar',"Koreya, O'zbekiston va boshqa mamlakatlarda hozir ommabop videolar.",'1–2 birlik'],
+      ['compare','columns','var(--d3)','Solishtirish',"4 tagacha raqib kanalni bitta jadvalda solishtiring.",'≈ 4 birlik / kanal'],
+      ['tracker','eye','var(--d4)','Kuzatuv',"Tanlangan kanallar obunachilari qanday o'sayotganini kuzating.",'1 birlik'],
+      ['preview','image','var(--d2)','Thumbnail sinovi',"Muqova va sarlavhangizni YouTube lentasida sinab ko'ring.",'bepul']];
+    el.append(secHead('Vositalar',"Har bir vosita kunlik bepul limitdan qancha olishi ko'rsatilgan"),
+      h('div',{class:'tools'},tools.map(([id,ic,c,t,d,cost])=>h('a',{class:'card tool',href:'#'+id},
+        h('div',{class:'ti',style:`background:color-mix(in srgb,${c} 16%,transparent);color:${c}`},icon(ic,22)),
+        h('b',{text:t}),h('p',{text:d}),h('div',{class:'cost',text:cost})))));
+    this.lists=h('div',{class:'two'}); el.append(this.lists);
+  },
+  show(){
+    this.setup.replaceChildren();
+    if(!S.key){
+      const step=(n,t,d,done)=>h('div',{class:'step'+(done?' done':'')},h('div',{class:'n'},done?icon('check',14,3):String(n)),h('p',null,h('b',{text:t}),d));
+      this.setup.append(h('div',{class:'card pad stack'},
+        h('div',{class:'row',style:'justify-content:space-between'},
+          h('div',null,h('h3',{text:'Boshlash uchun 1 ta qadam qoldi'}),h('p',{text:"Dastur YouTube'ning bepul API kaliti bilan ishlaydi. Kalit sizning brauzeringizda saqlanadi."})),
+          h('div',{class:'row'},h('a',{class:'btn',href:'#settings'},icon('key',16,2),'Kalitni kiritish'),h('button',{class:'btn line',type:'button',onclick:()=>go('channel','__sample'),text:"Namunani ko'rish"}))),
+        h('div',{class:'steps'},
+          step(1,"Google Cloud'da loyiha","console.cloud.google.com → NEW PROJECT"),
+          step(2,'YouTube Data API v3 ni yoqing','Library → YouTube Data API v3 → ENABLE'),
+          step(3,'API kalitni Sozlamalarga qo\'ying','Credentials → API key → nusxalash'))));
+    }
+    const rec=S.recent.slice(0,6), sav=S.saved.slice(0,6);
+    const TL={channel:'Kanal',video:'Video',keyword:"Kalit so'z"};
+    const TI={channel:'bar',video:'play',keyword:'search'};
+    this.lists.replaceChildren(
+      h('div',{class:'card pad'},h('h3',{text:"So'nggi tahlillar"}),
+        rec.length?h('div',{class:'list',style:'margin-top:8px'},rec.map(r=>h('div',{class:'li'},
+          r.thumb?avatar(r.thumb,r.title,'sm'):h('div',{class:'ava sm'},icon(TI[r.type],18)),
+          h('div',{class:'tx'},h('b',{text:r.title}),h('small',{text:TL[r.type]+' · '+ago(new Date(r.t))})),
+          h('button',{class:'btn sec sm',type:'button',onclick:()=>go(r.type,r.ref),text:'Ochish'})))):h('p',{class:'hint',style:'margin-top:8px',text:"Hali tahlil qilinmagan. Yuqoridagi maydonga kanal nomini yozib ko'ring."})),
+      h('div',{class:'card pad'},h('h3',{text:'Kuzatuvdagi kanallar'}),
+        sav.length?h('div',{class:'list',style:'margin-top:8px'},sav.map(s=>{ const a=s.snaps[0], b=s.snaps[s.snaps.length-1];
+          return h('div',{class:'li'},avatar(s.thumb,s.title,'sm'),h('div',{class:'tx'},h('b',{text:s.title}),h('small',{text:(b&&b.subs!=null?compact(b.subs)+' obunachi':'')+(a&&b&&b.subs!=null&&a!==b?' · '+(b.subs-a.subs>=0?'+':'')+compact(b.subs-a.subs):'')})),
+            h('button',{class:'btn sec sm',type:'button',onclick:()=>go('channel',s.id),text:'Tahlil'})); })):
+          h('p',{class:'hint',style:'margin-top:8px',text:"Kanal tahlilida \"Kuzatuvga qo'shish\" tugmasini bosing — bu yerda o'sishi ko'rinadi."})));
+  }
+};
+
+/* ======================= CHANNEL ======================= */
+function sampleChannel(){
+  let seed=19; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const T=["Koreyada birinchi oy: nimalarga tayyor bo'lish kerak","Seulda arzon ovqatlanish: 5 ta joy","Koreyada ish topish — mening tajribam","T-money kartasi qanday ishlaydi?","Koreys tilini 3 oyda o'rgandim: usulim","Koreyadagi oylik xarajatlarim (2026)","Zavodda bir kunlik smena | vlog","Koreys supermarketida narxlar","Busan sayohati 1 kunda","Koreyada uy ijarasi: 월세 va 전세 farqi","Koreyada shifoxonaga borish tartibi","Koreyslar bizdan nimasi bilan farq qiladi?","Koreyada qishki kiyim qayerdan arzon","Koreyada haydovchilik guvohnomasi olish","Daiso'dan foydali 10 ta narsa","Koreyada bank kartasi ochish","Koreyadagi o'zbek kafelari","Koreyada birinchi maoshim qancha bo'ldi?","Jeju oroliga arzon sayohat","Koreyada telefon raqam olish — 3 ta usul"];
+  const tagsPool=['koreya','korea vlog','koreyada hayot','한국생활','seul','koreyada ish','uzbek in korea','koreys tili','vlog','koreyada narxlar'];
+  const vids=[]; const now=Date.now();
+  for(let i=0;i<60;i++){
+    const age=1.5+i*5.2+rnd()*3;
+    let views=Math.round(5200*(0.45+rnd()*1.1)*Math.min(1,age/12)*(1+0.012*Math.max(0,120-age)));
+    const t=T[i%T.length];
+    if(/\d/.test(t)) views=Math.round(views*1.35);
+    if(rnd()<0.12) views*=Math.round(4+rnd()*6);
+    const short=rnd()<0.28;
+    const d=new Date(now-age*864e5); d.setHours([10,12,18,19,20,21,15,9][Math.floor(rnd()*8)],Math.floor(rnd()*60));
+    if(d.getDay()===5) views=Math.round(views*1.3);
+    vids.push({id:'s'+i,title:t,desc:'',published:d,views,likes:Math.round(views*(0.03+rnd()*0.025)),comments:Math.round(views*(0.003+rnd()*0.003)),
+      durSec:Math.round(short?20+rnd()*40:280+rnd()*820),tags:tagsPool.filter(()=>rnd()<0.45),thumb:'',channelTitle:'Namuna kanal'});
+  }
+  return {ch:{id:'sample',title:'Namuna kanal',handle:'@namuna_kanal',desc:"Koreyadagi hayot haqida o'zbek tilida kundalik vloglar, maslahatlar va narxlar.",country:'KR',created:new Date(now-3.2*365*864e5),thumb:'',banner:'',subs:48200,views:2860000,videoCount:126},vids};
+}
+V.channel={
+  init(el){
+    this.inp=h('input',{class:'inp',id:'chInp',placeholder:'@kanal_nomi yoki kanal havolasi',autocomplete:'off'});
+    this.cnt=h('select',{class:'inp',id:'chCnt'},[[50,'Oxirgi 50'],[100,'Oxirgi 100'],[200,'Oxirgi 200'],[500,'Oxirgi 500']].map(([v,l])=>h('option',{value:v,selected:v===100?true:null,text:l})));
+    this.btn=h('button',{class:'btn',type:'submit'},icon('bar',17,2.2),'Tahlil qilish');
+    el.append(h('form',{class:'card pad formbar',onsubmit:e=>{ e.preventDefault(); this.analyze(); }},
+      h('div',{class:'field grow'},h('label',{for:'chInp',text:'Kanal'}),this.inp),
+      h('div',{class:'field'},h('label',{for:'chCnt',text:'Videolar'}),this.cnt),
+      this.btn,h('button',{class:'btn line',type:'button',onclick:()=>this.sample(),text:'Namuna'})));
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:22px'});
+    el.append(this.st,this.out);
+    if(!S.key) this.sample();
+  },
+  run(arg){ if(arg==='__sample') return this.sample(); this.inp.value=arg; this.analyze(); },
+  sample(){ const d=sampleChannel(); setStatus(this.st,null); this.render(channelReport(d.ch,d.vids),true); },
+  async analyze(fresh){
+    const q=this.inp.value.trim();
+    if(!q){ setStatus(this.st,'error',"Kanal nomi yoki havolasini kiriting."); this.inp.focus(); return; }
+    this.out.replaceChildren(skeletonReport());
+    await busy(this.btn,()=>withApi(fresh,async()=>{
+      try{
+        setStatus(this.st,'loading','Kanal qidirilmoqda…');
+        const ch=await resolveChannel(q);
+        const vids=await getUploads(ch,+this.cnt.value,(ph,a,b)=>setStatus(this.st,'loading',ph==='list'?`Videolar ro'yxati olinmoqda: ${a} ta`:`Video ma'lumotlari: ${a} / ${b}`));
+        setStatus(this.st,null);
+        if(!vids.length){ this.out.replaceChildren(emptyBox('play','Bu kanalda ochiq video yo\'q',"Kanal topildi, lekin tahlil qilish uchun video yo'q.")); return; }
+        if(isSaved(ch.id)&&!API_META.cachedAt) snapChannel(ch);
+        this.render(channelReport(ch,vids),false);
+        cacheNote(this.out,()=>this.analyze(true));
+        pushRecent({type:'channel',ref:ch.id,title:ch.title,thumb:ch.thumb,t:Date.now()});
+      }catch(e){ this.out.replaceChildren(); errorStatus(this.st,e); }
+    }));
+  },
+  render(r,sample){
+    const {ch,vids}=r, out=this.out; out.replaceChildren();
+    this.rep=r;
+    if(sample) out.append(h('div',{class:'banner-note'},icon('info',18),"Bu namuna ma'lumot — haqiqiy kanal emas. Kalitni kiritgach, istalgan kanalni tahlil qilasiz.",h('a',{class:'btn sm',href:'#settings',style:'margin-left:auto',text:'Kalitni kiritish'})));
+    // hero
+    const saveBtn=h('button',{class:'btn line sm',type:'button'});
+    const drawSave=()=>saveBtn.replaceChildren(icon('bookmark',15,2),isSaved(ch.id)?'Kuzatilmoqda':'Kuzatuvga qo\'shish');
+    drawSave(); saveBtn.onclick=()=>{ toggleSave(ch); drawSave(); };
+    const desc=ch.desc?h('p',{class:'desc',text:ch.desc,title:"Bosing — to'liq ko'rsatish",style:'cursor:pointer',onclick:e=>e.currentTarget.classList.toggle('open')}):null;
+    const bnr=h('div',{class:'bnr'}); if(ch.banner){ const im=thumbImg(ch.banner); if(im) bnr.append(im); }
+    const ratio=ch.subs?r.base/ch.subs:null;
+    out.append(h('div',{class:'card chero'},bnr,
+      h('div',{class:'body'},avatar(ch.thumb,ch.title),
+        h('div',{class:'who'},
+          h('h2',null,sample?ch.title:h('a',{href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener',text:ch.title})),
+          h('div',{class:'meta'},ch.handle?h('span',{text:ch.handle}):null,ch.country?h('span',{text:'Mamlakat: '+ch.country}):null,h('span',{text:'Ochilgan: '+dateUz(ch.created)}),h('span',{text:`Tahlil: oxirgi ${vids.length} video`})),
+          desc),
+        sample?null:h('div',{class:'acts'},saveBtn,
+          h('button',{class:'btn line sm',type:'button',onclick:()=>addToCompare(ch.id,ch.title)},icon('columns',15,2),'Solishtirish'),
+          h('a',{class:'btn sec sm',href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube'))),
+      h('div',{class:'hstats'},
+        hs('Obunachilar',ch.subs==null?'yashirin':compact(ch.subs),ch.subs!=null?full(ch.subs):''),
+        hs("Jami ko'rishlar",compact(ch.views),full(ch.views)),
+        hs('Videolar',full(ch.videoCount),''),
+        hs("Ko'rish ÷ obunachi",ratio==null?'—':pct(ratio,0),"obunachilarning necha foizi odatda ko'radi"))));
+    // score + kpis
+    const [gL,gT,gC]=grade(r.health);
+    const sorted=r.byDate.filter(v=>v.age>=3);
+    const roll=sorted.map((v,i)=>median(sorted.slice(Math.max(0,i-5),i+1).map(z=>z.views))).slice(-24);
+    const e30=earnings(r.monthly.lv,r.monthly.sv);
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},
+        h('div',null,h('h3',{text:'Kanal salomatligi'}),h('p',{text:"4 ta ko'rsatkich asosida taxminiy baho (0–100)"})),
+        h('div',{class:'scorecard'},ring(r.health,gL+' · '+gT,gC),
+          h('div',{class:'subbars'},r.parts.map(p=>subBar(p.k,p.v,25,p.d,p.c)))),
+        howTo('Bu baho qanday hisoblanadi?',[
+          ['Muntazamlik (25)','haftasiga 3 va undan ko\'p video = 25 ball'],
+          ['Faollik (25)','(layk + izoh) ÷ ko\'rish 6% va undan yuqori = 25 ball'],
+          ["O'sish sur'ati (25)","oxirgi 10 video oldingi 20 tadan 1,5× yaxshi = 25 ball, teng = 12,5 ball"],
+          ['Hit videolar (25)','videolarning 20% i kanal odatiysidan 2× yuqori = 25 ball'],
+          ['Video yoshi','eski videolar ko\'proq ko\'rish to\'plagani uchun barcha solishtirishlar video yoshini hisobga oladi']],
+          "Bu formula yo'l-yo'riq uchun — YouTube'ning rasmiy bahosi emas.")),
+      h('div',{class:'kpis',style:'grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))'},
+        kpi("Odatiy ko'rish",compact(r.base),"bitta video uchun (median)",{icon:'eye',spark:sparkline(roll,{color:'var(--d2)'})}),
+        kpi("O'sish sur'ati",r.momentum==null?'—':(r.momentum>=1?'+':'')+pct(r.momentum-1,0),"oxirgi 10 video, oldingi 20 taga nisbatan",{icon:r.momentum!=null&&r.momentum<1?'down':'up'}),
+        kpi('Haftalik yuklash',r.perWeek.toFixed(1)+' ta',"oxirgi 90 kun bo'yicha",{icon:'calendar'}),
+        kpi('Daromad / oy',money(e30.min)+' – '+money(e30.max),r.monthly.method==='track'?"kuzatuv ma'lumoti bo'yicha (aniqroq)":"videolar yoshiga qarab taxmin",{icon:'money',title:"RPM: "+NICHES[S.set.niche].l})))
+    );
+    // tips
+    if(r.tips.length) out.append(h('div',{class:'stack'},secHead('Xulosa va tavsiyalar',"Kanal ma'lumotlaridan avtomatik chiqarilgan"),
+      h('div',{class:'tips'},r.tips.map(t=>h('div',{class:'tip '+t.tone},h('div',{class:'ti'},icon(t.ic,17,2)),h('p',null,t.p))))));
+    // perf chart
+    let pf='all';
+    const chartHost=h('div');
+    const drawChart=()=>chartHost.replaceChildren(perfChart(vids.filter(v=>pf==='all'||(pf==='short'?v.isShort:!v.isShort)),r.base,{sample}));
+    const seg=segCtl([['all','Hammasi'],['long','Uzun'],['short','Shorts']],'all',k=>{ pf=k; drawChart(); });
+    out.append(h('div',{class:'card pad stack'},
+      h('div',{class:'sec-h'},h('div',null,h('h3',{text:"Ko'rishlar dinamikasi"}),h('p',{text:"Har bir nuqta — bitta video. Ustiga olib boring — ma'lumot, bosing — video ochiladi."})),seg),
+      chartHost,perfLegend()));
+    drawChart();
+    // outliers
+    const outs=[...vids].filter(v=>v.score>=2).sort((a,b)=>b.score-a.score).slice(0,8);
+    out.append(h('div',{class:'stack'},secHead('Outlier videolar',"Kanal odatiysidan 2 barobar va ko'proq ko'rilgan (video yoshi hisobga olingan) — g'oya topish uchun eng foydali qism"),
+      outs.length?h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{sample}))):emptyBox('flame',"Outlier video yo'q","Bu kanalda barcha videolar bir xil darajada ko'rilgan.")));
+    // heat + durations
+    const hm=heatmap(r.heat);
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Qachon yuklash kerak'}),h('p',{text:"Kun va soat (sizning vaqtingiz) bo'yicha natija. Quyuq rang — yaxshiroq. Katakdagi raqam — videolar soni."})),
+        hm.el,h('p',{class:'hint'},hm.best?['Eng yaxshi natija: ',h('b',{style:'color:var(--ink)',text:`${WDF[hm.best.d]}, ${String(hm.best.s*4).padStart(2,'0')}:00–${String(hm.best.s*4+4).padStart(2,'0')}:00`})]:"Ma'lumot yetarli emas")),
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Qanday uzunlik ishlaydi'}),h('p',{text:"Uzunlik bo'yicha natija: 1.0× — kanal uchun odatiy, 1.5× — 50% yaxshiroq"})),
+        hbars(r.durs.map(b=>({l:b.l,s:b.s+(b.n?' · '+b.n+' ta':''),v:b.n?b.med:null})),{fmt:x=>x.toFixed(1)+'×'}))));
+    // months + titles
+    const featRows=r.tf.map(f=>h('div',{class:'fr'},h('div',null,f.l,h('small',{text:`${f.d} · ${f.ny} ta video`})),
+      f.lift==null?h('span',{class:'delta flat',text:"kam ma'lumot"}):deltaChip(f.lift)));
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Yuklash ritmi'}),h('p',{text:"Oxirgi 12 oyda har oy nechta video chiqqan"})),
+        colBars(r.months.map(m=>({l:MON[m.m],v:m.n,tip:()=>[h('b',{text:MON[m.m]+' '+m.y}),h('div',{text:`${m.n} ta video`+(m.v.length?` · odatda ${compact(median(m.v))} ko'rish`:'')})]})),{color:'var(--d2)'})),
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Sarlavha tahlili'}),h('p',{text:"Sarlavhadagi belgilar ko'rishga qanday ta'sir qilgan (odatiyga nisbatan)"})),
+        h('div',{class:'feat'},featRows),
+        r.tw.length?h('div',{class:'stack',style:'gap:8px'},h('div',{class:'lbl',text:"Eng kuchli so'zlar"}),h('div',{class:'chips'},r.tw.slice(0,14).map(w=>h('span',{class:'chip',title:`${w.n} ta sarlavhada`},w.w,h('b',{text:w.s.toFixed(1)+'×'}))))):null)));
+    // tags
+    const tg=r.tags.slice(0,40);
+    out.append(h('div',{class:'card pad stack'},
+      h('div',{class:'sec-h'},h('div',null,h('h3',{text:'Ko\'p ishlatilgan teglar'}),h('p',{text:tg.length?`${r.tags.length} ta noyob teg · raqam — nechta videoda ishlatilgan`:"Bu kanal teglarni yashirgan yoki ishlatmaydi"})),
+        tg.length?h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(tg.map(t=>t[0]).join(', '))},icon('copy',15,2),'Nusxalash'):null),
+      tg.length?h('div',{class:'chips'},tg.map(([t,n])=>h('span',{class:'chip'},t,h('b',{text:n})))):null));
+    // earnings
+    out.append(this.earnCard(r));
+    // table
+    let tf='all';
+    const cols=[
+      {k:'title',l:'Video',f:v=>vtCell(v,{sample})},
+      {k:'published',l:'Chiqqan',n:1,f:v=>h('span',{title:dateUz(v.published),text:ago(v.published)})},
+      {k:'views',l:"Ko'rish",n:1,f:v=>full(v.views)},
+      {k:'vpd',l:'Kunlik',n:1,f:v=>compact(v.vpd)},
+      {k:'score',l:'Outlier',n:1,f:v=>v.isNew?h('span',{class:'pill acc',title:'3 kundan yosh — baho hali aniq emas',text:'yangi'}):scoreChip(v.score)},
+      {k:'likes',l:'Layk',n:1,f:v=>full(v.likes)},
+      {k:'comments',l:'Izoh',n:1,f:v=>full(v.comments)},
+      {k:'eng',l:'Faollik',n:1,f:v=>pct(v.eng)},
+      {k:'durSec',l:'Uzunlik',n:1,f:v=>h('span',null,dur(v.durSec),v.isShort?h('span',{class:'pill',style:'margin-left:6px;padding:1px 7px',text:'S'}):null)}];
+    let dt;
+    const tseg=segCtl([['all','Hammasi'],['long','Uzun'],['short','Shorts']],'all',k=>{ tf=k; dt.setFilter(v=>tf==='all'||(tf==='short'?v.isShort:!v.isShort)); });
+    dt=dataTable(cols,vids,{sort:{k:'published',d:'desc'},right:h('div',{class:'row'},tseg,
+      h('button',{class:'btn sec sm',type:'button',onclick:()=>csvChannel(r)},icon('download',15,2),'Excel (CSV)'))});
+    out.append(h('div',{class:'stack'},secHead('Barcha videolar',`${vids.length} ta video · ustun nomini bosib saralang`),dt.el));
+  },
+  earnCard(r){
+    const host=h('div');
+    const draw=()=>{
+      const M=r.monthly, em=earnings(M.lv,M.sv);
+      const longShare=M.lv/((M.lv+M.sv)||1);
+      const life=earnings(r.ch.views*longShare,r.ch.views*(1-longShare));
+      const per=earnings(1e6,0);
+      const sel=h('select',{class:'inp',style:'max-width:240px','aria-label':'Kanal mavzusi'},Object.entries(NICHES).filter(([k])=>k!=='custom'||S.set.niche==='custom').map(([k,n])=>h('option',{value:k,selected:S.set.niche===k?true:null,text:n.l})));
+      sel.onchange=()=>{ const n=NICHES[sel.value]; S.set.niche=sel.value; if(n.min!=null){ S.set.rpmMin=n.min; S.set.rpmMax=n.max; } saveSettings(); draw(); };
+      const col=(t,v,s)=>h('div',{class:'kpi',style:'padding:0'},h('div',{class:'k',text:t}),h('div',{class:'v',text:v}),h('div',{class:'s',text:s}));
+      const track=M.method==='track';
+      host.replaceChildren(h('div',{class:'card pad stack'},
+        h('div',{class:'sec-h'},h('div',null,h('h3',{text:'Taxminiy daromad'}),h('p',{text:`RPM: uzun videolar $${S.set.rpmMin}–${S.set.rpmMax}, Shorts $${S.set.sMin}–${S.set.sMax} (1000 ko'rish uchun)`})),
+          h('div',{class:'row'},h('span',{class:'lbl',text:'Mavzu'}),sel)),
+        h('div',{class:'three'},
+          col('Bir oyda',money(em.min)+' – '+money(em.max),`≈ ${compact(M.v)} ko'rish/oy (${compact(M.lv)} uzun + ${compact(M.sv)} Shorts)`),
+          col("Butun davr (taxmin)",money(life.min)+' – '+money(life.max),`jami ${compact(r.ch.views)} ko'rish bo'yicha`),
+          col("1 mln ko'rish uchun",money(per.min)+' – '+money(per.max),'uzun video, shu mavzu uchun')),
+        h('div',{class:'tip '+(track?'good':'info')},h('div',{class:'ti'},icon(track?'check':'info',17,2)),
+          h('p',null,track?[h('b',{text:"Aniqroq hisob: "}),`oylik ko'rish kuzatuvdagi haqiqiy o'sishdan olindi (${M.days.toFixed(1)} kunlik ma'lumot).`]:
+            [h('b',{text:'Taxminiy hisob: '}),"oylik ko'rish har bir videoning yoshiga qarab hisoblandi. ",isSaved(r.ch.id)?"Kuzatuvda 1 kundan ko'p ma'lumot to'plangach, haqiqiy o'sish ishlatiladi.":"Kanalni kuzatuvga qo'shsangiz, 1–2 kundan keyin haqiqiy o'sish bo'yicha hisoblanadi."])),
+        h('p',{class:'hint',text:"Haqiqiy daromad mamlakat, tomoshabin yoshi va reklama mavsumiga bog'liq. Pul ishlash uchun kanal YouTube hamkorlik dasturiga qabul qilingan bo'lishi kerak."})));
+    };
+    draw(); return host;
+  }
+};
+function hs(l,v,s){ return h('div',null,h('small',{text:l}),h('b',{text:v,title:s||null})); }
+function segCtl(opts,cur,onPick){
+  const seg=h('div',{class:'seg',role:'group'});
+  for(const [k,l] of opts){
+    const b=h('button',{type:'button','aria-pressed':String(k===cur),text:l});
+    b.onclick=()=>{ seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); onPick(k); };
+    seg.append(b);
+  }
+  return seg;
+}
+function csvChannel(r){
+  csv(safeName(r.ch.title)+'_tahlil.csv',
+    ['Sarlavha','Havola','Sana','Kun','Soat',"Ko'rish","Kunlik ko'rish",'Outlier (x)','Layk','Izoh','Faollik %','Uzunlik','Shorts','Teglar'],
+    r.vids.map(v=>[v.title,'https://youtu.be/'+v.id,d10(v.published),WDF[v.wd],v.hr,v.views,Math.round(v.vpd),v.score.toFixed(2),v.likes,v.comments,(v.eng*100).toFixed(2),dur(v.durSec),v.isShort?'ha':"yo'q",(v.tags||[]).join(' | ')]));
+}
+
+function backupNow(){
+  download('youtube-tahlil-zaxira-'+d10(new Date())+'.json',JSON.stringify({v:2,saved:S.saved,settings:S.set,recent:S.recent,cmp:CMP.list},null,1),'application/json');
+  store.set('lastBackup',Date.now()); toast('Zaxira yuklab olindi');
+}
+/* ======================= SETTINGS ======================= */
+V.settings={
+  init(el){
+    // key
+    const ki=h('input',{class:'inp',type:'password',id:'setKey',placeholder:'AIzaSy…',autocomplete:'off',spellcheck:'false',value:S.key||''});
+    const st=statusEl();
+    const show=h('button',{class:'btn line',type:'button',text:"Ko'rsatish"});
+    show.onclick=()=>{ const t=ki.type==='text'; ki.type=t?'password':'text'; show.textContent=t?"Ko'rsatish":'Yashirish'; };
+    const remember=h('input',{type:'checkbox',id:'setRemember'}); remember.checked=S.set.rememberKey!==false;
+    const save=h('button',{class:'btn',type:'button'},icon('check',16,2.4),'Saqlash va tekshirish');
+    save.onclick=()=>busy(save,async()=>{
+      S.key=ki.value.trim()||null; S.set.rememberKey=remember.checked; saveSettings(); keySave(S.key,remember.checked); memCache.clear();
+      if(!S.key){ keyPillUpdate(); setStatus(st,'info','Kalit o\'chirildi.'); return; }
+      try{ await api('videos',{part:'id',id:'dQw4w9WgXcQ'},1,{fresh:true}); keyPillUpdate(true); setStatus(st,'info',"Kalit ishlayapti. Endi istalgan bo'limdan foydalanishingiz mumkin."); toast('Kalit saqlandi'); }
+      catch(e){ keyPillUpdate(false); errorStatus(st,e); }
+    });
+    const help=h('details',{class:'stack',style:'gap:8px'},h('summary',{style:'cursor:pointer;font-weight:700',text:"Kalitni qanday olaman? (5 qadam)"}),
+      h('ol',{style:'margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px'},
+        h('li',null,h('b',{text:'console.cloud.google.com'}),' saytiga Google akkauntingiz bilan kiring'),
+        h('li',null,'Yuqorida loyiha tanlash → ',h('b',{text:'NEW PROJECT'}),' (새 프로젝트) → nomi: YouTube Tahlil → CREATE'),
+        h('li',null,'Menyu → APIs & Services → Library → ',h('b',{text:'YouTube Data API v3'}),' → ENABLE (사용)'),
+        h('li',null,'APIs & Services → Credentials → ',h('b',{text:'+ CREATE CREDENTIALS → API key'})),
+        h('li',null,'Kalitni nusxalab, shu yerga qo\'ying. Xavfsizlik uchun kalitni faqat YouTube Data API v3 bilan cheklang.')));
+    el.append(h('div',{class:'card pad stack'},
+      h('div',null,h('h3',{text:'YouTube API kalit'}),h('p',{text:"Kalit faqat shu kompyuterdagi brauzeringizda saqlanadi va faqat YouTube'ga yuboriladi. Uni hech kimga bermang."})),
+      h('div',{class:'formbar'},h('div',{class:'field grow'},h('label',{for:'setKey',text:'API kalit'}),ki),show,save),
+      h('label',{for:'setRemember',class:'row',style:'gap:8px;font-size:14px;cursor:pointer'},remember,"Kalitni shu kompyuterda eslab qolish",h('span',{class:'hint',text:"(kompyuterni boshqalar ham ishlatsa, belgini olib tashlang — brauzer yopilganda kalit o'chadi)"})),
+      st,help));
+    // security
+    el.append(h('div',{class:'card pad stack'},
+      h('div',null,h('h3',{text:'Kalitni himoya qilish'}),h('p',{text:"Kalit fayl ichida emas, faqat brauzeringizda saqlanadi. Shunday bo'lsa ham, 3 ta oddiy qadam uni xavfsizroq qiladi:"})),
+      h('div',{class:'steps'},
+        h('div',{class:'step'},h('div',{class:'n',text:'1'}),h('p',null,h('b',{text:'Faqat YouTube uchun cheklang'}),"Credentials → kalit → API restrictions → Restrict key → faqat YouTube Data API v3")),
+        h('div',{class:'step'},h('div',{class:'n',text:'2'}),h('p',null,h('b',{text:'Kunlik limitni kamaytiring'}),"Quotas sahifasida «Queries per day» ni masalan 3000 qiling — kalit tarqalsa ham ko'p sarflanmaydi")),
+        h('div',{class:'step'},h('div',{class:'n',text:'3'}),h('p',null,h('b',{text:'Shubha bo\'lsa — yangilang'}),"Credentials → kalit → «Regenerate key». Eski kalit darhol ishlamay qoladi"))),
+      h('div',{class:'row'},
+        h('a',{class:'btn line sm',href:'https://console.cloud.google.com/apis/credentials',target:'_blank',rel:'noopener'},icon('ext',14,2),'Credentials sahifasi'),
+        h('a',{class:'btn line sm',href:'https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas',target:'_blank',rel:'noopener'},icon('ext',14,2),'Quotas (haqiqiy limit)'))));
+    // RPM
+    const nsel=h('select',{class:'inp',id:'setNiche'},Object.entries(NICHES).map(([k,n])=>h('option',{value:k,selected:S.set.niche===k?true:null,text:n.l+(n.min!=null?` ($${n.min}–${n.max})`:'')})));
+    const num=(id,k,step)=>{ const i=h('input',{class:'inp inp-num',type:'number',id,min:'0',step:step||'0.1',value:String(S.set[k])}); i.onchange=()=>{ S.set[k]=Math.max(0,+i.value||0); S.set.niche='custom'; nsel.value='custom'; saveSettings(); }; return i; };
+    const f={rpmMin:num('rpmMin','rpmMin'),rpmMax:num('rpmMax','rpmMax'),sMin:num('sMin','sMin','0.01'),sMax:num('sMax','sMax','0.01')};
+    nsel.onchange=()=>{ const n=NICHES[nsel.value]; S.set.niche=nsel.value; if(n.min!=null){ S.set.rpmMin=n.min; S.set.rpmMax=n.max; f.rpmMin.value=n.min; f.rpmMax.value=n.max; } saveSettings(); toast('Saqlandi'); };
+    el.append(h('div',{class:'card pad stack'},
+      h('div',null,h('h3',{text:'Daromad hisoblash (RPM)'}),h('p',{text:"RPM — 1000 ko'rishdan muallifga tushadigan taxminiy daromad (AQSh dollarida). Mavzuni tanlang yoki o'zingiz kiriting."})),
+      h('div',{class:'formbar'},
+        h('div',{class:'field',style:'min-width:240px'},h('label',{for:'setNiche',text:'Kanal mavzusi'}),nsel),
+        h('div',{class:'field'},h('label',{for:'rpmMin',text:'Uzun, min $'}),f.rpmMin),
+        h('div',{class:'field'},h('label',{for:'rpmMax',text:'Uzun, max $'}),f.rpmMax),
+        h('div',{class:'field'},h('label',{for:'sMin',text:'Shorts, min $'}),f.sMin),
+        h('div',{class:'field'},h('label',{for:'sMax',text:'Shorts, max $'}),f.sMax))));
+    // theme
+    el.append(h('div',{class:'card pad stack'},
+      h('div',null,h('h3',{text:"Ko'rinish"}),h('p',{text:"Avtomatik — kompyuteringiz sozlamasiga qarab yorug' yoki qorong'i bo'ladi."})),
+      segCtl([['auto','Avtomatik'],['light',"Yorug'"],['dark',"Qorong'i"]],S.set.theme,k=>{ S.set.theme=k; saveSettings(); applyTheme(); })));
+    // costs
+    el.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Bepul limit qancha ketadi'}),h('p',{text:"YouTube kuniga 10 000 birlik beradi. Koreya vaqti bilan har kuni ~16:00 (qishda 17:00) da yangilanadi. Chapdagi hisoblagich taxminiy — haqiqiy sarfni Google Cloud'dagi «Quotas» sahifasi ko'rsatadi. Saqlangan natijalar limit sarflamaydi."})),
+        h('table',{class:'costtbl'},h('tbody',null,[
+          ['Kanal tahlili (100 video)','≈ 4 birlik'],['Kanal tahlili (500 video)','≈ 22 birlik'],['Kanalni nomi bilan qidirish (@ siz)','+100 birlik'],
+          ['Video tahlili','≈ 5 birlik'],["Kalit so'z qidiruvi",'≈ 102 birlik'],["Kalit so'z g'oyalari (takliflar)",'bepul'],
+          ['Trendlar','1–2 birlik'],['Kuzatuvni yangilash','1 birlik'],['Thumbnail sinovi','bepul']].map(([a,b])=>h('tr',null,h('td',{text:a}),h('td',{text:b})))))),
+      this.dataCard()));
+  },
+  dataCard(){
+    const fi=h('input',{type:'file',accept:'application/json,.json',hidden:true});
+    fi.onchange=()=>{ const f=fi.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.saved) S.saved=d.saved; if(d.settings) S.set=Object.assign(S.set,d.settings); if(d.recent) S.recent=d.recent; if(d.cmp) CMP.list=d.cmp;
+      saveSaved(); saveSettings(); store.set('recent',S.recent); store.set('cmp',CMP.list); applyTheme(); toast('Zaxira tiklandi'); }catch(e){ toast("Fayl noto'g'ri",'err'); } }; rd.readAsText(f); fi.value=''; };
+    let arm=false;
+    const clr=h('button',{class:'btn danger',type:'button'},icon('trash',16,2),'Hammasini tozalash');
+    clr.onclick=()=>{ if(!arm){ arm=true; clr.lastChild.textContent='Ishonchingiz komilmi? Yana bosing'; setTimeout(()=>{ arm=false; clr.lastChild.textContent='Hammasini tozalash'; },4000); return; }
+      for(const k of ['saved','recent','cmp','settings','quota','lastRefresh']) store.del(k);
+      S.saved=[]; S.recent=[]; CMP.list=[]; toast("Ma'lumotlar tozalandi (kalit saqlab qolindi)"); arm=false; clr.lastChild.textContent='Hammasini tozalash'; };
+    return h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Ma'lumotlar va zaxira"}),h('p',{text:"Kuzatuvdagi kanallar va sozlamalarni faylga saqlab, boshqa kompyuterda tiklashingiz mumkin. Kalit zaxiraga kirmaydi."})),
+      h('div',{class:'row'},
+        h('button',{class:'btn sec',type:'button',onclick:()=>backupNow()},icon('download',16,2),'Zaxira olish'),
+        h('button',{class:'btn sec',type:'button',onclick:()=>fi.click()},icon('upload',16,2),'Zaxiradan tiklash'),fi),
+      h('div',{class:'row'},clr,h('button',{class:'btn sec',type:'button',onclick:async()=>{ await cacheClear(); toast('Saqlangan natijalar tozalandi'); }},icon('refresh',16,2),'Saqlangan natijalarni tozalash')));
+  }
+};
+
+/* =========================================================
+   Video, Keyword, Trends, Compare, Tracker, Preview, boot
+   ========================================================= */
+let LAST_FEED=[];
+
+/* ======================= VIDEO ======================= */
+V.video={
+  init(el){
+    this.inp=h('input',{class:'inp',id:'vInp',placeholder:'https://youtu.be/... yoki video havolasi',autocomplete:'off'});
+    this.btn=h('button',{class:'btn',type:'submit'},icon('play',17,2.2),'Tahlil qilish');
+    el.append(h('form',{class:'card pad formbar',onsubmit:e=>{ e.preventDefault(); this.analyze(); }},
+      h('div',{class:'field grow'},h('label',{for:'vInp',text:'Video havolasi'}),this.inp),this.btn));
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:22px'});
+    el.append(this.st,this.out);
+    this.out.append(emptyBox('play',"Video havolasini kiriting","YouTube'dagi istalgan video (Shorts ham) havolasini qo'ying: teglar, izohlar va kanalga nisbatan natijasi chiqadi."));
+  },
+  run(arg){ this.inp.value=arg.length===11?'https://youtu.be/'+arg:arg; this.analyze(); },
+  async analyze(fresh){
+    const id=parseVideoInput(this.inp.value);
+    if(!id){ setStatus(this.st,'error',"Video havolasini to'g'ri kiriting (masalan: https://youtu.be/abc123XYZ00)."); return; }
+    this.out.replaceChildren(skeletonReport());
+    await busy(this.btn,()=>withApi(fresh,async()=>{
+      try{
+        setStatus(this.st,'loading','Video ma\'lumotlari olinmoqda…');
+        const [v]=await getVideos([id]);
+        if(!v) throw new AppErr("Video topilmadi yoki yopiq (private).");
+        const chs=await getChannelsMap([v.channelId]); const ch=chs[v.channelId];
+        setStatus(this.st,'loading','Kanalning boshqa videolari bilan solishtirilmoqda…');
+        let others=[]; if(ch) others=await getUploads(ch,50);
+        others=others.filter(o=>o.id!==v.id);
+        const base=enrich(others.length?others:[v]);
+        enrich([v]); v.score=others.length?v.norm/others._nbase:null;
+        let cm=[], cmErr=null;
+        try{ const j=await api('commentThreads',{part:'snippet',videoId:id,order:'relevance',maxResults:40,textFormat:'plainText'},1);
+          cm=(j.items||[]).map(t=>{ const s=t.snippet.topLevelComment.snippet; return {a:s.authorDisplayName,img:s.authorProfileImageUrl,tx:s.textDisplay,l:s.likeCount||0,r:t.snippet.totalReplyCount||0,t:new Date(s.publishedAt)}; }); }
+        catch(e){ cmErr=e.message; }
+        setStatus(this.st,null);
+        this.render(v,ch,others,base,cm,cmErr);
+        cacheNote(this.out,()=>this.analyze(true));
+        pushRecent({type:'video',ref:v.id,title:v.title,thumb:v.thumb,t:Date.now()});
+      }catch(e){ this.out.replaceChildren(); errorStatus(this.st,e); }
+    }));
+  },
+  render(v,ch,others,base,cm,cmErr){
+    const out=this.out; out.replaceChildren();
+    const rankAll=[...others,v].sort((a,b)=>b.views-a.views), rank=rankAll.indexOf(v)+1;
+    const thumbBox=h('div',{class:'vthumb'});
+    const im=h('img',{src:'https://i.ytimg.com/vi/'+v.id+'/maxresdefault.jpg',alt:'',referrerpolicy:'no-referrer'});
+    im.onerror=()=>{ if(!im.dataset.f){ im.dataset.f=1; im.src=v.thumbHi||v.thumb; } else im.remove(); };
+    thumbBox.append(im,h('span',{class:'dur',text:dur(v.durSec)}));
+    out.append(h('div',{class:'vhero'},
+      h('div',{class:'stack'},thumbBox),
+      h('div',{class:'stack'},
+        h('h2',{class:'vtitle',text:v.title}),
+        ch?h('div',{class:'row'},avatar(ch.thumb,ch.title,'sm'),h('div',{style:'flex:1;min-width:0'},h('b',{text:ch.title}),h('div',{class:'hint',text:(ch.subs!=null?compact(ch.subs)+' obunachi':'')})),
+          h('button',{class:'btn sec sm',type:'button',onclick:()=>go('channel',ch.id)},icon('bar',15,2),'Kanalni tahlil qilish')):null,
+        h('div',{class:'hint',text:`${dateUz(v.published)}, ${String(v.published.getHours()).padStart(2,'0')}:${String(v.published.getMinutes()).padStart(2,'0')} (${WDF[v.wd]}) · ${ago(v.published)}${v.isShort?' · Shorts':''}`}),
+        h('div',{class:'kpis',style:'grid-template-columns:repeat(2,minmax(0,1fr))'},
+          kpi("Ko'rish",compact(v.views),full(v.views)),
+          kpi('Kunlik',compact(v.vpd),"o'rtacha kunlik ko'rish"),
+          kpi('Layk',compact(v.likes),v.likeRate!=null?pct(v.likeRate)+" ko'ruvchilardan":'yashirilgan'),
+          kpi('Izoh',compact(v.comments),pct(v.views?(v.comments||0)/v.views:0,2)+" ko'ruvchilardan")),
+        h('div',{class:'row'},
+          h('a',{class:'btn sm',href:ytUrl(v.id),target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube\'da ochish'),
+          h('a',{class:'btn sec sm',href:'https://i.ytimg.com/vi/'+v.id+'/maxresdefault.jpg',target:'_blank',rel:'noopener'},icon('image',15,2),'Thumbnailni ochish'),
+          h('button',{class:'btn line sm',type:'button',onclick:()=>go('preview',{title:v.title,img:'https://i.ytimg.com/vi/'+v.id+'/hqdefault.jpg',channel:v.channelTitle,views:compact(v.views),avatar:ch&&ch.thumb})},icon('image',15,2),'Thumbnail sinovida ko\'rish')))));
+    // vs channel
+    if(others.length){
+      const mvpd=median(others.filter(o=>o.age>=3).map(o=>o.vpd)), meng=median(others.filter(o=>o.views>100).map(o=>o.eng));
+      const row=(l,a,b,f)=>h('div',{class:'fr'},h('div',null,l,h('small',{text:`bu video: ${f(a)} · kanal odatiy: ${f(b)}`})),deltaChip(b?a/b-1:null));
+      const verdict=v.score>=2?['good','Bu video kanal uchun HIT — odatiydan '+v.score.toFixed(1)+'× ko\'p ko\'rilgan.']:v.score>=0.8?['info',"Bu video kanal uchun odatiy natija ko'rsatmoqda."]:['warn',"Bu video kanal odatiysidan kam ko'rilgan."];
+      out.append(h('div',{class:'two'},
+        h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Kanalga nisbatan'}),h('p',{text:`Kanalning oxirgi ${others.length} ta videosi bilan solishtirildi`})),
+          h('div',{class:'scorecard'},ring(clamp(v.score/3*100,0,100),v.score.toFixed(1)+'× odatiy',v.score>=2?'var(--hot)':v.score>=0.8?'var(--d1)':'var(--muted)',132),
+            h('div',{class:'stack',style:'gap:6px'},h('div',{class:'tip '+verdict[0],style:'padding:10px 12px'},h('p',{text:verdict[1]})),
+              h('div',{class:'hint'},'Ko\'rishlar bo\'yicha o\'rni: ',h('b',{style:'color:var(--ink)',text:`${rank} / ${rankAll.length}`})),
+              h('p',{class:'hint',text:v.isNew?"Diqqat: video 3 kundan yosh — baho hali aniq emas, 1 haftadan keyin qayta tekshiring.":"Video yoshi hisobga olingan: yangi va eski videolar adolatli solishtiriladi."})))),
+        h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Ko'rsatkichlar taqqoslash"}),h('p',{text:"Yashil — kanal odatiysidan yaxshiroq"})),
+          h('div',{class:'feat'},row("Ko'rish",v.views,base,compact),row("Kunlik ko'rish",v.vpd,mvpd,compact),row('Faollik',v.eng,meng,x=>pct(x)),
+            row('Uzunlik',v.durSec,median(others.filter(o=>o.isShort===v.isShort).map(o=>o.durSec)),dur)))));
+    }
+    // tags & hashtags & chapters
+    const hashtags=[...new Set((v.desc.match(/#[\p{L}\p{N}_]+/gu)||[]))];
+    const chapters=[...v.desc.matchAll(/^\s*((?:\d{1,2}:)?\d{1,2}:\d{2})\s*[-–—:]?\s*(.+)$/gm)].map(m=>({t:m[1],l:m[2]})).slice(0,40);
+    const tagLen=v.tags.join(',').length;
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},
+        h('div',{class:'sec-h'},h('div',null,h('h3',{text:`Teglar (${v.tags.length})`}),h('p',{text:v.tags.length?`Jami ${tagLen} / 500 belgi`:"Bu videoda teglar yo'q yoki yashirilgan"})),
+          v.tags.length?h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(v.tags.join(', '))},icon('copy',15,2),'Nusxalash'):null),
+        v.tags.length?h('div',{class:'chips'},v.tags.map(t=>h('button',{class:'chip',type:'button',title:"Bu teg bo'yicha kalit so'z tadqiqoti",onclick:()=>go('keyword',t),text:t}))):null,
+        hashtags.length?h('div',{class:'stack',style:'gap:8px'},h('div',{class:'lbl',text:'Heshteglar'}),h('div',{class:'chips'},hashtags.map(t=>h('span',{class:'chip',text:t})))):null),
+      h('div',{class:'card pad stack'},h('div',{class:'sec-h'},h('div',null,h('h3',{text:'Tavsif'}),h('p',{text:`${v.desc.length} belgi`+(chapters.length?` · ${chapters.length} ta bob`:'')})),
+          v.desc?h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(v.desc)},icon('copy',15,2),'Nusxalash'):null),
+        chapters.length?h('div',{class:'chips'},chapters.map(c=>h('span',{class:'chip'},h('b',{text:c.t}),c.l))):null,
+        h('pre',{class:'descbox',text:v.desc||'Tavsif yo\'q'}))));
+    // comments
+    const cw={}; for(const c of cm) for(const w of new Set(words(c.tx))) cw[w]=(cw[w]||0)+1;
+    const topW=Object.entries(cw).filter(([,n])=>n>=2).sort((a,b)=>b[1]-a[1]).slice(0,20);
+    out.append(h('div',{class:'card pad stack'},
+      h('div',null,h('h3',{text:'Eng yaxshi izohlar'}),h('p',{text:cmErr?cmErr:`${cm.length} ta eng mashhur izoh · tomoshabinlar nimani so'rayotganini bilib oling`})),
+      topW.length?h('div',{class:'stack',style:'gap:8px'},h('div',{class:'lbl',text:"Izohlarda ko'p uchraydigan so'zlar"}),h('div',{class:'chips'},topW.map(([w,n])=>h('span',{class:'chip'},w,h('b',{text:n}))))):null,
+      cm.length?h('div',null,cm.slice(0,15).map(c=>h('div',{class:'cmt'},avatar(c.img,c.a,'sm'),h('div',{class:'tx'},h('b',{text:c.a}),h('span',{class:'hint',text:' · '+ago(c.t)}),h('p',{text:c.tx})),
+        h('div',{class:'lk'},icon('heart',13,2),' '+compact(c.l))))):null));
+  }
+};
+
+/* ======================= KEYWORD ======================= */
+V.keyword={
+  init(el){
+    this.inp=h('input',{class:'inp',id:'kwInp',placeholder:'masalan: 한국 생활 yoki life in korea',autocomplete:'off'});
+    const sel=(id,opts,def)=>h('select',{class:'inp',id},opts.map(([v,l])=>h('option',{value:v,selected:v===def?true:null,text:l})));
+    this.region=sel('kwReg',[['KR','Koreya'],['UZ',"O'zbekiston"],['US','AQSh'],['RU','Rossiya'],['TR','Turkiya'],['KZ','Qozog\'iston'],['JP','Yaponiya'],['','Hammasi']],'KR');
+    this.lang=sel('kwLang',[['ko','Koreys'],['uz',"O'zbek"],['en','Ingliz'],['ru','Rus'],['tr','Turk'],['','Farqi yo\'q']],'ko');
+    this.period=sel('kwPer',[['30','30 kun'],['90','3 oy'],['365','1 yil'],['0','Hammasi']],'90');
+    this.order=sel('kwOrd',[['viewCount',"Ko'p ko'rilgan"],['relevance','Eng mos'],['date','Eng yangi']],'viewCount');
+    this.dur=sel('kwDur',[['any','Hammasi'],['short','4 daq gacha'],['medium','4–20 daq'],['long','20+ daq']],'any');
+    this.btn=h('button',{class:'btn',type:'submit'},icon('search',17,2.2),'Qidirish');
+    el.append(h('form',{class:'card pad stack',onsubmit:e=>{ e.preventDefault(); this.search(); }},
+      h('div',{class:'formbar'},h('div',{class:'field grow'},h('label',{for:'kwInp',text:"Kalit so'z"}),this.inp),this.btn),
+      h('div',{class:'formbar'},
+        h('div',{class:'field'},h('label',{for:'kwReg',text:'Mamlakat'}),this.region),
+        h('div',{class:'field'},h('label',{for:'kwLang',text:'Til'}),this.lang),
+        h('div',{class:'field'},h('label',{for:'kwPer',text:'Davr'}),this.period),
+        h('div',{class:'field'},h('label',{for:'kwOrd',text:'Tartib'}),this.order),
+        h('div',{class:'field'},h('label',{for:'kwDur',text:'Uzunlik'}),this.dur))));
+    // ideas
+    this.ideaChips=h('div',{class:'chips'});
+    this.deepBox=h('div',{class:'stack',hidden:true,style:'gap:10px'});
+    this.deepBtn=h('button',{class:'btn line sm',type:'button',onclick:()=>this.deep()},icon('spark',15,2),"Ko'proq g'oyalar");
+    this.ideaCard=h('div',{class:'card pad stack'},
+      h('div',{class:'sec-h'},h('div',null,h('h3',{text:"G'oyalar — odamlar YouTube'da nimani qidirmoqda"}),h('p',{text:"YouTube qidiruv takliflari. Bepul — limit sarflanmaydi. Bosing — maydonga qo'yiladi."})),this.deepBtn),
+      this.ideaChips,this.deepBox);
+    el.append(this.ideaCard);
+    let t; this.inp.addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(()=>this.ideas(this.inp.value),320); });
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:22px'});
+    el.append(this.st,this.out);
+    this.ideaChips.append(h('span',{class:'hint',text:"Yozishni boshlang — takliflar shu yerda chiqadi."}));
+  },
+  hl(){ return this.lang.value||'en'; },
+  async ideas(q){
+    q=(q||'').trim();
+    if(!q){ this.ideaChips.replaceChildren(h('span',{class:'hint',text:"Yozishni boshlang — takliflar shu yerda chiqadi."})); return; }
+    const list=await suggest(q,this.hl());
+    if(this.inp.value.trim()!==q) return;
+    const chip=s=>h('button',{class:'chip',type:'button',onclick:()=>{ this.inp.value=s; this.ideas(s); },text:s});
+    if(list.length){ this.ideaChips.replaceChildren(...list.map(chip)); return; }
+    const alt=(this.lastTags||[]).filter(t=>t!==q.toLowerCase()).slice(0,20);
+    this.ideaChips.replaceChildren(h('span',{class:'hint',style:'width:100%',text:alt.length?"YouTube takliflari olinmadi — o'rniga oxirgi qidiruvdagi raqiblar teglaridan g'oyalar:":"YouTube takliflari olinmadi. Avval «Qidirish» tugmasini bosing — raqiblar teglaridan g'oyalar shu yerda chiqadi."}),...alt.map(chip));
+  },
+  async deep(){
+    const q=this.inp.value.trim(); if(!q){ this.inp.focus(); return; }
+    const hangul=/[ㄱ-힝]/.test(q);
+    const suf=hangul?['가','나','다','라','마','바','사','아','자','차','카','타','파','하','추천','방법','후기','브이로그','비용','팁']:'abcdefghijklmnopqrstuvwyz'.split('').concat(['how','why','2026']);
+    const pre=hangul?['왜','어떻게']:['how to','best','why'];
+    const qs=[...suf.map(s=>q+' '+s),...pre.map(p=>p+' '+q)];
+    this.deepBox.hidden=false;
+    const counter=h('span',{class:'hint',text:"Qidirilmoqda…"});
+    const box=h('div',{class:'chips ideas-deep'});
+    this.deepBox.replaceChildren(h('div',{class:'row',style:'justify-content:space-between'},counter,h('button',{class:'btn sec sm',type:'button',onclick:()=>copy([...seen].join('\n'))},icon('copy',15,2),'Hammasini nusxalash')),box);
+    const seen=new Set();
+    await busy(this.deepBtn,async()=>{
+      for(let i=0;i<qs.length;i+=4){
+        const res=await Promise.all(qs.slice(i,i+4).map(x=>suggest(x,this.hl())));
+        for(const s of res.flat()){ if(!seen.has(s)&&s!==q){ seen.add(s); box.append(h('button',{class:'chip',type:'button',onclick:()=>{ this.inp.value=s; this.ideas(s); window.scrollTo({top:0,behavior:'smooth'}); },text:s})); } }
+        counter.textContent=`${seen.size} ta g'oya topildi`;
+      }
+      if(!seen.size) counter.textContent="G'oyalar topilmadi (internetni tekshiring).";
+    });
+  },
+  run(arg){ this.inp.value=arg; this.ideas(arg); this.search(); },
+  async search(fresh){
+    const q=this.inp.value.trim();
+    if(!q){ setStatus(this.st,'error',"Kalit so'z kiriting."); this.inp.focus(); return; }
+    this.out.replaceChildren(skeletonReport());
+    await busy(this.btn,()=>withApi(fresh,async()=>{
+      try{
+        setStatus(this.st,'loading','YouTube\'da qidirilmoqda…');
+        const days=+this.period.value;
+        const p={part:'snippet',type:'video',q,maxResults:50,order:this.order.value,regionCode:this.region.value,relevanceLanguage:this.lang.value,videoDuration:this.dur.value};
+        if(days) p.publishedAfter=new Date(Date.now()-days*864e5).toISOString();
+        const sr=await api('search',p,100);
+        const ids=(sr.items||[]).map(i=>i.id&&i.id.videoId).filter(Boolean);
+        const vids=ids.length?await getVideos(ids):[];
+        const chs=await getChannelsMap(vids.map(v=>v.channelId));
+        for(const v of vids){ const c=chs[v.channelId]; v.subs=c?c.subs:null; v.chThumb=c?c.thumb:''; }
+        setStatus(this.st,null);
+        this.render(q,vids,chs);
+        cacheNote(this.out,()=>this.search(true));
+        pushRecent({type:'keyword',ref:q,title:q,thumb:'',t:Date.now()});
+      }catch(e){ this.out.replaceChildren(); errorStatus(this.st,e); }
+    }));
+  },
+  render(q,vids,chs){
+    const out=this.out; out.replaceChildren();
+    if(!vids.length){ out.append(emptyBox('search','Hech narsa topilmadi',"Davrni kengaytiring, mamlakatni 'Hammasi' qiling yoki boshqa so'z yozing.")); return; }
+    enrich(vids);
+    for(const v of vids){ v.ratio=v.subs?v.views/v.subs:null; }
+    LAST_FEED=vids.slice(0,16);
+    const medV=median(vids.map(v=>v.views))||0;
+    const small=vids.filter(v=>v.subs!=null&&v.subs<10000), smallShare=small.length/vids.length;
+    const big=vids.filter(v=>v.subs!=null&&v.subs>=1e6).length/vids.length;
+    const brk=vids.filter(v=>v.ratio!=null&&v.ratio>=1);
+    const medAge=median(vids.map(v=>v.age))||0;
+    const demand=clamp((Math.log10(Math.max(1,medV))-2)/4,0,1);
+    const ease=clamp(smallShare*1.4+brk.length/vids.length*0.8-big*0.5,0,1);
+    const fresh=clamp(1-medAge/365,0,1);
+    const opp=Math.round(100*(0.4*demand+0.45*ease+0.15*fresh));
+    const verdict=opp>=65?['good',"Yaxshi imkoniyat: talab bor va kichik kanallar ham ko'rish olmoqda."]:opp>=45?['warn',"O'rtacha: talab bor, lekin raqobat sezilarli. Mavzuni torroq qiling."]:['bad',"Qiyin: natijalarda asosan katta kanallar yoki talab past."];
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:`«${q}» — imkoniyat bali`}),h('p',{text:"Talab, raqobat va mavzu yangiligi asosida taxminiy baho"})),
+        h('div',{class:'gauge-wrap'},semiGauge(opp,'/ 100'),
+          h('div',{class:'subbars'},subBar('Talab',demand*100,100,`odatda ${compact(medV)} ko'rish`,'var(--d1)'),
+            subBar('Kirish osonligi',ease*100,100,`${pct(smallShare,0)} natija kichik kanallardan`,'var(--d4)'),
+            subBar('Yangilik',fresh*100,100,`videolar odatda ${Math.round(medAge)} kunlik`,'var(--d2)'))),
+        h('div',{class:'tip '+verdict[0]},h('div',{class:'ti'},icon(verdict[0]==='good'?'up':'info',17,2)),h('p',{text:verdict[1]})),
+        howTo('Bu baho qanday hisoblanadi?',[
+          ['Talab (40%)',"natijalardagi videolar odatda qancha ko'rilgani: 100 ko'rish = 0, 1 mln = 100"],
+          ['Kirish osonligi (45%)',"kichik kanallar (10 mingdan kam) va obunachidan ko'p ko'rilgan videolar ulushi; katta kanallar ko'p bo'lsa kamayadi"],
+          ['Yangilik (15%)',"videolar qanchalik yangi: yangi videolar ko'p bo'lsa, mavzu hozir faol"]],
+          "Haqiqiy qidiruv hajmini faqat Google biladi — bu baho YouTube natijalariga asoslangan taxmin.")),
+      h('div',{class:'kpis',style:'grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))'},
+        kpi("Odatiy ko'rish",compact(medV),`${vids.length} ta natija, median`,{icon:'eye'}),
+        kpi('Kichik kanallar',pct(smallShare,0),"10 mingdan kam obunachili kanallar ulushi",{icon:'users'}),
+        kpi('Breakout videolar',brk.length+' ta',"obunachi sonidan ko'p ko'rilgan",{icon:'flame'}),
+        kpi('Katta kanallar',pct(big,0),"1 mln+ obunachili kanallar ulushi",{icon:'bar'}))));
+    // breakouts
+    const outs=vids.filter(v=>v.ratio!=null).sort((a,b)=>b.ratio-a.ratio).slice(0,8);
+    out.append(h('div',{class:'stack'},secHead('Eng kuchli breakoutlar',"Kanal hajmiga nisbatan eng ko'p ko'rilgan videolar — raqam: ko'rish ÷ obunachi"),
+      h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{scoreVal:v.ratio,scoreLabel:"Ko'rish ÷ obunachi",channel:true})))));
+    // channels, tags
+    const byCh={};
+    for(const v of vids){ const c=byCh[v.channelId]=byCh[v.channelId]||{id:v.channelId,title:v.channelTitle,subs:v.subs,thumb:v.chThumb,n:0,views:0}; c.n++; c.views+=v.views; }
+    const topCh=Object.values(byCh).sort((a,b)=>b.views-a.views).slice(0,8);
+    const tags=tagFreq(vids).slice(0,36);
+    this.lastTags=tags.map(t=>t[0]);
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Bu mavzudagi asosiy kanallar'}),h('p',{text:"Natijalarda eng ko'p ko'rish olgan kanallar"})),
+        h('div',{class:'list'},topCh.map(c=>h('div',{class:'li'},avatar(c.thumb,c.title,'sm'),h('div',{class:'tx'},h('b',{text:c.title}),h('small',{text:`${c.subs!=null?compact(c.subs)+' obunachi · ':''}${c.n} ta video · ${compact(c.views)} ko'rish`})),
+          h('button',{class:'btn sec sm',type:'button',onclick:()=>go('channel',c.id),text:'Tahlil'}))))),
+      h('div',{class:'card pad stack'},h('div',{class:'sec-h'},h('div',null,h('h3',{text:'Raqiblar ishlatgan teglar'}),h('p',{text:"Raqam — nechta videoda uchragan"})),
+          tags.length?h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(tags.map(t=>t[0]).join(', '))},icon('copy',15,2),'Nusxalash'):null),
+        tags.length?h('div',{class:'chips'},tags.map(([t,n])=>h('span',{class:'chip'},t,h('b',{text:n})))):h('p',{class:'hint',text:'Teglar topilmadi.'}))));
+    // title words + durations
+    const tw={}; for(const v of vids) for(const w of new Set(words(v.title))) tw[w]=(tw[w]||0)+1;
+    const twl=Object.entries(tw).filter(([,n])=>n>=2).sort((a,b)=>b[1]-a[1]).slice(0,24);
+    const durs=DUR_B.map(b=>{ const g=vids.filter(v=>v.durSec>=b.a&&v.durSec<=b.b); return {l:b.l,s:b.s+(g.length?' · '+g.length+' ta':''),v:g.length?median(g.map(v=>v.views)):null}; });
+    out.append(h('div',{class:'two'},
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Sarlavhalardagi so'zlar"}),h('p',{text:"Top videolar sarlavhalarida ko'p takrorlangan so'zlar"})),
+        twl.length?h('div',{class:'chips'},twl.map(([w,n])=>h('span',{class:'chip'},w,h('b',{text:n})))):h('p',{class:'hint',text:"Takrorlangan so'z yo'q."})),
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Qanday uzunlik ishlaydi'}),h('p',{text:"Bu mavzuda uzunlik bo'yicha odatiy ko'rish"})),hbars(durs))));
+    // table
+    const cols=[
+      {k:'title',l:'Video',f:v=>vtCell(v,{channel:true})},
+      {k:'subs',l:'Obunachi',n:1,f:v=>v.subs==null?'—':compact(v.subs)},
+      {k:'views',l:"Ko'rish",n:1,f:v=>full(v.views)},
+      {k:'ratio',l:"Ko'rish ÷ obuna",n:1,f:v=>v.ratio==null?'—':scoreChip(v.ratio,"Ko'rish ÷ obunachi")},
+      {k:'vpd',l:'Kunlik',n:1,f:v=>compact(v.vpd)},
+      {k:'published',l:'Chiqqan',n:1,f:v=>ago(v.published)},
+      {k:'eng',l:'Faollik',n:1,f:v=>pct(v.eng)},
+      {k:'durSec',l:'Uzunlik',n:1,f:v=>dur(v.durSec)}];
+    const dt=dataTable(cols,vids,{sort:{k:'views',d:'desc'},right:h('button',{class:'btn sec sm',type:'button',onclick:()=>csv('qidiruv_'+safeName(q)+'.csv',
+      ['Sarlavha','Havola','Kanal','Obunachi',"Ko'rish","Ko'rish/obuna","Kunlik",'Sana','Faollik %','Uzunlik','Teglar'],
+      vids.map(v=>[v.title,'https://youtu.be/'+v.id,v.channelTitle,v.subs,v.views,v.ratio==null?'':v.ratio.toFixed(2),Math.round(v.vpd),d10(v.published),(v.eng*100).toFixed(2),dur(v.durSec),(v.tags||[]).join(' | ')]))},icon('download',15,2),'Excel (CSV)')});
+    out.append(h('div',{class:'stack'},secHead('Barcha natijalar',`${vids.length} ta video`),dt.el));
+  }
+};
+
+/* ======================= TRENDS ======================= */
+const CATS=[['','Hammasi'],['10','Musiqa'],['20',"O'yinlar"],['24',"Ko'ngilochar"],['22','Odamlar va bloglar'],['23','Komediya'],['25','Yangiliklar'],['26',"Qo'llanma va uslub"],['27',"Ta'lim"],['28','Fan va texnika'],['17','Sport'],['1','Film va animatsiya'],['2','Avtomobillar'],['15','Hayvonlar'],['19','Sayohat']];
+V.trends={
+  init(el){
+    const sel=(id,opts,def)=>h('select',{class:'inp',id},opts.map(([v,l])=>h('option',{value:v,selected:v===def?true:null,text:l})));
+    this.region=sel('trReg',[['KR','Koreya'],['UZ',"O'zbekiston"],['US','AQSh'],['RU','Rossiya'],['TR','Turkiya'],['KZ',"Qozog'iston"],['JP','Yaponiya'],['GB','Britaniya'],['DE','Germaniya'],['IN','Hindiston']],'KR');
+    this.cat=sel('trCat',CATS,'');
+    this.btn=h('button',{class:'btn',type:'submit'},icon('flame',17,2.2),"Ko'rsatish");
+    this.sort='pop';
+    el.append(h('form',{class:'card pad formbar',onsubmit:e=>{ e.preventDefault(); this.load(); }},
+      h('div',{class:'field'},h('label',{for:'trReg',text:'Mamlakat'}),this.region),
+      h('div',{class:'field',style:'min-width:200px'},h('label',{for:'trCat',text:'Toifa'}),this.cat),this.btn,
+      h('div',{class:'field',style:'margin-left:auto'},h('span',{class:'lbl',text:'Tartib'}),segCtl([['pop','Ommabop'],['vph','Eng tez o\'sayotgan']],'pop',k=>{ this.sort=k; this.draw(); }))));
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:22px'});
+    el.append(this.st,this.out);
+  },
+  show(){ if(!this.loaded){ if(S.key) this.load(); else this.out.replaceChildren(emptyBox('flame','Trendlarni ko\'rish uchun kalit kerak',"Sozlamalarda API kalitni kiriting — trendlar faqat 1–2 birlik oladi.",h('a',{class:'btn',href:'#settings',text:'Kalitni kiritish'}))); } },
+  async load(fresh){
+    this.out.replaceChildren(h('div',{class:'vgrid'},Array.from({length:8},()=>h('div',{class:'skel',style:'height:260px'}))));
+    await busy(this.btn,()=>withApi(fresh,async()=>{
+      try{
+        setStatus(this.st,'loading','Trendlar olinmoqda…');
+        const j=await api('videos',{part:'snippet,statistics,contentDetails',chart:'mostPopular',regionCode:this.region.value,videoCategoryId:this.cat.value||undefined,maxResults:50},1);
+        const vids=(j.items||[]).map(mapVideo);
+        const chs=await getChannelsMap(vids.map(v=>v.channelId));
+        vids.forEach((v,i)=>{ v.rank=i+1; const c=chs[v.channelId]; v.subs=c?c.subs:null; v.chThumb=c?c.thumb:''; });
+        enrich(vids);
+        for(const v of vids){ v.ratio=v.subs?v.views/v.subs:null; }
+        this.vids=vids; this.loaded=true; LAST_FEED=vids.slice(0,16);
+        this.cachedAt=API_META.cachedAt;
+        setStatus(this.st,null); this.draw();
+      }catch(e){ this.out.replaceChildren(); errorStatus(this.st,e); }
+    }));
+  },
+  draw(){
+    const vids=this.vids; if(!vids) return;
+    const out=this.out; out.replaceChildren();
+    if(!vids.length){ out.append(emptyBox('flame','Trend topilmadi',"Boshqa toifani tanlang.")); return; }
+    if(this.cachedAt){ const keep=API_META.cachedAt; API_META.cachedAt=this.cachedAt; cacheNote(out,()=>this.load(true)); API_META.cachedAt=keep; }
+    const shorts=vids.filter(v=>v.isShort).length/vids.length;
+    const tags=tagFreq(vids).slice(0,30);
+    const list=[...vids].sort((a,b)=>this.sort==='vph'?b.vph-a.vph:a.rank-b.rank);
+    const regionName=this.region.options[this.region.selectedIndex].text;
+    out.append(h('div',{class:'kpis'},
+      kpi('Videolar soni',String(vids.length),`${regionName} · ${this.cat.options[this.cat.selectedIndex].text}`,{icon:'flame'}),
+      kpi("Odatiy ko'rish",compact(median(vids.map(v=>v.views))),'trenddagi video uchun',{icon:'eye'}),
+      kpi("Soatiga ko'rish",compact(median(vids.map(v=>v.vph))),"chiqqandan beri o'rtacha",{icon:'bolt'}),
+      kpi('Odatiy uzunlik',dur(Math.round(median(vids.map(v=>v.durSec))||0)),`Shorts ulushi: ${pct(shorts,0)}`,{icon:'clock'}),
+      kpi('Odatiy yoshi',Math.round(median(vids.map(v=>v.age*24))||0)+' soat','trendga chiqqan video necha soatlik',{icon:'calendar'})));
+    if(tags.length) out.append(h('div',{class:'card pad stack'},h('div',{class:'sec-h'},h('div',null,h('h3',{text:'Trenddagi teglar'}),h('p',{text:"Hozir ommabop videolarda eng ko'p ishlatilgan teglar"})),
+      h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(tags.map(t=>t[0]).join(', '))},icon('copy',15,2),'Nusxalash')),
+      h('div',{class:'chips'},tags.map(([t,n])=>h('button',{class:'chip',type:'button',onclick:()=>go('keyword',t)},t,h('b',{text:n}))))));
+    out.append(h('div',{class:'stack'},secHead(this.sort==='vph'?"Eng tez o'sayotgan videolar":'Ommabop videolar',"Raqam — trend ro'yxatidagi o'rni; chaqmoq — soatiga ko'rish",
+      h('button',{class:'btn sec sm',type:'button',onclick:()=>csv('trend_'+this.region.value+'_'+d10(new Date())+'.csv',['#','Sarlavha','Havola','Kanal','Obunachi',"Ko'rish","Soatiga",'Chiqqan','Uzunlik','Teglar'],
+        list.map(v=>[v.rank,v.title,'https://youtu.be/'+v.id,v.channelTitle,v.subs,v.views,Math.round(v.vph),d10(v.published),dur(v.durSec),(v.tags||[]).join(' | ')]))},icon('download',15,2),'Excel (CSV)')),
+      h('div',{class:'vgrid'},list.map(v=>videoCard(v,{rank:v.rank,score:false,vph:true,channel:true})))));
+  }
+};
+
+/* ======================= COMPARE ======================= */
+const CMP_COL=['var(--d1)','var(--accent)','var(--d2)','var(--d3)'];
+V.compare={
+  init(el){
+    this.inp=h('input',{class:'inp',id:'cmpInp',placeholder:'@kanal_nomi yoki havola',autocomplete:'off'});
+    this.chips=h('div',{class:'chips'});
+    this.btn=h('button',{class:'btn',type:'button',onclick:()=>this.compare()},icon('columns',17,2.2),'Solishtirish');
+    this.quick=h('div',{class:'chips'});
+    el.append(h('div',{class:'card pad stack'},
+      h('form',{class:'formbar',onsubmit:e=>{ e.preventDefault(); const v=this.inp.value.trim(); if(v){ addToCompare(v,v); this.inp.value=''; } }},
+        h('div',{class:'field grow'},h('label',{for:'cmpInp',text:"Kanal qo'shish (4 tagacha)"}),this.inp),
+        h('button',{class:'btn line',type:'submit'},icon('plus',16,2.2),"Qo'shish"),this.btn),
+      this.chips,this.quick));
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:22px'});
+    el.append(this.st,this.out);
+    this.drawChips();
+    this.out.append(emptyBox('columns',"Kamida 2 ta kanal qo'shing","Raqiblaringizni (yoki o'z kanalingizni) qo'shing va «Solishtirish» tugmasini bosing. Har bir kanal ≈ 3 birlik oladi."));
+  },
+  show(){ this.drawChips(); },
+  drawChips(){
+    this.chips.replaceChildren(...(CMP.list.length?CMP.list.map((c,i)=>h('span',{class:'chip',style:'padding-right:5px'},h('span',{class:'dot',style:'background:'+CMP_COL[i]}),c.label,
+      h('button',{class:'iconbtn',type:'button',style:'width:22px;height:22px;border:0;background:none','aria-label':'Olib tashlash',onclick:()=>{ CMP.list.splice(i,1); store.set('cmp',CMP.list); this.drawChips(); }},icon('x',13,2.4)))):[h('span',{class:'hint',text:"Hali kanal qo'shilmagan."})]));
+    this.btn.disabled=CMP.list.length<2;
+    const q=S.saved.filter(s=>!CMP.list.some(c=>c.ref===s.id)).slice(0,8);
+    this.quick.replaceChildren(...(q.length?[h('span',{class:'hint',style:'align-self:center',text:'Kuzatuvdan:'}),...q.map(s=>h('button',{class:'chip',type:'button',onclick:()=>{ addToCompare(s.id,s.title); this.drawChips(); }},icon('plus',12,2.4),s.title))]:[]));
+  },
+  async compare(){
+    if(CMP.list.length<2) return;
+    this.out.replaceChildren(skeletonReport());
+    await busy(this.btn,()=>withApi(this._fresh,async()=>{
+      try{
+        const reps=[];
+        for(let i=0;i<CMP.list.length;i++){
+          setStatus(this.st,'loading',`${i+1} / ${CMP.list.length}: ${CMP.list[i].label} tahlil qilinmoqda…`);
+          const ch=await resolveChannel(CMP.list[i].ref);
+          CMP.list[i]={ref:ch.id,label:ch.title};
+          if(reps.some(r=>r.ch.id===ch.id)) continue;
+          const vids=await getUploads(ch,50);
+          reps.push(channelReport(ch,vids));
+        }
+        store.set('cmp',CMP.list); this.drawChips();
+        CMP.list=CMP.list.filter((c,i,a)=>a.findIndex(x=>x.ref===c.ref)===i); store.set('cmp',CMP.list); this.drawChips();
+        setStatus(this.st,null);
+        if(reps.length<2){ this.out.replaceChildren(emptyBox('columns','Kamida 2 ta har xil kanal kerak',"Ro'yxatdagi kanallar bir xil ekan. Boshqa kanal qo'shing.")); return; }
+        this.render(reps);
+        cacheNote(this.out,()=>{ this._fresh=true; this.compare().finally(()=>{ this._fresh=false; }); });
+      }catch(e){ this.out.replaceChildren(); errorStatus(this.st,e); }
+    }));
+  },
+  render(reps){
+    const out=this.out; out.replaceChildren();
+    const M=[
+      ['Obunachilar','',r=>r.ch.subs,compact,1],
+      ["Jami ko'rishlar",'',r=>r.ch.views,compact,1],
+      ['Videolar soni','',r=>r.ch.videoCount,full,0],
+      ["Odatiy ko'rish",'bitta video uchun (median)',r=>r.base,compact,1],
+      ["Ko'rish ÷ obunachi","obunachilarning necha foizi ko'radi",r=>r.ch.subs?r.base/r.ch.subs:null,x=>pct(x,0),1],
+      ['Haftalik yuklash','oxirgi 90 kun',r=>r.perWeek,x=>x.toFixed(1)+' ta',1],
+      ['Faollik','layk + izoh ÷ ko\'rish',r=>r.engM,x=>pct(x),1],
+      ["O'sish sur'ati",'oxirgi 10 video vs oldingi 20',r=>r.momentum!=null?r.momentum-1:null,x=>(x>0?'+':'')+pct(x,0),1],
+      ['Hit videolar','2× dan yuqori videolar ulushi',r=>r.hitRate,x=>pct(x,0),1],
+      ['Shorts ulushi','',r=>r.vids.length?r.shorts.length/r.vids.length:0,x=>pct(x,0),0],
+      ['Odatiy uzunlik','uzun videolar',r=>median(r.longs.map(v=>v.durSec)),x=>dur(Math.round(x)),0],
+      ['Salomatlik bali','0–100',r=>r.health,x=>Math.round(x)+' / 100',1]];
+    const best=Math.max(...reps.map(r=>r.health)), win=reps.find(r=>r.health===best);
+    out.append(h('div',{class:'tips'},reps.map((r,i)=>{ const [gL,gT,gC]=grade(r.health); return h('div',{class:'card pad row',style:'gap:14px;flex-wrap:nowrap'},
+      ring(r.health,gL,CMP_COL[i],84),h('div',{style:'min-width:0'},h('div',{class:'row',style:'gap:8px;flex-wrap:nowrap'},h('span',{class:'dot',style:'background:'+CMP_COL[i]}),h('b',{style:'white-space:nowrap;overflow:hidden;text-overflow:ellipsis',text:r.ch.title})),
+        h('div',{class:'hint',text:`${compact(r.ch.subs)} obunachi · ${gT}`}),r===win?h('span',{class:'pill ok',style:'margin-top:6px',text:'Eng yaxshi natija'}):null)); })));
+    const tbl=h('table',{class:'cmp'},
+      h('thead',null,h('tr',null,h('th',{text:"Ko'rsatkich"}),reps.map((r,i)=>h('th',{class:'ch'},h('div',{class:'chhead'},avatar(r.ch.thumb,r.ch.title,'xs'),h('span',{text:r.ch.title})))))),
+      h('tbody',null,M.map(([l,s,f,fmt,rank])=>{
+        const vals=reps.map(f), fin=vals.filter(v=>v!=null&&isFinite(v));
+        const mx=Math.max(...fin.map(v=>Math.abs(v)),1e-9), top=rank&&fin.length?Math.max(...fin):null;
+        return h('tr',null,h('td',{class:'metric'},l,s?h('small',{text:s}):null),
+          vals.map((v,i)=>h('td',null,h('div',{class:'cmpcell'+(rank&&v===top&&fin.length>1?' win':'')},h('b',{text:v==null||!isFinite(v)?'—':fmt(v)}),
+            h('div',{class:'tr'},h('i',{style:`width:${v==null?0:Math.abs(v)/mx*100}%;background:${v<0?'var(--bad)':CMP_COL[i]}`}))))));
+      })));
+    out.append(h('div',{class:'stack'},secHead('Batafsil solishtirish',"Yashil raqam — shu ko'rsatkich bo'yicha eng yaxshi kanal"),h('div',{class:'tscroll'},tbl)));
+    out.append(h('div',{class:'stack'},secHead('Har kanalning eng kuchli videolari',"Har birining kanal odatiysiga nisbatan eng yaxshi 2 ta videosi"),
+      h('div',{class:'vgrid'},reps.flatMap(r=>[...r.vids].sort((a,b)=>b.score-a.score).slice(0,2).map(v=>videoCard(v,{channel:true}))))));
+  }
+};
+
+/* ======================= TRACKER ======================= */
+V.tracker={
+  init(el){
+    this.inp=h('input',{class:'inp',id:'trkInp',placeholder:'@kanal_nomi yoki havola',autocomplete:'off'});
+    this.addBtn=h('button',{class:'btn',type:'submit'},icon('plus',16,2.4),"Kuzatuvga qo'shish");
+    this.refBtn=h('button',{class:'btn line',type:'button',onclick:()=>this.refresh(true)},icon('refresh',16,2),'Hammasini yangilash');
+    el.append(h('form',{class:'card pad formbar',onsubmit:e=>{ e.preventDefault(); this.add(); }},
+      h('div',{class:'field grow'},h('label',{for:'trkInp',text:'Kanal'}),this.inp),this.addBtn,this.refBtn));
+    this.st=statusEl(); this.out=h('div',{class:'stack',style:'gap:16px'});
+    el.append(this.st,this.out);
+  },
+  show(){ this.draw(); const last=store.get('lastRefresh',0); if(S.key&&S.saved.length&&Date.now()-last>6*3600e3) this.refresh(false); },
+  async add(){
+    const q=this.inp.value.trim(); if(!q) return;
+    await busy(this.addBtn,async()=>{
+      try{ const ch=await resolveChannel(q); if(!isSaved(ch.id)) toggleSave(ch); else { snapChannel(ch); toast('Bu kanal allaqachon kuzatilmoqda'); } this.inp.value=''; setStatus(this.st,null); this.draw(); }
+      catch(e){ errorStatus(this.st,e); }
+    });
+  },
+  async refresh(manual){
+    if(!S.saved.length){ if(manual) toast("Avval kanal qo'shing",'err'); return; }
+    await busy(this.refBtn,async()=>{
+      try{
+        const m=await withApi(true,()=>getChannelsMap(S.saved.map(s=>s.id)));
+        for(const id in m) snapChannel(m[id]);
+        store.set('lastRefresh',Date.now()); setStatus(this.st,null); this.draw(); if(manual) toast('Yangilandi');
+      }catch(e){ errorStatus(this.st,e); }
+    });
+  },
+  draw(){
+    const out=this.out; out.replaceChildren();
+    if(!S.saved.length){ out.append(emptyBox('eye',"Hali kanal kuzatilmayapti","Raqib yoki o'z kanalingizni qo'shing. Dasturni har kuni ochganingizda obunachi va ko'rishlar avtomatik yoziladi — shunda o'sish grafigi paydo bo'ladi.")); return; }
+    const last=store.get('lastRefresh',0);
+    const bk=store.get('lastBackup',0);
+    if(Date.now()-bk>7*864e5) out.append(h('div',{class:'banner-note'},icon('info',18),bk?`Oxirgi zaxira ${ago(new Date(bk))} olingan. Brauzer tozalansa, kuzatuv tarixi yo'qoladi.`:"Kuzatuv tarixi faqat shu brauzerda saqlanadi. Yo'qolmasligi uchun zaxira oling.",
+      h('button',{class:'btn sm',type:'button',style:'margin-left:auto',onclick:()=>{ backupNow(); this.draw(); }},icon('download',14,2),'Zaxira olish')));
+    out.append(h('p',{class:'hint',text:`${S.saved.length} ta kanal · oxirgi yangilanish: ${last?ago(new Date(last)):"hali yo'q"} · dastur ochilganda har 6 soatda o'zi yangilanadi (1 birlik). Dastur ochilmagan kunlar grafikda to'g'ri chiziq bilan ulanadi.`}));
+    const near=(snaps,ms)=>{ const t=Date.now()-ms; let b=null; for(const s of snaps){ if(s.t<=t) b=s; } return b; };
+    const dl=(a,b,k)=>a&&b&&a[k]!=null&&b[k]!=null?b[k]-a[k]:null;
+    const dchip=x=>x==null?h('span',{class:'muted',text:'—'}):h('span',{class:'delta '+(x>0?'up':x<0?'down':'flat'),text:(x>0?'+':'')+compact(x)});
+    const rows=S.saved.map(s=>{
+      const sn=s.snaps, cur=sn[sn.length-1], first=sn[0], d7=near(sn,7*864e5), days=cur&&first?(cur.t-first.t)/864e5:0;
+      const perDay=days>=0.9&&cur.subs!=null&&first.subs!=null?(cur.subs-first.subs)/days:null;
+      return h('tr',null,
+        h('td',null,h('div',{class:'chhead'},avatar(s.thumb,s.title,'sm'),h('div',{style:'min-width:0'},h('span',{style:'display:block',text:s.title}),h('div',{class:'sub',text:s.handle||''})))),
+        h('td',{class:'num'},cur&&cur.subs!=null?full(cur.subs):'yashirin'),
+        h('td',{class:'num'},perDay==null?h('span',{class:'muted',text:'—'}):dchip(Math.round(perDay))),
+        h('td',{class:'num'},dchip(dl(d7,cur,'subs'))),
+        h('td',{class:'num'},cur?compact(cur.views):'—'),
+        h('td',{class:'num'},dchip(dl(d7,cur,'views'))),
+        h('td',{class:'num'},dchip(dl(first,cur,'videos'))),
+        h('td',null,sn.length>=2?sparkline(sn.map(x=>x.subs!=null?x.subs:x.views),{w:120,h:32,color:'var(--d4)',xs:sn.map(x=>x.t)}):h('span',{class:'hint',text:'ertaga paydo bo\'ladi'})),
+        h('td',{class:'sub',text:`${dateUz(new Date(s.added))} dan · ${sn.length} ta yozuv`}),
+        h('td',null,h('div',{class:'row',style:'flex-wrap:nowrap;gap:6px'},
+          h('button',{class:'btn sec sm',type:'button',onclick:()=>go('channel',s.id),text:'Tahlil'}),
+          h('button',{class:'iconbtn',type:'button',title:'Olib tashlash','aria-label':'Olib tashlash',onclick:()=>{ S.saved=S.saved.filter(x=>x.id!==s.id); saveSaved(); this.draw(); toast('Olib tashlandi'); }},icon('trash',16)))));
+    });
+    out.append(h('div',{class:'tscroll'},h('table',{class:'trk'},
+      h('thead',null,h('tr',null,['Kanal','Obunachi','Kuniga',"7 kunda","Ko'rishlar","7 kunda","Yangi video",'O\'sish','Kuzatuv',''].map((t,i)=>h('th',{class:i>0&&i<7?'num':null,style:'cursor:default',text:t})))),
+      h('tbody',null,rows))));
+    out.append(h('div',{class:'row'},h('button',{class:'btn sec sm',type:'button',onclick:()=>csv('kuzatuv_'+d10(new Date())+'.csv',['Kanal','Sana','Obunachi',"Ko'rishlar",'Videolar'],
+      S.saved.flatMap(s=>s.snaps.map(x=>[s.title,new Date(x.t).toISOString().slice(0,16).replace('T',' '),x.subs,x.views,x.videos])))},icon('download',15,2),'Tarixni Excel (CSV) ga olish')));
+  }
+};
+
+/* ======================= PREVIEW ======================= */
+const POWER=['eng','sir','haqiqat','xato','bepul','tez','oson','birinchi','hech kim','nega','qanday','ajoyib','dahshat','yangi','zo\'r','kafolat','maxfiy','tajriba','natija',
+  '최고','꿀팁','진짜','비밀','충격','무료','방법','필수','후회','실수','처음','이유','현실','best','secret','free','how','why','easy','mistake','never','truth','ultimate','proven','first','real',
+  'лучший','секрет','бесплатно','как','почему','ошибка','правда'];
+function titleCheck(t,kw){
+  t=t||''; const L=[...t].length, items=[]; let sc=0;
+  const add=(ok,pts,l,d)=>{ items.push({ok,l,d}); if(ok===true) sc+=pts; else if(ok===null) sc+=pts/2; };
+  add(L>=30&&L<=70?true:L>=20&&L<=90?null:false,20,'Uzunlik 30–70 belgi',`Hozir ${L} belgi. Eng muhim so'zlar birinchi 40 belgida bo'lsin — telefonda oxiri qirqilishi mumkin.`);
+  const k=(kw||'').trim().toLowerCase();
+  if(k){ const i=t.toLowerCase().indexOf(k); add(i>=0&&i<=40?true:i>40?null:false,20,"Kalit so'z boshida",i<0?`"${kw}" sarlavhada yo'q.`:i<=40?"Kalit so'z sarlavhaning boshida — zo'r.":"Kalit so'z bor, lekin oxirroqda."); }
+  else add(null,20,"Kalit so'z boshida","Chap tomondagi «Kalit so'z» maydonini to'ldirsangiz, tekshiriladi.");
+  add(/\d/.test(t),15,'Raqam bor','Raqamlar ("5 ta", "2026", "1 kunda") e\'tiborni tortadi.');
+  const low=t.toLowerCase(); const pw=POWER.find(p=>low.includes(p));
+  add(!!pw,15,'Kuchli so\'z',pw?`"${pw}" — qiziqish uyg'otadi.`:'Masalan: "eng", "sir", "xato", "bepul", "꿀팁", "진짜".');
+  const letters=t.replace(/[^\p{L}]/gu,''), up=letters.replace(/[^\p{Lu}]/gu,'').length;
+  add(!letters.length||up/letters.length<=0.35,10,'Baqirmaydi (KATTA harf kam)',letters.length?`Katta harflar: ${pct(up/letters.length,0)}`:'');
+  const em=(t.match(/\p{Extended_Pictographic}/gu)||[]).length;
+  add(em<=2,10,'Emoji 0–2 ta',`Hozir ${em} ta emoji.`);
+  add(/[?？!(\[【「]/.test(t),10,'Qiziqish belgisi','Savol, undov yoki qavs ichidagi izoh bosishni oshiradi.');
+  return {score:Math.round(sc),items};
+}
+const PH_TITLES=["Koreyada bir oyda qancha pul ishlash mumkin?","Seul metrosidan qanday foydalanish kerak","하루 만에 부산 여행 코스 추천","Koreys tilini tez o'rganishning 3 usuli","Life in Korea: my honest experience","편의점 신상 리뷰 10가지","Koreyada uy topish: to'liq qo'llanma","Busan vs Seoul — qayerda yashash yaxshi?"];
+V.preview={
+  init(el){
+    this.s={img:null,title:"Koreyada birinchi maoshim qancha bo'ldi? (real hisob)",channel:'Mening kanalim',views:'12 ming',kw:'',dev:'desk',th:'l',avatar:null,pos:1};
+    const fi=h('input',{type:'file',accept:'image/*',hidden:true});
+    this.drop=h('div',{class:'drop',tabindex:'0',role:'button','aria-label':'Thumbnail rasm yuklash'});
+    const setImg=f=>{ if(!f||!/^image\//.test(f.type)) return; const rd=new FileReader(); rd.onload=()=>{ this.s.img=rd.result; this.drawDrop(); this.draw(); }; rd.readAsDataURL(f); };
+    fi.onchange=()=>setImg(fi.files[0]);
+    this.drop.onclick=()=>fi.click(); this.drop.onkeydown=e=>{ if(e.key==='Enter') fi.click(); };
+    this.drop.ondragover=e=>{ e.preventDefault(); this.drop.classList.add('over'); };
+    this.drop.ondragleave=()=>this.drop.classList.remove('over');
+    this.drop.ondrop=e=>{ e.preventDefault(); this.drop.classList.remove('over'); setImg(e.dataTransfer.files[0]); };
+    document.addEventListener('paste',e=>{ if(this.el.hidden) return; const f=[...(e.clipboardData||{}).files||[]][0]; if(f) setImg(f); });
+    const inp=(id,k,ph)=>{ const i=h('input',{class:'inp',id,placeholder:ph||'',value:this.s[k]}); i.oninput=()=>{ this.s[k]=i.value; this.draw(); }; return i; };
+    this.tInp=inp('pvTitle','title','Video sarlavhasi');
+    this.cnt=h('div',{class:'counter'});
+    this.chInp=inp('pvCh','channel','Kanal nomi'); this.vInp=inp('pvViews','views',"12 ming"); this.kwInp=inp('pvKw','kw',"masalan: maosh");
+    this.score=h('div');
+    el.append(h('div',{class:'pv-wrap'},
+      h('div',{class:'stack'},
+        h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Sizning videongiz'}),h('p',{text:"Rasm yuklang (yoki Ctrl+V bilan joylang), sarlavhani yozing."})),
+          this.drop,fi,
+          h('div',{class:'field'},h('label',{for:'pvTitle',text:'Sarlavha'}),this.tInp,this.cnt),
+          h('div',{class:'formbar'},h('div',{class:'field grow',style:'flex-basis:140px'},h('label',{for:'pvCh',text:'Kanal nomi'}),this.chInp),h('div',{class:'field',style:'width:110px'},h('label',{for:'pvViews',text:"Ko'rish"}),this.vInp)),
+          h('div',{class:'field'},h('label',{for:'pvKw',text:"Kalit so'z (ixtiyoriy)"}),this.kwInp)),
+        h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Sarlavha bahosi'}),h('p',{text:"Oddiy qoidalar asosida — kafolat emas, yo'l-yo'riq"})),this.score)),
+      h('div',{class:'stack'},
+        h('div',{class:'row',style:'justify-content:space-between'},
+          h('div',{class:'row'},segCtl([['desk','Kompyuter'],['mob','Telefon']],'desk',k=>{ this.s.dev=k; this.draw(); }),segCtl([['l',"Yorug'"],['d',"Qorong'i"]],'l',k=>{ this.s.th=k; this.draw(); })),
+          h('button',{class:'btn line sm',type:'button',onclick:()=>{ this.s.pos=Math.floor(Math.random()*6); this.draw(); }},icon('shuffle',15,2),'Joyini almashtirish')),
+        this.mock=h('div',{class:'yt l'}),
+        h('p',{class:'hint',text:"Atrofdagi videolar — oxirgi kalit so'z yoki trend qidiruvingiz natijalari (bo'lmasa namuna). Sizning videongiz rangli ramkada."}))));
+    this.drawDrop(); this.draw();
+  },
+  run(a){ if(a&&typeof a==='object'){ Object.assign(this.s,{title:a.title||this.s.title,img:a.img||this.s.img,channel:a.channel||this.s.channel,views:a.views||this.s.views,avatar:a.avatar||null});
+    this.tInp.value=this.s.title; this.chInp.value=this.s.channel; this.vInp.value=this.s.views; this.drawDrop(); this.draw(); } },
+  show(){ this.draw&&this.mock&&this.draw(); },
+  drawDrop(){
+    this.drop.replaceChildren(...(this.s.img?[h('img',{src:this.s.img,alt:'Yuklangan thumbnail',referrerpolicy:'no-referrer'}),h('span',{class:'hint',text:'Boshqa rasm uchun bosing'})]:
+      [icon('upload',28,1.8),h('b',{style:'color:var(--ink)',text:'Thumbnail rasmini tashlang'}),h('span',{class:'hint',text:'yoki bosib tanlang · 1280×720 tavsiya etiladi'})]));
+  },
+  draw(){
+    const s=this.s, L=[...s.title].length;
+    this.cnt.textContent=L+' / 100'; this.cnt.classList.toggle('bad',L>100);
+    const tc=titleCheck(s.title,s.kw);
+    const [,,gC]=grade(tc.score);
+    const [,gT2]=grade(tc.score);
+    this.score.replaceChildren(h('div',{class:'stack'},h('div',{class:'row',style:'gap:16px;flex-wrap:nowrap'},ring(tc.score,'/ 100',gC,104),h('div',null,h('b',{style:'font:700 18px var(--f-display)',text:gT2}),h('p',{class:'hint',text:`${tc.items.filter(i=>i.ok===true).length} / ${tc.items.length} qoida bajarildi`}))),
+      h('div',{class:'check'},tc.items.map(i=>h('div',{class:'ck '+(i.ok===true?'y':i.ok===false?'n':'o')},h('div',{class:'m'},icon(i.ok===true?'check':i.ok===false?'x':'info',13,2.6)),h('div',null,i.l,h('small',{text:i.d})))))));
+    const feed=(LAST_FEED.length?LAST_FEED:PH_TITLES.map((t,i)=>({title:t,channelTitle:['Seoul Life','Korea Tips','여행가자','Til ustasi','Expat Diaries','편의점왕','Uy topish','Shahar vs shahar'][i],views:[48000,12000,230000,9800,77000,410000,15000,26000][i],published:new Date(Date.now()-(i+1)*3*864e5),durSec:[612,488,903,377,1240,655,842,530][i],thumb:''}))).slice(0,8);
+    const others=feed.map(v=>({img:v.thumb?v.thumb.replace('mqdefault','hqdefault'):'',title:v.title,ch:v.channelTitle,meta:`${compact(v.views)} ko'rish · ${ago(v.published)}`,dur:dur(v.durSec),av:v.chThumb||''}));
+    const n=s.dev==='mob'?4:6, mine={me:true,img:s.img,title:s.title||'Sarlavha',ch:s.channel,meta:`${s.views} ko'rish · 1 kun oldin`,dur:'10:24',av:s.avatar};
+    const list=others.slice(0,n-1); list.splice(Math.min(s.pos,list.length),0,mine);
+    this.mock.className='yt '+s.th+(s.dev==='mob'?' m':'');
+    this.mock.replaceChildren(h('div',{class:'g'},list.map(c=>h('div',{class:'c'+(c.me?' me':'')},
+      h('div',{class:'im'},c.img?thumbImg(c.img):null,h('span',{class:'dr',text:c.dur})),
+      h('div',{class:'rw'},h('div',{class:'av',style:c.me?'background:var(--accent)':''},c.av?thumbImg(c.av):(c.ch||'?')[0]),
+        h('div',{style:'min-width:0'},h('div',{class:'tt',text:c.title}),h('div',{class:'mt'},c.ch,h('br'),c.meta)))))));
+  }
+};
+
+/* ======================= BOOT ======================= */
+function boot(){
+  buildNav(); applyTheme(); keyPillUpdate(); quotaShow(); cachePrune();
+  $('#themeBtn').onclick=()=>{ S.set.theme=S.set.theme==='auto'?'light':S.set.theme==='light'?'dark':'auto'; saveSettings(); applyTheme(); toast(S.set.theme==='auto'?'Mavzu: avtomatik':S.set.theme==='dark'?"Mavzu: qorong'i":"Mavzu: yorug'"); };
+  window.addEventListener('hashchange',route);
+  route();
+}
+boot();
+
+</script>
+</body>
+</html>
