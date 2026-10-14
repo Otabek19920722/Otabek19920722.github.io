@@ -658,6 +658,20 @@ function download(name,text,type){
   const a=h('a',{href:url,download:name}); document.body.append(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
+/* ---------- AvtoVideo bilan ulanish: g'oya faylini yuklash ---------- */
+function avtoVideo(vids,ctx){
+  vids=[vids].flat().filter(v=>v&&v.id);
+  if(!vids.length) return;
+  const iso=d=>d instanceof Date&&!isNaN(d)?d.toISOString():null;
+  const num=(x,d)=>x!=null&&isFinite(x)?+(+x).toFixed(d):null;
+  const data={turi:'avtovideo-goya',versiya:1,manba:'YouTube Tahlil',yaratilgan:new Date().toISOString(),kontekst:ctx||{},
+    videolar:vids.slice(0,25).map(v=>({id:v.id,title:v.title,channelTitle:v.channelTitle,channelId:v.channelId,
+      views:v.views,likes:v.likes,comments:v.comments,subs:v.subs!=null?v.subs:null,published:iso(v.published),
+      durSec:v.durSec||0,isShort:!!v.isShort,tags:(v.tags||[]).slice(0,30),desc:(v.desc||'').slice(0,600),lang:v.lang||'',
+      vph:num(v.vph,0),ratio:num(v.ratio,3),score:num(v.score,2),url:'https://youtu.be/'+v.id}))};
+  download('avtovideo-goya_'+d10(new Date())+'_'+Date.now().toString(36).slice(-4)+'.json',JSON.stringify(data,null,1),'application/json');
+  toast(vids.length===1?"G'oya fayli yuklandi. AvtoVideo'da «📥 G'oya fayli» tugmasini bosing":vids.length+" ta video g'oya fayliga yozildi. AvtoVideo'da «📥 G'oya fayli» tugmasini bosing");
+}
 function csv(name,head,rows){
   const esc=x=>{ const s=x==null?'':String(x); return /[",;\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
   download(name,'﻿'+[head,...rows].map(r=>r.map(esc).join(',')).join('\r\n'),'text/csv;charset=utf-8');
@@ -1068,7 +1082,9 @@ function videoCard(v,o){
       h('div',{class:'m'},meta),
       h('div',{class:'ft'},
         o.channel?h('span',{class:'chn',text:v.channelTitle+(v.subs!=null?' · '+compact(v.subs)+' obunachi':'')}):h('span'),
-        real?h('button',{class:'linkbtn',type:'button',onclick:()=>go('video',v.id)},icon('bar',13,2.2),'Tahlil'):null)));
+        real?h('span',{style:'display:inline-flex;gap:12px;align-items:center'},
+          h('button',{class:'linkbtn',type:'button',title:"Shu yo'nalishda AvtoVideo'da video yasash",onclick:()=>avtoVideo(v,{bolim:'karta'})},icon('film',13,2.2),'AvtoVideo'),
+          h('button',{class:'linkbtn',type:'button',onclick:()=>go('video',v.id)},icon('bar',13,2.2),'Tahlil')):null)));
 }
 /* sortable, searchable table */
 function dataTable(cols,rows,o){
@@ -1743,7 +1759,8 @@ V.video={
           kpi('Layk',compact(v.likes),v.likeRate!=null?pct(v.likeRate)+" ko'ruvchilardan":'yashirilgan'),
           kpi('Izoh',compact(v.comments),pct(v.views?(v.comments||0)/v.views:0,2)+" ko'ruvchilardan")),
         h('div',{class:'row'},
-          h('a',{class:'btn sm',href:ytUrl(v.id),target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube\'da ochish'),
+          h('button',{class:'btn sm',type:'button',onclick:()=>avtoVideo(v,{bolim:'video'})},icon('film',15,2),"AvtoVideo'da shunga o'xshash yasash"),
+          h('a',{class:'btn sec sm',href:ytUrl(v.id),target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube\'da ochish'),
           h('a',{class:'btn sec sm',href:'https://i.ytimg.com/vi/'+v.id+'/maxresdefault.jpg',target:'_blank',rel:'noopener'},icon('image',15,2),'Thumbnailni ochish'),
           h('button',{class:'btn line sm',type:'button',onclick:()=>go('preview',{title:v.title,img:'https://i.ytimg.com/vi/'+v.id+'/hqdefault.jpg',channel:v.channelTitle,views:compact(v.views),avatar:ch&&ch.thumb})},icon('image',15,2),'Thumbnail sinovida ko\'rish')))));
     // vs channel
@@ -1907,7 +1924,8 @@ V.keyword={
         kpi('Katta kanallar',pct(big,0),"1 mln+ obunachili kanallar ulushi",{icon:'bar'}))));
     // breakouts
     const outs=vids.filter(v=>v.ratio!=null).sort((a,b)=>b.ratio-a.ratio).slice(0,8);
-    out.append(h('div',{class:'stack'},secHead('Eng kuchli breakoutlar',"Kanal hajmiga nisbatan eng ko'p ko'rilgan videolar — raqam: ko'rish ÷ obunachi"),
+    out.append(h('div',{class:'stack'},secHead('Eng kuchli breakoutlar',"Kanal hajmiga nisbatan eng ko'p ko'rilgan videolar — raqam: ko'rish ÷ obunachi",
+        outs.length?h('button',{class:'btn sm',type:'button',onclick:()=>avtoVideo(outs,{bolim:'kalit_soz',kalit_soz:q})},icon('film',15,2),"Breakoutlar → AvtoVideo"):null),
       h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{scoreVal:v.ratio,scoreLabel:"Ko'rish ÷ obunachi",channel:true})))));
     // channels, tags
     const byCh={};
@@ -2000,8 +2018,9 @@ V.trends={
       h('button',{class:'btn sec sm',type:'button',onclick:()=>copy(tags.map(t=>t[0]).join(', '))},icon('copy',15,2),'Nusxalash')),
       h('div',{class:'chips'},tags.map(([t,n])=>h('button',{class:'chip',type:'button',onclick:()=>go('keyword',t)},t,h('b',{text:n}))))));
     out.append(h('div',{class:'stack'},secHead(this.sort==='vph'?"Eng tez o'sayotgan videolar":'Ommabop videolar',"Raqam — trend ro'yxatidagi o'rni; chaqmoq — soatiga ko'rish",
+      h('div',{class:'row'},h('button',{class:'btn sm',type:'button',title:"Eng yaxshi 10 ta videoni AvtoVideo'ga yuborish",onclick:()=>avtoVideo(list.slice(0,10),{bolim:'trendlar',mamlakat:this.region.value,toifa:this.cat.value})},icon('film',15,2),"Top 10 → AvtoVideo"),
       h('button',{class:'btn sec sm',type:'button',onclick:()=>csv('trend_'+this.region.value+'_'+d10(new Date())+'.csv',['#','Sarlavha','Havola','Kanal','Obunachi',"Ko'rish","Soatiga",'Chiqqan','Uzunlik','Teglar'],
-        list.map(v=>[v.rank,v.title,'https://youtu.be/'+v.id,v.channelTitle,v.subs,v.views,Math.round(v.vph),d10(v.published),dur(v.durSec),(v.tags||[]).join(' | ')]))},icon('download',15,2),'Excel (CSV)')),
+        list.map(v=>[v.rank,v.title,'https://youtu.be/'+v.id,v.channelTitle,v.subs,v.views,Math.round(v.vph),d10(v.published),dur(v.durSec),(v.tags||[]).join(' | ')]))},icon('download',15,2),'Excel (CSV)'))),
       h('div',{class:'vgrid'},list.map(v=>videoCard(v,{rank:v.rank,score:false,vph:true,channel:true})))));
   }
 };
