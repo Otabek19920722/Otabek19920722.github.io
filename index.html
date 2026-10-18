@@ -127,6 +127,28 @@ select.inp{padding-right:30px}
 .pill.warn{background:var(--warm-bg);color:var(--warm)}
 .pill.acc{background:var(--accent-soft);color:var(--accent)}
 .hint{font-size:13px;color:var(--muted);margin:0}
+/* Mening kanallarim */
+.mine-card{padding:0;overflow:hidden;border:2px solid color-mix(in srgb,var(--accent) 45%,var(--line))}
+.mine-toggle{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:18px 20px;cursor:pointer;background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.mine-toggle:hover{background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.mine-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.mine-toggle .ti{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:#fff;flex:none}
+.mine-toggle .tt{flex:1;min-width:0}
+.mine-toggle .tt b{display:block;font:800 17px/1.2 var(--f-display)}
+.mine-toggle .tt small{color:var(--muted);font-size:13px}
+.mine-toggle .mine-n{min-width:28px;height:28px;padding:0 8px;border-radius:99px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.mine-toggle .ic{transition:transform .2s}
+.mine-toggle[aria-expanded="true"] .ic:last-child{transform:rotate(180deg)}
+.mine-body{padding:18px 20px 20px;border-top:1px solid var(--line)}
+.mine-body .li .acts{display:flex;gap:6px;align-items:center;flex:none}
+.mine-body .iconbtn{width:32px;height:32px}
+.mine-body .iconbtn:disabled{opacity:.35;cursor:default}
+.mine-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mine-chip{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:99px;border:1px solid var(--line-2);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);font-weight:600;font-size:14px}
+.mine-chip:hover{background:var(--surface-2)}
+.mine-chip .ava.xs{margin:0}
+.mine-chip.add{border-style:dashed;color:var(--accent);padding-left:12px}
+@media (max-width:560px){.mine-toggle{padding:14px 16px;gap:10px}.mine-body{padding:14px 16px 16px}.mine-body .li{flex-wrap:wrap}.mine-body .li .acts{width:100%;padding-left:52px}}
 .muted{color:var(--muted)}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
@@ -529,7 +551,8 @@ const ICON={
   upload:'M12 15V3M7 8l5-5 5 5M4 20h16',
   shuffle:'M3 7h3l9 10h6M18 14l3 3-3 3M3 17h3l3-3.4M14 10.4L15 9h6M18 6l3 3-3 3',
   film:'M4 4h16v16H4zM8 4v16M16 4v16M4 9h4M4 15h4M16 9h4M16 15h4',
-  type:'M5 6V4h14v2M12 4v16M9 20h6'
+  type:'M5 6V4h14v2M12 4v16M9 20h6',
+  tv:'M3 7h18v12H3zM8 3l4 4 4-4M10 10.5v5l4-2.5z'
 };
 function icon(n,sz=18,sw=1.8){
   return sv('svg',{viewBox:'0 0 24 24',width:sz,height:sz,fill:'none',stroke:'currentColor','stroke-width':sw,'stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true',class:'ic'},sv('path',{d:ICON[n]||ICON.info}));
@@ -1005,7 +1028,7 @@ function statusEl(){ const e=h('div',{hidden:true}); return e; }
 function setStatus(el,type,msg,extra){
   if(!type){ el.hidden=true; el.replaceChildren(); return; }
   el.hidden=false; el.className='status '+type;
-  el.replaceChildren(type==='loading'?h('span',{class:'spin'}):icon(type==='error'?'info':'info',18), h('span',{text:msg}), extra||null);
+  el.replaceChildren(...[type==='loading'?h('span',{class:'spin'}):icon('info',18), h('span',{text:msg}), extra].filter(Boolean));
 }
 function errorStatus(el,e){
   const nokey=e&&e.code==='nokey';
@@ -1349,6 +1372,34 @@ function addToCompare(ref,label){
   CMP.list.push({ref,label}); store.set('cmp',CMP.list); toast('Solishtirishga qo\'shildi');
   V.compare.el&&V.compare.drawChips&&V.compare.drawChips();
 }
+/* ---------- Mening kanallarim (o'z kanallarim) ---------- */
+const MINE_DEFAULT=[{ref:'@한국의어제와오늘',title:'한국의 어제와 오늘'},{ref:'@ActivMusic-OK',title:'ActivMusic'},{ref:'@Vortex_World-new',title:'Vortex World'}];
+S.mine=store.get('mine',null)||MINE_DEFAULT.map(x=>Object.assign({},x));
+function saveMine(){ store.set('mine',S.mine); }
+function isMine(id){ return S.mine.some(m=>m.id===id); }
+function mineData(ch,ref){ return {ref:ref||ch.handle||ch.id,id:ch.id,title:ch.title,handle:ch.handle,thumb:ch.thumb,subs:ch.subs,views:ch.views,videos:ch.videoCount,upd:Date.now()}; }
+function mineDedupe(){ S.mine=S.mine.filter((m,i,a)=>!m.id||a.findIndex(x=>x.id===m.id)===i); }
+function mineAdd(ch,ref){
+  const i=S.mine.findIndex(m=>m.id===ch.id||(ref&&m.ref===ref));
+  if(i>=0) S.mine[i]=mineData(ch,S.mine[i].ref); else S.mine.push(mineData(ch,ref));
+  mineDedupe(); saveMine();
+}
+function mineToggle(ch){
+  if(isMine(ch.id)){ S.mine=S.mine.filter(m=>m.id!==ch.id); saveMine(); toast("Mening kanallarimdan olib tashlandi"); return false; }
+  mineAdd(ch); toast("Mening kanallarimga qo'shildi"); return true;
+}
+async function mineRefresh(fresh){
+  return withApi(fresh,async()=>{
+    const known=S.mine.filter(m=>m.id);
+    if(known.length){ const map=await getChannelsMap(known.map(m=>m.id)); for(const m of known){ const c=map[m.id]; if(c) Object.assign(m,mineData(c,m.ref),{err:false}); } }
+    for(const m of S.mine.filter(m=>!m.id)){
+      try{ const c=await resolveChannel(m.ref); Object.assign(m,mineData(c,m.ref),{err:false}); }
+      catch(e){ if(e.code==='nokey'||e.code==='net'||/quota|limit|keyInvalid/i.test(e.code||'')) { saveMine(); throw e; } m.err=true; }
+    }
+    mineDedupe(); saveMine();
+  });
+}
+function mineOpen(m){ go('channel',m.id||m.ref); }
 
 /* ======================= HOME ======================= */
 V.home={
@@ -1378,6 +1429,7 @@ V.home={
       h('div',{class:'tools'},tools.map(([id,ic,c,t,d,cost])=>h('a',{class:'card tool',href:'#'+id},
         h('div',{class:'ti',style:`background:color-mix(in srgb,${c} 16%,transparent);color:${c}`},icon(ic,22)),
         h('b',{text:t}),h('p',{text:d}),h('div',{class:'cost',text:cost})))));
+    this.mine=h('div'); el.insertBefore(this.mine,this.setup.nextSibling);
     this.lists=h('div',{class:'two'}); el.append(this.lists);
   },
   show(){
@@ -1393,6 +1445,13 @@ V.home={
           step(2,'YouTube Data API v3 ni yoqing','Library → YouTube Data API v3 → ENABLE'),
           step(3,'API kalitni Sozlamalarga qo\'ying','Credentials → API key → nusxalash'))));
     }
+    this.mine.replaceChildren(h('div',{class:'card pad'},
+      h('div',{class:'row',style:'justify-content:space-between'},
+        h('div',null,h('h3',null,'📺 Mening kanallarim'),h('p',{text:"Bir bosishda o'z kanalingizni tahlil qiling"})),
+        h('a',{class:'btn line sm',href:'#settings',onclick:e=>{ e.preventDefault(); go('settings','mine'); }},icon('gear',14,2),'Boshqarish')),
+      h('div',{class:'mine-strip'},
+        ...S.mine.map(m=>h('button',{class:'mine-chip',type:'button',title:'Tahlil qilish',onclick:()=>mineOpen(m)},avatar(m.thumb,m.title||m.ref,'xs'),m.title||m.ref)),
+        h('button',{class:'mine-chip add',type:'button',onclick:()=>go('settings','mine')},icon('plus',15,2.4),"Kanal qo'shish"))));
     const rec=S.recent.slice(0,6), sav=S.saved.slice(0,6);
     const TL={channel:'Kanal',video:'Video',keyword:"Kalit so'z"};
     const TI={channel:'bar',video:'play',keyword:'search'};
@@ -1471,6 +1530,10 @@ V.channel={
     const saveBtn=h('button',{class:'btn line sm',type:'button'});
     const drawSave=()=>saveBtn.replaceChildren(icon('bookmark',15,2),isSaved(ch.id)?'Kuzatilmoqda':'Kuzatuvga qo\'shish');
     drawSave(); saveBtn.onclick=()=>{ toggleSave(ch); drawSave(); };
+    const mineBtn=h('button',{class:'btn line sm',type:'button'});
+    const drawMine=()=>mineBtn.replaceChildren(icon(isMine(ch.id)?'check':'tv',15,2),isMine(ch.id)?'Mening kanalim':"Mening kanallarimga qo'shish");
+    drawMine(); mineBtn.onclick=()=>{ mineToggle(ch); drawMine(); };
+    if(!sample&&isMine(ch.id)){ const m=S.mine.find(x=>x.id===ch.id); Object.assign(m,mineData(ch,m.ref)); saveMine(); }
     const desc=ch.desc?h('p',{class:'desc',text:ch.desc,title:"Bosing — to'liq ko'rsatish",style:'cursor:pointer',onclick:e=>e.currentTarget.classList.toggle('open')}):null;
     const bnr=h('div',{class:'bnr'}); if(ch.banner){ const im=thumbImg(ch.banner); if(im) bnr.append(im); }
     const ratio=ch.subs?r.base/ch.subs:null;
@@ -1480,7 +1543,7 @@ V.channel={
           h('h2',null,sample?ch.title:h('a',{href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener',text:ch.title})),
           h('div',{class:'meta'},ch.handle?h('span',{text:ch.handle}):null,ch.country?h('span',{text:'Mamlakat: '+ch.country}):null,h('span',{text:'Ochilgan: '+dateUz(ch.created)}),h('span',{text:`Tahlil: oxirgi ${vids.length} video`})),
           desc),
-        sample?null:h('div',{class:'acts'},saveBtn,
+        sample?null:h('div',{class:'acts'},mineBtn,saveBtn,
           h('button',{class:'btn line sm',type:'button',onclick:()=>addToCompare(ch.id,ch.title)},icon('columns',15,2),'Solishtirish'),
           h('a',{class:'btn sec sm',href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube'))),
       h('div',{class:'hstats'},
@@ -1612,12 +1675,14 @@ function csvChannel(r){
 }
 
 function backupNow(){
-  download('youtube-tahlil-zaxira-'+d10(new Date())+'.json',JSON.stringify({v:2,saved:S.saved,settings:S.set,recent:S.recent,cmp:CMP.list},null,1),'application/json');
+  download('youtube-tahlil-zaxira-'+d10(new Date())+'.json',JSON.stringify({v:2,saved:S.saved,mine:S.mine,settings:S.set,recent:S.recent,cmp:CMP.list},null,1),'application/json');
   store.set('lastBackup',Date.now()); toast('Zaxira yuklab olindi');
 }
 /* ======================= SETTINGS ======================= */
 V.settings={
+  run(a){ if(a==='mine'&&this.mineSet){ this.mineSet(true); setTimeout(()=>{ const i=$('#mineInp'); i&&i.focus({preventScroll:true}); },60); } },
   init(el){
+    el.append(this.mineCard());
     // key
     const ki=h('input',{class:'inp',type:'password',id:'setKey',placeholder:'AIzaSy…',autocomplete:'off',spellcheck:'false',value:S.key||''});
     const st=statusEl();
@@ -1679,16 +1744,76 @@ V.settings={
           ['Trendlar','1–2 birlik'],['Kuzatuvni yangilash','1 birlik'],['Thumbnail sinovi','bepul']].map(([a,b])=>h('tr',null,h('td',{text:a}),h('td',{text:b})))))),
       this.dataCard()));
   },
+  mineCard(){
+    const cnt=h('span',{class:'mine-n'});
+    const tbtn=h('button',{class:'mine-toggle',type:'button','aria-expanded':'false','aria-controls':'mineBody'},
+      h('span',{class:'ti'},icon('tv',24,2)),
+      h('span',{class:'tt'},h('b',{text:'Mening kanallarim'}),h('small',{text:"YouTube'dagi o'z kanallaringiz — qo'shish, o'chirish, tahlil qilish"})),
+      cnt,icon('down',20,2.2));
+    const body=h('div',{class:'mine-body stack',id:'mineBody',hidden:true});
+    const st=statusEl(), list=h('div',{class:'list'});
+    let autoDone=false;
+    const setOpen=open=>{ body.hidden=!open; tbtn.setAttribute('aria-expanded',String(open));
+      if(open&&!autoDone&&S.key&&S.mine.some(m=>!m.id&&!m.err)){ autoDone=true; refresh(false); } };
+    this.mineSet=setOpen;
+    tbtn.onclick=()=>setOpen(body.hidden);
+    const sub=m=>{
+      if(!m.id) return (m.ref)+' · '+(m.err?"topilmadi — nomini tekshiring":S.key?"ma'lumot yuklanmoqda…":"kalit kiritilgach ma'lumot yuklanadi");
+      return [m.handle||m.ref,m.subs!=null?compact(m.subs)+' obunachi':'obunachi yashirin',m.videos!=null?full(m.videos)+' video':null,m.views!=null?compact(m.views)+" ko'rish":null].filter(Boolean).join(' · ');
+    };
+    const move=(i,d)=>{ const j=i+d; if(j<0||j>=S.mine.length) return; [S.mine[i],S.mine[j]]=[S.mine[j],S.mine[i]]; saveMine(); draw(); };
+    const draw=()=>{
+      cnt.textContent=String(S.mine.length);
+      list.replaceChildren(...(S.mine.length?S.mine.map((m,i)=>h('div',{class:'li'},
+        avatar(m.thumb,m.title||m.ref,'sm'),
+        h('div',{class:'tx'},h('b',{text:m.title||m.ref}),h('small',{text:sub(m)})),
+        h('div',{class:'acts'},
+          h('button',{class:'iconbtn',type:'button',title:'Yuqoriga','aria-label':'Yuqoriga',disabled:i===0?true:null,onclick:()=>move(i,-1)},icon('up',15,2)),
+          h('button',{class:'iconbtn',type:'button',title:'Pastga','aria-label':'Pastga',disabled:i===S.mine.length-1?true:null,onclick:()=>move(i,1)},icon('down',15,2)),
+          h('button',{class:'btn sec sm',type:'button',onclick:()=>mineOpen(m)},icon('bar',14,2),'Tahlil'),
+          h('button',{class:'iconbtn',type:'button',title:"O'chirish",'aria-label':"O'chirish",onclick:()=>{ S.mine.splice(i,1); saveMine(); draw(); toast("Ro'yxatdan olib tashlandi"); }},icon('trash',15))))):
+        [h('p',{class:'hint',text:"Hali kanal qo'shilmagan. Pastdagi maydonga @kanal_nomi yoki kanal havolasini yozing."})]));
+      cmpBtn.disabled=S.mine.length<2;
+    };
+    const refresh=fresh=>busy(rBtn,async()=>{
+      if(!S.key){ errorStatus(st,new AppErr(NO_KEY,'nokey')); return; }
+      setStatus(st,'loading',"Kanallar ma'lumoti yangilanmoqda…");
+      try{ await mineRefresh(fresh); setStatus(st,null); draw(); if(fresh) toast('Yangilandi'); }
+      catch(e){ draw(); errorStatus(st,e); }
+    });
+    const inp=h('input',{class:'inp',id:'mineInp',placeholder:'@kanal_nomi yoki https://youtube.com/@…',autocomplete:'off',spellcheck:'false'});
+    const addBtn=h('button',{class:'btn',type:'submit'},icon('plus',16,2.4),"Qo'shish");
+    const form=h('form',{class:'formbar',onsubmit:e=>{ e.preventDefault();
+      const q=inp.value.trim(); if(!q){ inp.focus(); return; }
+      if(S.mine.some(m=>(m.ref||'').toLowerCase()===q.toLowerCase()||(m.handle||'').toLowerCase()===q.toLowerCase())){ toast("Bu kanal allaqachon ro'yxatda"); return; }
+      if(!S.key){ S.mine.push({ref:q,title:q.replace(/^.*\/(@[^\/?#]+).*$/,'$1')}); saveMine(); inp.value=''; draw(); toast("Qo'shildi. Kalit kiritilgach ma'lumotlari yuklanadi"); return; }
+      busy(addBtn,async()=>{
+        setStatus(st,'loading','Kanal qidirilmoqda…');
+        try{ const ch=await resolveChannel(q);
+          if(isMine(ch.id)) toast("Bu kanal allaqachon ro'yxatda"); else { mineAdd(ch,q); toast("«"+ch.title+"» qo'shildi"); }
+          inp.value=''; setStatus(st,null); draw(); }
+        catch(e){ errorStatus(st,e); }
+      }); }},
+      h('div',{class:'field grow'},h('label',{for:'mineInp',text:"Yangi kanal qo'shish"}),inp),addBtn);
+    const rBtn=h('button',{class:'btn sec sm',type:'button',onclick:()=>refresh(true)},icon('refresh',14,2),'Hammasini yangilash');
+    const cmpBtn=h('button',{class:'btn sec sm',type:'button',onclick:()=>{
+      CMP.list=S.mine.slice(0,4).map(m=>({ref:m.id||m.ref,label:m.title||m.ref})); store.set('cmp',CMP.list); go('compare','auto'); }},icon('columns',14,2),'Solishtirish (4 tagacha)');
+    body.append(form,
+      h('p',{class:'hint',text:"Misol: @ActivMusic-OK yoki kanal havolasi. @ bilan yozish limitdan faqat 1 birlik oladi, nomi bilan qidirish esa 100 birlik."}),
+      st,list,h('div',{class:'row'},rBtn,cmpBtn));
+    draw();
+    return h('div',{class:'card mine-card'},tbtn,body);
+  },
   dataCard(){
     const fi=h('input',{type:'file',accept:'application/json,.json',hidden:true});
-    fi.onchange=()=>{ const f=fi.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.saved) S.saved=d.saved; if(d.settings) S.set=Object.assign(S.set,d.settings); if(d.recent) S.recent=d.recent; if(d.cmp) CMP.list=d.cmp;
+    fi.onchange=()=>{ const f=fi.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.saved) S.saved=d.saved; if(d.settings) S.set=Object.assign(S.set,d.settings); if(d.recent) S.recent=d.recent; if(d.cmp) CMP.list=d.cmp; if(Array.isArray(d.mine)){ S.mine=d.mine; saveMine(); }
       saveSaved(); saveSettings(); store.set('recent',S.recent); store.set('cmp',CMP.list); applyTheme(); toast('Zaxira tiklandi'); }catch(e){ toast("Fayl noto'g'ri",'err'); } }; rd.readAsText(f); fi.value=''; };
     let arm=false;
     const clr=h('button',{class:'btn danger',type:'button'},icon('trash',16,2),'Hammasini tozalash');
     clr.onclick=()=>{ if(!arm){ arm=true; clr.lastChild.textContent='Ishonchingiz komilmi? Yana bosing'; setTimeout(()=>{ arm=false; clr.lastChild.textContent='Hammasini tozalash'; },4000); return; }
       for(const k of ['saved','recent','cmp','settings','quota','lastRefresh']) store.del(k);
       S.saved=[]; S.recent=[]; CMP.list=[]; toast("Ma'lumotlar tozalandi (kalit saqlab qolindi)"); arm=false; clr.lastChild.textContent='Hammasini tozalash'; };
-    return h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Ma'lumotlar va zaxira"}),h('p',{text:"Kuzatuvdagi kanallar va sozlamalarni faylga saqlab, boshqa kompyuterda tiklashingiz mumkin. Kalit zaxiraga kirmaydi."})),
+    return h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Ma'lumotlar va zaxira"}),h('p',{text:"Mening kanallarim, kuzatuvdagi kanallar va sozlamalarni faylga saqlab, boshqa kompyuterda tiklashingiz mumkin. Kalit zaxiraga kirmaydi."})),
       h('div',{class:'row'},
         h('button',{class:'btn sec',type:'button',onclick:()=>backupNow()},icon('download',16,2),'Zaxira olish'),
         h('button',{class:'btn sec',type:'button',onclick:()=>fi.click()},icon('upload',16,2),'Zaxiradan tiklash'),fi),
@@ -2044,6 +2169,7 @@ V.compare={
     this.out.append(emptyBox('columns',"Kamida 2 ta kanal qo'shing","Raqiblaringizni (yoki o'z kanalingizni) qo'shing va «Solishtirish» tugmasini bosing. Har bir kanal ≈ 3 birlik oladi."));
   },
   show(){ this.drawChips(); },
+  run(a){ if(a==='auto'&&CMP.list.length>=2) this.compare(); },
   drawChips(){
     this.chips.replaceChildren(...(CMP.list.length?CMP.list.map((c,i)=>h('span',{class:'chip',style:'padding-right:5px'},h('span',{class:'dot',style:'background:'+CMP_COL[i]}),c.label,
       h('button',{class:'iconbtn',type:'button',style:'width:22px;height:22px;border:0;background:none','aria-label':'Olib tashlash',onclick:()=>{ CMP.list.splice(i,1); store.set('cmp',CMP.list); this.drawChips(); }},icon('x',13,2.4)))):[h('span',{class:'hint',text:"Hali kanal qo'shilmagan."})]));
