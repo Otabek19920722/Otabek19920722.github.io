@@ -255,6 +255,7 @@ button.chip:hover{background:var(--accent-soft);color:var(--accent)}
 .vc .t{font-weight:600;font-size:14.5px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink);text-decoration:none}
 .vc a.t:hover{color:var(--accent)}
 .vc .m{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+.vc .m>span{white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .vc .m .mono{color:var(--ink-2)}
 .vc .ft{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:6px}
 .vc .chn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -386,6 +387,8 @@ td .sub{font-size:12px;color:var(--muted)}
 @media (max-width:900px){.vhero{grid-template-columns:1fr}}
 .vthumb{aspect-ratio:16/9;max-width:100%;border-radius:var(--r);overflow:hidden;background:var(--surface-3);position:relative}
 .vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb .vplay{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;border:0;background:rgba(10,10,14,.72);color:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .15s,background .15s}
+.vthumb .vplay:hover{transform:scale(1.06);background:var(--accent)}
 .vthumb .dur{position:absolute;right:12px;bottom:12px;background:rgba(10,10,14,.85);color:#fff;font:600 13px var(--f-mono);padding:3px 8px;border-radius:6px}
 .vtitle{margin:0;font:700 22px/1.25 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
 .descbox{white-space:pre-wrap;font-size:13.5px;color:var(--ink-2);max-height:220px;overflow:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0;font-family:var(--f-body);overflow-wrap:anywhere}
@@ -448,6 +451,52 @@ td .sub{font-size:12px;color:var(--muted)}
 .costtbl td:last-child{text-align:right;font-family:var(--f-mono);white-space:nowrap}
 .costtbl tr:hover td{background:none}
 
+/* ---------- in-app player: one click on any video card plays it here ---------- */
+.vc .th .pi{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(10,10,14,.72);color:#fff;display:grid;place-items:center;opacity:0;transform:scale(.85);transition:opacity .15s,transform .15s;pointer-events:none}
+.vc .th:hover .pi,.vc .th:focus-visible .pi{opacity:1;transform:scale(1)}
+@media (hover:none){.vc .th .pi{opacity:.9;transform:none;width:44px;height:44px;margin:-22px 0 0 -22px}}
+.pl-ov{position:fixed;inset:0;z-index:200;background:rgba(6,6,10,.8);display:grid;place-items:center;padding:20px;animation:tin .2s ease-out}
+.pl-box{width:min(1040px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow-lg);display:flex;flex-direction:column}
+.pl-hd{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 18px;border-bottom:1px solid var(--line)}
+.pl-hd .hint{font-family:var(--f-mono)}
+.pl-stage{background:#000;display:flex;justify-content:center}
+.pl-fr{position:relative;width:100%;aspect-ratio:16/9}
+.pl-fr.short{width:auto;height:min(70vh,640px);max-width:100%;aspect-ratio:9/16}
+.pl-fr iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pl-bd{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.pl-bd h3{margin:0;font:700 18px/1.3 var(--f-display);letter-spacing:-.01em}
+.pl-meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13.5px;color:var(--muted)}
+.pl-meta b{color:var(--ink);font-weight:600}
+.pl-meta>span{white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
+@media (max-width:560px){.pl-ov{padding:0;place-items:stretch}.pl-box{max-height:100vh;border-radius:0}.pl-bd .row .btn{flex:1 1 auto}}
+
+/* ---------- o'xshash kanallar ---------- */
+#oxshash{scroll-margin-top:90px}
+.sim-card{border:2px solid color-mix(in srgb,var(--d2) 40%,var(--line))}
+.sim-kw{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sim-kw .chip.kw{background:color-mix(in srgb,var(--d2) 14%,var(--surface));color:var(--d2);font-weight:700}
+.simch{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:12px}
+.sc{display:flex;flex-direction:column;gap:10px;padding:14px;min-width:0}
+.sc.pin{border-color:color-mix(in srgb,var(--accent) 60%,var(--line));background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+.sc .top{display:flex;gap:12px;align-items:center;min-width:0}
+.sc .top .tx{flex:1;min-width:0}
+.sc .top b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .top small{color:var(--muted);font-size:12.5px}
+.sc .st{display:flex;flex-wrap:wrap;gap:6px}
+.sc .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.sc .acts .btn{padding:6px 10px}
+.sc .sc-x{width:30px;height:30px;flex:none;align-self:flex-start;border-color:transparent;background:transparent;color:var(--muted)}
+.sc .sc-x:hover{background:var(--bad-bg);color:var(--bad)}
+.sc .bestv{display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.35;min-width:0;cursor:pointer;background:var(--surface-2);border-radius:10px;padding:6px;border:1px solid var(--line);text-align:left;width:100%;color:inherit}
+.sc .bestv:hover{border-color:var(--line-2)}
+.sc .bestv img,.sc .bestv .ph{width:88px;aspect-ratio:16/9;border-radius:6px;object-fit:cover;flex:none;background:var(--surface-3)}
+.sc .bestv span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0}
+.sim-sub{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sim-sub h3{margin:0;font:700 17px/1.25 var(--f-display)}
+.sim-sub p{margin:3px 0 0;font-size:13px;color:var(--muted)}
+.sim-start{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.sim-start p{margin:0;flex:1 1 300px;color:var(--ink-2);font-size:14px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -463,7 +512,7 @@ td .sub{font-size:12px;color:var(--muted)}
       <div class="qmeter" title="YouTube kuniga 10 000 birlik bepul beradi">
         <div class="t"><span>Bugungi bepul limit</span><b id="qText">0</b></div>
         <div class="qbar" id="qBarWrap"><i id="qBar"></i></div>
-        <p id="qNote">Koreya vaqti bilan har kuni ~16:00 da yangilanadi</p>
+        <p id="qNote">Har kuni yangilanadi</p>
       </div>
     </div>
   </aside>
@@ -537,6 +586,9 @@ const ICON={
   x:'M6 6l12 12M18 6L6 18',
   up:'M12 19V5M6 11l6-6 6 6',
   down:'M12 5v14M6 13l6 6 6-6',
+  left:'M19 12H5M11 6l-6 6 6 6',
+  right:'M5 12h14M13 6l6 6-6 6',
+  pin:'M9 3h6l-1 6 3 3H7l3-3zM12 12v9',
   spark:'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z',
   comment:'M4 5h16v11H9l-5 4z',
   clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
@@ -639,11 +691,21 @@ function pushRecent(item){
 function ptDay(){ return new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'}); }
 function quotaGet(){ const q=store.get('quota',{}); return q.day===ptDay()?q.used:0; }
 function quotaAdd(n){ store.set('quota',{day:ptDay(),used:quotaGet()+n}); quotaShow(); }
+/* limit AQSh Tinch okeani vaqti bilan yarim tunda yangilanadi: Koreyada qishda 17:00, yozda 16:00 */
+function quotaReset(){
+  const now=new Date();
+  const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}).formatToParts(now).map(x=>[x.type,x.value]));
+  const sec=(+p.hour%24)*3600+(+p.minute)*60+(+p.second);
+  return new Date(Math.round((now.getTime()+(86400-sec)*1000)/60000)*60000);
+}
+function hhmm(d){ return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function resetText(){ try{ return hhmm(quotaReset()); }catch(e){ return '17:00'; } }
 function quotaShow(){
   const u=quotaGet();
   $('#qText').textContent=full(u)+' / 10 000';
   $('#qBar').style.width=Math.min(100,u/100)+'%';
   $('#qBarWrap').classList.toggle('warn',u>7500);
+  $('#qNote').textContent=`Sizning vaqtingiz bilan har kuni ${resetText()} da yangilanadi`;
 }
 
 /* ---------- toasts, tooltip, copy, download ---------- */
@@ -707,7 +769,7 @@ const NO_KEY="Avval YouTube API kalitini kiriting — bu bepul va 10 daqiqa olad
 function errText(reason,msg){
   const r=(reason||'')+' '+(msg||'');
   if(/keyInvalid|API key not valid|API_KEY_INVALID/i.test(r)) return "API kalit noto'g'ri. Google Cloud'dan kalitni qaytadan nusxalab, Sozlamalarga kiriting.";
-  if(/quotaExceeded|dailyLimitExceeded|rateLimitExceeded/i.test(r)) return "Bugungi bepul limit tugadi. Koreya vaqti bilan taxminan 16:00–17:00 da yangilanadi.";
+  if(/quotaExceeded|dailyLimitExceeded|rateLimitExceeded/i.test(r)) return `Bugungi bepul limit tugadi. Sizning vaqtingiz bilan ${resetText()} da yangilanadi.`;
   if(/accessNotConfigured|SERVICE_DISABLED|has not been used/i.test(r)) return "YouTube Data API v3 yoqilmagan. Google Cloud → APIs & Services → Library → YouTube Data API v3 → ENABLE.";
   if(/API_KEY_SERVICE_BLOCKED/i.test(r)) return "Kalit boshqa API uchun cheklangan. Kalit sozlamasida YouTube Data API v3 ni belgilang.";
   if(/REFERRER|referer/i.test(r)) return "Kalitda veb-sayt cheklovi bor. Google Cloud'da kalitning 'Application restrictions' bandini None qiling.";
@@ -832,11 +894,12 @@ async function getUploads(ch,count,onProg){
     onProg&&onProg('list',ids.length);
     tok=j.nextPageToken; if(!tok) break;
   }
-  return getVideos(ids.slice(0,count),(a,b)=>onProg&&onProg('vid',a,b));
+  /* rejalashtirilgan premyera/jonli efir (hali chiqmagan, 0 ko'rish) tahlilni buzmasin */
+  return (await getVideos(ids.slice(0,count),(a,b)=>onProg&&onProg('vid',a,b))).filter(v=>v.live!=='upcoming');
 }
 async function getChannelsMap(ids){
   const out={};
-  ids=[...new Set(ids.filter(Boolean))];
+  ids=[...new Set(ids.filter(Boolean))].sort();   // bir xil tartib = saqlangan natija qayta ishlatiladi
   for(let i=0;i<ids.length;i+=50){
     const j=await api('channels',{part:'snippet,statistics,contentDetails',id:ids.slice(i,i+50).join(',')},1);
     for(const c of j.items||[]) out[c.id]=mapChannel(c);
@@ -908,7 +971,7 @@ function titleFeatures(vids){
     {k:'q',l:'Savol belgisi',d:'"?" bilan',t:x=>/[?？]/.test(x)},
     {k:'br',l:'Qavs yoki [ ]',d:'(...) yoki [...]',t:x=>/[(\[【「]/.test(x)},
     {k:'emo',l:'Emoji',d:'sarlavhada emoji',t:x=>/\p{Extended_Pictographic}/u.test(x)},
-    {k:'caps',l:'KATTA HARFLI so\'z',d:'kamida bitta to\'liq katta so\'z',t:x=>/\b[A-ZА-ЯЎҚҒҲ]{3,}\b/.test(x)},
+    {k:'caps',l:'KATTA HARFLI so\'z',d:'kamida bitta to\'liq katta so\'z',t:x=>/(^|[^\p{L}])\p{Lu}{3,}(?=$|[^\p{L}])/u.test(x)},
     {k:'long',l:'Uzun sarlavha',d:'60 belgidan ko\'p',t:x=>x.length>60},
     {k:'bar',l:'"|" ajratgich',d:'sarlavhada | belgisi',t:x=>/[|｜]/.test(x)}];
   const pool=vids.filter(v=>v.age>=3);
@@ -932,7 +995,7 @@ function channelReport(ch,vids){
   const base=enrich(vids);
   const byDate=[...vids].sort((a,b)=>a.published-b.published);
   const mature=byDate.filter(v=>v.age>=3);
-  const perWeek=vids.filter(v=>v.age<=90).length/(90/7);
+  const span=clamp(Math.max(...vids.map(v=>v.age),0),7,90), perWeek=vids.filter(v=>v.age<=span).length/(span/7);
   const rec=mature.slice(-10), prev=mature.slice(-30,-10);
   const momentum=rec.length>=5&&prev.length>=5?median(rec.map(v=>v.norm))/median(prev.map(v=>v.norm)):null;
   const engM=median(vids.filter(v=>v.views>100).map(v=>v.eng))||0;
@@ -959,7 +1022,7 @@ function channelReport(ch,vids){
   const tf=titleFeatures(vids);
   const tw=topWordsByScore(vids,3);
   const tags=tagFreq(vids);
-  const rep={ch,vids,base,byDate,perWeek,momentum,engM,hitRate,shorts,longs,heat,durs,months,monthly,parts,health,tf,tw,tags};
+  const rep={ch,vids,base,byDate,perWeek,span,momentum,engM,hitRate,shorts,longs,heat,durs,months,monthly,parts,health,tf,tw,tags};
   rep.tips=makeTips(rep);
   return rep;
 }
@@ -1019,6 +1082,137 @@ function monthlyViews(ch,vids){
 }
 function earnings(longViews,shortViews){
   return {min:longViews/1000*S.set.rpmMin+shortViews/1000*S.set.sMin, max:longViews/1000*S.set.rpmMax+shortViews/1000*S.set.sMax};
+}
+
+/* ---------- O'xshash kanallar ----------
+   YouTube API'da "o'xshash kanallar" degan tayyor funksiya yo'q (relatedToVideoId 2023-yilda o'chirilgan).
+   Shuning uchun: kanalning o'zi ishlatgan eng kuchli teglar/so'zlar bo'yicha oxirgi 4 oydagi videolar
+   qidiriladi (100 birlik), natijada ko'p uchragan kanallar olinadi, hajmi sizga yaqinlari oldinga chiqadi,
+   keyin har birining oxirgi 30 videosi (2 birlik) olinib, o'z kanali odatiysidan ko'p ko'rilganlari tanlanadi. */
+const SIM_N=8, SIM_COST=100+1+2*SIM_N;
+const LANG_REG={ko:'KR',ja:'JP',ru:'RU',uz:'UZ',tr:'TR',kk:'KZ',de:'DE',hi:'IN',vi:'VN',th:'TH',id:'ID',fr:'FR',es:'ES',pt:'BR'};
+const LANG_UZ={ko:'koreys',en:'ingliz',ru:'rus',uz:"o'zbek",ja:'yapon',tr:'turk',kk:'qozoq',de:'nemis',hi:'hind',es:'ispan',fr:'fransuz',pt:'portugal',vi:'vyetnam',th:'tay',id:'indonez'};
+function simGet(id){ const all=store.get('sim',{}); const d=all[id]||{}; return {q:d.q||null,mode:d.mode==='pins'?'pins':'auto',pins:Array.isArray(d.pins)?d.pins:[],hide:Array.isArray(d.hide)?d.hide:[]}; }
+function simSet(id,d){ const all=store.get('sim',{}); all[id]=d; store.set('sim',all); }
+function scriptOf(t){ t=String(t||''); if(/[ㄱ-힝]/.test(t)) return 'ko'; if(/[ぁ-ゟ゠-ヿ]/.test(t)) return 'ja'; if(/[Ѐ-ӿ]/.test(t)) return 'cyr'; if(/[؀-ۿ]/.test(t)) return 'ar'; if(/\p{L}/u.test(t)) return 'lat'; return ''; }
+const LANG_SCRIPT={ko:'ko',ja:'ja',ru:'cyr',kk:'cyr',uk:'cyr',ar:'ar'};
+function chLang(vids){
+  const c={}; for(const v of vids){ const l=String(v.lang||'').toLowerCase().split(/[-_]/)[0]; if(l&&l!=='zxx'&&l!=='und') c[l]=(c[l]||0)+1; }
+  const best=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];
+  if(best&&best[1]>=Math.max(2,vids.length*0.2)) return best[0];
+  const sc={}; for(const v of vids){ const s=scriptOf(v.title); if(s) sc[s]=(sc[s]||0)+1; }
+  const s=(Object.entries(sc).sort((a,b)=>b[1]-a[1])[0]||[])[0];
+  if(s==='ko'||s==='ja') return s; if(s==='cyr') return 'ru';
+  const t=vids.map(v=>v.title).join(' ').toLowerCase();
+  if(/\b(va|uchun|qanday|bilan|nima|haqida)\b|oʻ|gʻ|o‘|g‘|\bo'|g'/.test(t)) return 'uz';
+  return 'en';
+}
+/* kanalning mavzusini eng yaxshi ifodalaydigan 4 ta so'z/ibora */
+function simTerms(r,lang){
+  const ownName=String(r.ch.title||'').toLowerCase().replace(/\s+/g,''), ownW=new Set(words(r.ch.title).concat(words(String(r.ch.handle||'').replace('@',''))));
+  const bad=new Set(['shorts','short','쇼츠','숏츠','youtube','유튜브','video','videos','vlog','브이로그','viral','trending','subscribe','구독','fyp','reels']);
+  const want=LANG_SCRIPT[lang]||'lat';
+  const m=new Map();
+  const add=(t,w)=>{
+    t=String(t||'').toLowerCase().replace(/^#/,'').replace(/[_]+/g,' ').replace(/\s+/g,' ').trim();
+    if(t.length<2||t.length>32||STOP.has(t)||bad.has(t)||ownW.has(t)||/^\d+$/.test(t)) return;
+    if(ownName.length>=3&&t.replace(/\s/g,'').includes(ownName)) return;
+    const sc=scriptOf(t); if(sc&&sc!==want) w*=0.45;
+    m.set(t,(m.get(t)||0)+w);
+  };
+  for(const v of r.vids){
+    const w=1+Math.log2(1+clamp(v.score||1,0,20));
+    for(const tg of new Set((v.tags||[]).map(x=>String(x).toLowerCase()))) add(tg,w*(/\s/.test(tg)?1.4:1));
+    for(const ht of new Set(String(v.desc||'').match(/#[\p{L}\p{N}_]+/gu)||[])) add(ht,w*0.5);
+  }
+  for(const x of r.tw.slice(0,25)) add(x.w,x.n*0.7*clamp(x.s,0.5,3));
+  if(m.size<3){ const f={}; for(const v of r.vids) for(const w of new Set(words(v.title))) f[w]=(f[w]||0)+1; for(const [w,n] of Object.entries(f)) if(n>=2) add(w,n*0.8); }
+  const ranked=[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,14);
+  const sq=x=>x.replace(/\s/g,'');
+  /* "한국" va "한국 역사" bo'lsa — aniqrog'i ("한국 역사") qoladi, umumiysi tashlanadi */
+  const kept=ranked.filter(([t,w])=>!ranked.some(([L,wl])=>L!==t&&L.length>t.length&&sq(L).includes(sq(t))&&wl>=w*0.3));
+  const out=[];
+  for(const [t] of kept){ if(out.length>=4) break; if(out.some(o=>sq(o).includes(sq(t))||sq(t).includes(sq(o)))) continue; out.push(t); }
+  return out;
+}
+function simQuery(terms){ return terms.map(t=>/\s/.test(t)?'"'+t.replace(/"/g,'')+'"':t.replace(/"/g,'')).join('|'); }
+function parseTerms(s){ return [...new Set(String(s||'').split(/[|,;\n]+/).map(x=>x.trim().replace(/^["']+|["']+$/g,'').trim()).filter(x=>x.length>=2))].slice(0,6); }
+function fatal(e){ return e&&(e.code==='nokey'||e.code==='net'||e.code==='cancel'||/quota|limit|key|forbidden/i.test(e.code||'')); }
+async function findSimilar(r,opt){
+  opt=opt||{}; const step=opt.onStep||(()=>{}), alive=opt.alive||(()=>true);
+  const me=r.ch, cfg=simGet(me.id), lang=chLang(r.vids), region=me.country||LANG_REG[lang]||'';
+  const autoTerms=simTerms(r,lang), terms=cfg.q?parseTerms(cfg.q):autoTerms;
+  const hide=new Set(cfg.hide), exclude=new Set([me.id,...S.mine.map(m=>m.id).filter(Boolean),...hide]);
+  const pinIds=cfg.pins.map(p=>p.id).filter(id=>id&&!hide.has(id)&&id!==me.id);
+  const hits={}; let searched=false;
+  if(cfg.mode!=='pins'||!pinIds.length){
+    if(!terms.length) throw new AppErr("Kanal mavzusini aniqlab bo'lmadi (teg va takrorlanuvchi so'z yo'q). «Kalit so'zlarni o'zgartirish» tugmasini bosib, mavzuni o'zingiz yozing.",'noterms');
+    step("O'xshash mavzudagi videolar qidirilmoqda…");
+    const p={part:'snippet',type:'video',q:simQuery(terms),maxResults:50,order:'relevance',
+      publishedAfter:new Date(Math.floor(Date.now()/864e5-120)*864e5).toISOString(),regionCode:region,relevanceLanguage:lang};
+    const sr=await api('search',p,100); searched=true;
+    (sr.items||[]).forEach((it,i)=>{ const c=it.snippet&&it.snippet.channelId; if(!c||exclude.has(c)) return; const x=hits[c]=hits[c]||{n:0,best:i}; x.n++; x.best=Math.min(x.best,i); });
+  }
+  if(!alive()) throw new AppErr('cancel','cancel');
+  const found=Object.keys(hits).sort((a,b)=>hits[b].n-hits[a].n||hits[a].best-hits[b].best).slice(0,24);
+  const cand=[...new Set([...pinIds,...found])];
+  if(!cand.length) return {terms,autoTerms,lang,region,searched,chans:[]};
+  step("Topilgan kanallar ma'lumoti olinmoqda…");
+  const map=await getChannelsMap(cand);
+  const ownSubs=me.subs;
+  let chans=cand.map(id=>map[id]).filter(c=>c&&(c.videoCount>=3||pinIds.includes(c.id))).map(c=>{
+    const x=hits[c.id]||{n:0,best:99}, ratio=ownSubs&&c.subs?c.subs/ownSubs:null;
+    const fit=ratio==null?0.5:1-Math.min(1,Math.abs(Math.log10(ratio))/2.5);   // hajmi yaqin = 1, 300× farq = 0
+    const rel=Math.min(1,x.n/5)*0.8+(x.best<10?0.2:x.best<25?0.1:0);       // mavzuga moslik
+    const pin=pinIds.includes(c.id);
+    return Object.assign(c,{hits:x.n,ratio,fit,rel,pin,rank:(pin?10:0)+rel*0.65+fit*0.35});
+  }).sort((a,b)=>b.rank-a.rank);
+  chans=chans.slice(0,Math.max(opt.n||SIM_N,pinIds.length));
+  for(let i=0;i<chans.length;i++){
+    if(!alive()) throw new AppErr('cancel','cancel');
+    const c=chans[i]; step(`Raqiblar videolari: ${i+1} / ${chans.length} — ${c.title}`);
+    try{
+      const vs=await getUploads(c,30);
+      c.base=enrich(vs); c.vids=vs;
+      for(const v of vs){ v.subs=c.subs; v.chThumb=c.thumb; }
+      const sp=clamp(Math.max(...vs.map(v=>v.age),0),7,90); c.perWeek=vs.filter(v=>v.age<=sp).length/(sp/7);
+    }catch(e){ if(fatal(e)) throw e; c.vids=[]; c.err=true; }
+  }
+  return {terms,autoTerms,lang,region,searched,chans};
+}
+/* raqiblarning hozir "o'q uzgan" videolari: o'z kanali odatiysidan yuqori, yangi, har kanaldan ko'pi bilan 2 ta */
+function simTrending(chans,filt,max){
+  const ok=v=>filt==='all'||(filt==='short'?v.isShort:!v.isShort);
+  const pool=(d,min)=>chans.flatMap(c=>(c.vids||[]).filter(v=>v.age>=0.25&&v.age<=d&&v.score>=min&&ok(v)));
+  let win=30, p=pool(30,1.3);
+  if(p.length<6){ win=60; p=pool(60,1.3); }
+  if(p.length<4){ win=120; p=pool(120,1); }
+  p.sort((a,b)=>b.score-a.score||b.vph-a.vph);
+  const per={}, out=[];
+  for(const v of p){ if((per[v.channelId]||0)>=2) continue; per[v.channelId]=(per[v.channelId]||0)+1; out.push(v); if(out.length>=(max||12)) break; }
+  return {list:out,win};
+}
+/* raqiblarda yaxshi ishlagan, lekin sizning sarlavhalaringizda hali uchramagan so'zlar */
+function simGap(r,chans){
+  const own=new Set(r.vids.flatMap(v=>words(v.title)));
+  const names=new Set(chans.flatMap(c=>words(c.title)).concat(words(r.ch.title)));
+  const m={};
+  for(const c of chans) for(const v of c.vids||[]){
+    if(v.score<1.5||v.age<2) continue;
+    for(const w of new Set(words(v.title))){ if(own.has(w)||names.has(w)) continue; const e=m[w]=m[w]||{w,n:0,ch:new Set(),s:[],v:[]}; e.n++; e.ch.add(c.id); e.s.push(v.score); e.v.push(v); }
+  }
+  return Object.values(m).filter(e=>e.ch.size>=2||e.n>=3).map(e=>({w:e.w,n:e.n,c:e.ch.size,s:median(e.s),v:e.v}))
+    .sort((a,b)=>b.c-a.c||b.n*b.s-a.n*a.s).slice(0,18);
+}
+function simPrompt(r,res,trend){
+  const L=LANG_UZ[res.lang]||res.lang;
+  const top=[...r.vids].filter(v=>v.age>=3).sort((a,b)=>b.score-a.score).slice(0,8);
+  return [`Men «${r.ch.title}» YouTube kanalining egasiman (${r.ch.subs!=null?compact(r.ch.subs)+' obunachi, ':''}kanal tili: ${L}).`,'',
+    "Mening eng yaxshi ishlagan videolarim (kanalim odatiysiga nisbatan necha barobar):",
+    ...top.map((v,i)=>`${i+1}. ${v.title} — ${compact(v.views)} ko'rish, ${v.score.toFixed(1)}×${v.isShort?' (Shorts)':''}`),'',
+    "O'xshash kanallarda hozir eng yaxshi ishlayotgan videolar (o'z kanali odatiysiga nisbatan):",
+    ...trend.slice(0,12).map((v,i)=>`${i+1}. ${v.title} — ${v.channelTitle}, ${compact(v.views)} ko'rish, ${v.score.toFixed(1)}×, ${ago(v.published)}${v.isShort?' (Shorts)':''}`),'',
+    `Vazifa: shu ma'lumotlar asosida kanalim uchun 10 ta yangi video g'oyasini taklif qil. Har biri uchun: 1) sarlavha (${L} tilida), 2) nima uchun ishlashi mumkin (1 jumla), 3) Shorts yoki uzun video. Raqiblar videolarini ko'chirma — mavzuni mening kanalim uslubiga moslashtir. Izohlarni o'zbek tilida yoz, faqat sarlavhalar ${L} tilida bo'lsin.`].join('\n');
 }
 
 /* =========================================================
@@ -1089,19 +1283,83 @@ function thumbImg(src,alt){
   return im;
 }
 function ytUrl(id){ return 'https://www.youtube.com/watch?v='+id; }
+/* ---------- dastur ichidagi pleyer: bir bosishda ko'rish, ←/→ keyingi, Esc yopish ---------- */
+const PL={list:[],i:0,ov:null,back:null};
+function isRealId(id){ return typeof id==='string'&&/^[\w-]{11}$/.test(id); }
+function plainClick(e){ return !(e.button||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey); }
+function playVideo(v,list){
+  if(!v||!isRealId(v.id)) return;
+  const L=(list&&list.length?list:[v]).filter(x=>x&&isRealId(x.id));
+  let i=L.findIndex(x=>x.id===v.id);
+  PL.list=i<0?[v]:L; PL.i=i<0?0:i;
+  if(!PL.ov) plBuild();
+  if(PL.ov.hidden) PL.back=document.activeElement;
+  plDraw(); PL.ov.hidden=false; document.documentElement.style.overflow='hidden';
+  PL.ov.querySelector('.pl-x').focus({preventScroll:true});
+}
+function plClose(){
+  if(!PL.ov||PL.ov.hidden) return;
+  PL.ov.hidden=true; PL.stage.replaceChildren(); document.documentElement.style.overflow='';
+  if(PL.back&&PL.back.isConnected&&PL.back.focus) PL.back.focus({preventScroll:true});
+}
+function plStep(d){ const j=PL.i+d; if(j<0||j>=PL.list.length) return; PL.i=j; plDraw(); }
+function plBuild(){
+  PL.cnt=h('span',{class:'hint'}); PL.stage=h('div',{class:'pl-stage'}); PL.bd=h('div',{class:'pl-bd'});
+  PL.ov=h('div',{class:'pl-ov',hidden:true,role:'dialog','aria-modal':'true','aria-label':'Video pleyer',onclick:e=>{ if(e.target===PL.ov) plClose(); }},
+    h('div',{class:'pl-box'},
+      h('div',{class:'pl-hd'},PL.cnt,h('span',{style:'flex:1'}),
+        h('button',{class:'iconbtn pl-x',type:'button','aria-label':'Yopish',title:'Yopish (Esc)',onclick:plClose},icon('x',18,2.2))),
+      PL.stage,PL.bd));
+  document.body.append(PL.ov);
+  document.addEventListener('keydown',e=>{
+    if(!PL.ov||PL.ov.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); plClose(); return; }
+    if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    if(e.key==='ArrowRight'){ e.preventDefault(); plStep(1); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); plStep(-1); }
+    else if(e.key==='Tab'){ const f=[...PL.ov.querySelectorAll('button:not([disabled]),a[href],iframe')]; if(!f.length) return;
+      const a=f[0], z=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey&&document.activeElement===z){ e.preventDefault(); a.focus(); } }
+  });
+}
+function plDraw(){
+  const v=PL.list[PL.i], n=PL.list.length;
+  PL.cnt.textContent=n>1?`${PL.i+1} / ${n}  ·  ← → bilan almashtiring`:'';
+  PL.stage.replaceChildren(h('div',{class:'pl-fr'+(v.isShort?' short':'')},
+    h('iframe',{src:`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&playsinline=1&modestbranding=1`,title:v.title||'Video',
+      allow:'autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write',allowfullscreen:true,referrerpolicy:'strict-origin-when-cross-origin'})));
+  const meta=[];
+  if(v.channelTitle) meta.push(h('b',{text:v.channelTitle+(v.subs!=null?' · '+compact(v.subs)+' obunachi':'')}));
+  if(v.views!=null) meta.push(h('span',null,h('span',{class:'mono',text:compact(v.views)}),' ko\'rish'));
+  if(v.published instanceof Date&&!isNaN(v.published)) meta.push(h('span',{text:ago(v.published)}));
+  if(v.vph!=null&&isFinite(v.vph)) meta.push(h('span',null,icon('bolt',12,2),' ',h('span',{class:'mono',text:compact(v.vph)}),'/soat'));
+  if(v.score!=null&&isFinite(v.score)) meta.push(scoreChip(v.score,"O'z kanali odatiysiga nisbatan necha barobar"));
+  const go2=(id,a)=>{ plClose(); go(id,a); };
+  PL.bd.replaceChildren(h('h3',{text:v.title||''}),h('div',{class:'pl-meta'},meta),
+    h('div',{class:'row'},
+      n>1?h('button',{class:'btn line sm',type:'button',disabled:PL.i===0?true:null,onclick:()=>plStep(-1)},icon('left',14,2.2),'Oldingi'):null,
+      n>1?h('button',{class:'btn sm',type:'button',disabled:PL.i===n-1?true:null,onclick:()=>plStep(1)},'Keyingi',icon('right',14,2.2)):null,
+      h('a',{class:'btn sec sm',href:ytUrl(v.id),target:'_blank',rel:'noopener'},icon('ext',14,2),"YouTube'da ochish"),
+      h('button',{class:'btn sec sm',type:'button',onclick:()=>go2('video',v.id)},icon('play',14,2),'Video tahlili'),
+      v.channelId?h('button',{class:'btn sec sm',type:'button',onclick:()=>go2('channel',v.channelId)},icon('bar',14,2),'Kanal tahlili'):null,
+      h('button',{class:'btn line sm',type:'button',onclick:()=>avtoVideo(v,{bolim:'pleyer'})},icon('film',14,2),'AvtoVideo')),
+    h('p',{class:'hint',text:"Video ochilmasa (muallif boshqa saytlarda ko'rishni taqiqlagan bo'lishi mumkin) — «YouTube'da ochish» tugmasini bosing."}));
+}
 /* video card */
 function videoCard(v,o){
   o=o||{};
-  const real=!o.sample;
-  const th=h(real?'a':'div',{class:'th',href:real?ytUrl(v.id):null,target:real?'_blank':null,rel:'noopener'},
+  const real=!o.sample&&isRealId(v.id);
+  const play=e=>{ if(!plainClick(e)) return; e.preventDefault(); playVideo(v,o.list); };
+  const th=h(real?'a':'div',{class:'th',href:real?ytUrl(v.id):null,target:real?'_blank':null,rel:'noopener',onclick:real?play:null,title:real?"Bosing — shu yerda ko'rish":null},
     thumbImg(v.thumb,v.title),
+    real?h('span',{class:'pi'},icon('play',24,2)):null,
     h('div',{class:'tl'},o.rank?h('span',{class:'rank',text:'#'+o.rank}):null,o.score!==false?scoreChip(o.scoreVal!=null?o.scoreVal:v.score,o.scoreLabel):null),
     v.durSec?h('span',{class:'dur',text:dur(v.durSec)}):null);
   const meta=[h('span',null,h('span',{class:'mono',text:compact(v.views)}),' ko\'rish'),h('span',{text:ago(v.published)})];
   if(o.vph) meta.push(h('span',null,icon('bolt',12,2),' ',h('span',{class:'mono',text:compact(v.vph)}),'/soat'));
   return h('div',{class:'card vc'},th,
     h('div',{class:'bd'},
-      real?h('a',{class:'t',href:ytUrl(v.id),target:'_blank',rel:'noopener',text:v.title}):h('div',{class:'t',text:v.title}),
+      real?h('a',{class:'t',href:ytUrl(v.id),target:'_blank',rel:'noopener',onclick:play,text:v.title}):h('div',{class:'t',text:v.title}),
       h('div',{class:'m'},meta),
       h('div',{class:'ft'},
         o.channel?h('span',{class:'chn',text:v.channelTitle+(v.subs!=null?' · '+compact(v.subs)+' obunachi':'')}):h('span'),
@@ -1130,19 +1388,20 @@ function dataTable(cols,rows,o){
         onclick:()=>{ sort={k:c.k,d:sort.k===c.k&&sort.d==='desc'?'asc':'desc'}; draw(); },
         onkeydown:e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.currentTarget.click(); } },text:c.l})))),
       h('tbody',null,rs.slice(0,shown).map(r=>h('tr',null,cols.map(c=>{ const out=c.f?c.f(r):r[c.k]; return out&&out.tagName==='TD'?out:h('td',{class:c.n?'num':null},out); })))));
-    body.replaceChildren(h('div',{class:'tscroll'},tbl),
-      rs.length>shown?h('div',{class:'more'},h('button',{class:'btn line sm',type:'button',onclick:()=>{ shown+=50; draw(); },text:`Yana ko'rsatish (${rs.length-shown} ta qoldi)`})):null);
+    body.replaceChildren(...[h('div',{class:'tscroll'},tbl),
+      rs.length>shown?h('div',{class:'more'},h('button',{class:'btn line sm',type:'button',onclick:()=>{ shown+=50; draw(); },text:`Yana ko'rsatish (${rs.length-shown} ta qoldi)`})):null].filter(Boolean));
   }
   draw();
   return {el:wrap,setFilter(f){ filt=f; draw(); },redraw:draw};
 }
 function vtCell(v,o){
   o=o||{};
-  const real=!o.sample;
+  const real=!o.sample&&isRealId(v.id);
+  const play=e=>{ if(!plainClick(e)) return; e.preventDefault(); playVideo(v,o.list); };
   return h('td',{class:'vt'},h('div',{class:'in'},
     v.thumb?thumbImg(v.thumb):h('div',{class:'ph'}),
     h('div',{style:'min-width:0'},
-      real?h('a',{href:ytUrl(v.id),target:'_blank',rel:'noopener',text:v.title}):h('span',{class:'tt',text:v.title}),
+      real?h('a',{href:ytUrl(v.id),target:'_blank',rel:'noopener',onclick:play,text:v.title}):h('span',{class:'tt',text:v.title}),
       o.channel?h('div',{class:'sub',text:v.channelTitle}):null)));
 }
 /* ---------- responsive chart registry ---------- */
@@ -1226,7 +1485,7 @@ function perfChart(vids,base,o){
       const r=cls==='hot'?6.5:cls==='warm'?5.5:4.2;
       const dot=sv('circle',{cx:x(+v.published),cy:y(v.views),r,fill:v.isShort?'var(--surface)':col,stroke:col,'stroke-width':v.isShort?2:1.2,'fill-opacity':v.isShort?1:.85,style:'cursor:pointer'});
       tipOn(dot,()=>[h('b',{text:v.title}),h('div',{class:'mono',text:`${full(v.views)} ko'rish · ${v.score.toFixed(1)}×`}),h('div',{text:dateUz(v.published)+(v.isShort?' · Shorts':'')+' · '+dur(v.durSec)})]);
-      if(!o.sample) dot.addEventListener('click',()=>window.open(ytUrl(v.id),'_blank','noopener'));
+      if(!o.sample) dot.addEventListener('click',()=>{ hideTip(); playVideo(v,sorted); });
       g.append(dot);
     }
     g.append(g.__lbl);
@@ -1512,6 +1771,7 @@ V.channel={
       try{
         setStatus(this.st,'loading','Kanal qidirilmoqda…');
         const ch=await resolveChannel(q);
+        if(ch.handle) this.inp.value=ch.handle;
         const vids=await getUploads(ch,+this.cnt.value,(ph,a,b)=>setStatus(this.st,'loading',ph==='list'?`Videolar ro'yxati olinmoqda: ${a} ta`:`Video ma'lumotlari: ${a} / ${b}`));
         setStatus(this.st,null);
         if(!vids.length){ this.out.replaceChildren(emptyBox('play','Bu kanalda ochiq video yo\'q',"Kanal topildi, lekin tahlil qilish uchun video yo'q.")); return; }
@@ -1525,6 +1785,7 @@ V.channel={
   render(r,sample){
     const {ch,vids}=r, out=this.out; out.replaceChildren();
     this.rep=r;
+    if(!sample) mineLink(ch);
     if(sample) out.append(h('div',{class:'banner-note'},icon('info',18),"Bu namuna ma'lumot — haqiqiy kanal emas. Kalitni kiritgach, istalgan kanalni tahlil qilasiz.",h('a',{class:'btn sm',href:'#settings',style:'margin-left:auto',text:'Kalitni kiritish'})));
     // hero
     const saveBtn=h('button',{class:'btn line sm',type:'button'});
@@ -1543,7 +1804,9 @@ V.channel={
           h('h2',null,sample?ch.title:h('a',{href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener',text:ch.title})),
           h('div',{class:'meta'},ch.handle?h('span',{text:ch.handle}):null,ch.country?h('span',{text:'Mamlakat: '+ch.country}):null,h('span',{text:'Ochilgan: '+dateUz(ch.created)}),h('span',{text:`Tahlil: oxirgi ${vids.length} video`})),
           desc),
-        sample?null:h('div',{class:'acts'},mineBtn,saveBtn,
+        sample?null:h('div',{class:'acts'},
+          h('button',{class:'btn sm',type:'button',title:"Sahifa oxiridagi o'xshash kanallar bo'limiga o'tish",onclick:()=>{ const t=document.getElementById('oxshash'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }},icon('users',15,2),"O'xshash kanallar"),
+          mineBtn,saveBtn,
           h('button',{class:'btn line sm',type:'button',onclick:()=>addToCompare(ch.id,ch.title)},icon('columns',15,2),'Solishtirish'),
           h('a',{class:'btn sec sm',href:'https://www.youtube.com/channel/'+ch.id,target:'_blank',rel:'noopener'},icon('ext',15,2),'YouTube'))),
       h('div',{class:'hstats'},
@@ -1571,7 +1834,7 @@ V.channel={
       h('div',{class:'kpis',style:'grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))'},
         kpi("Odatiy ko'rish",compact(r.base),"bitta video uchun (median)",{icon:'eye',spark:sparkline(roll,{color:'var(--d2)'})}),
         kpi("O'sish sur'ati",r.momentum==null?'—':(r.momentum>=1?'+':'')+pct(r.momentum-1,0),"oxirgi 10 video, oldingi 20 taga nisbatan",{icon:r.momentum!=null&&r.momentum<1?'down':'up'}),
-        kpi('Haftalik yuklash',r.perWeek.toFixed(1)+' ta',"oxirgi 90 kun bo'yicha",{icon:'calendar'}),
+        kpi('Haftalik yuklash',r.perWeek.toFixed(1)+' ta',`oxirgi ${Math.round(r.span||90)} kun bo'yicha`,{icon:'calendar'}),
         kpi('Daromad / oy',money(e30.min)+' – '+money(e30.max),r.monthly.method==='track'?"kuzatuv ma'lumoti bo'yicha (aniqroq)":"videolar yoshiga qarab taxmin",{icon:'money',title:"RPM: "+NICHES[S.set.niche].l})))
     );
     // tips
@@ -1583,13 +1846,13 @@ V.channel={
     const drawChart=()=>chartHost.replaceChildren(perfChart(vids.filter(v=>pf==='all'||(pf==='short'?v.isShort:!v.isShort)),r.base,{sample}));
     const seg=segCtl([['all','Hammasi'],['long','Uzun'],['short','Shorts']],'all',k=>{ pf=k; drawChart(); });
     out.append(h('div',{class:'card pad stack'},
-      h('div',{class:'sec-h'},h('div',null,h('h3',{text:"Ko'rishlar dinamikasi"}),h('p',{text:"Har bir nuqta — bitta video. Ustiga olib boring — ma'lumot, bosing — video ochiladi."})),seg),
+      h('div',{class:'sec-h'},h('div',null,h('h3',{text:"Ko'rishlar dinamikasi"}),h('p',{text:"Har bir nuqta — bitta video. Ustiga olib boring — ma'lumot, bosing — shu yerda ko'rasiz."})),seg),
       chartHost,perfLegend()));
     drawChart();
     // outliers
     const outs=[...vids].filter(v=>v.score>=2).sort((a,b)=>b.score-a.score).slice(0,8);
     out.append(h('div',{class:'stack'},secHead('Outlier videolar',"Kanal odatiysidan 2 barobar va ko'proq ko'rilgan (video yoshi hisobga olingan) — g'oya topish uchun eng foydali qism"),
-      outs.length?h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{sample}))):emptyBox('flame',"Outlier video yo'q","Bu kanalda barcha videolar bir xil darajada ko'rilgan.")));
+      outs.length?h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{sample,list:outs}))):emptyBox('flame',"Outlier video yo'q","Bu kanalda barcha videolar bir xil darajada ko'rilgan.")));
     // heat + durations
     const hm=heatmap(r.heat);
     out.append(h('div',{class:'two'},
@@ -1617,7 +1880,7 @@ V.channel={
     // table
     let tf='all';
     const cols=[
-      {k:'title',l:'Video',f:v=>vtCell(v,{sample})},
+      {k:'title',l:'Video',f:v=>vtCell(v,{sample,list:vids})},
       {k:'published',l:'Chiqqan',n:1,f:v=>h('span',{title:dateUz(v.published),text:ago(v.published)})},
       {k:'views',l:"Ko'rish",n:1,f:v=>full(v.views)},
       {k:'vpd',l:'Kunlik',n:1,f:v=>compact(v.vpd)},
@@ -1631,6 +1894,8 @@ V.channel={
     dt=dataTable(cols,vids,{sort:{k:'published',d:'desc'},right:h('div',{class:'row'},tseg,
       h('button',{class:'btn sec sm',type:'button',onclick:()=>csvChannel(r)},icon('download',15,2),'Excel (CSV)'))});
     out.append(h('div',{class:'stack'},secHead('Barcha videolar',`${vids.length} ta video · ustun nomini bosib saralang`),dt.el));
+    // o'xshash kanallar — eng oxirida
+    out.append(simSection(r,sample));
   },
   earnCard(r){
     const host=h('div');
@@ -1674,8 +1939,147 @@ function csvChannel(r){
     r.vids.map(v=>[v.title,'https://youtu.be/'+v.id,d10(v.published),WDF[v.wd],v.hr,v.views,Math.round(v.vpd),v.score.toFixed(2),v.likes,v.comments,(v.eng*100).toFixed(2),dur(v.durSec),v.isShort?'ha':"yo'q",(v.tags||[]).join(' | ')]));
 }
 
+/* ======================= O'XSHASH KANALLAR (kanal tahlili oxirida) ======================= */
+function normRef(x){ x=String(x||'').trim(); try{ x=decodeURIComponent(x); }catch(e){} const m=x.match(/@([^\/?#\s]+)/); return (m?'@'+m[1]:x).toLowerCase(); }
+/* "Mening kanallarim"dagi hali ID'siz yozuvni (@nom bilan qo'shilgan) shu kanalga bog'lash */
+function mineLink(ch){
+  if(!ch||!ch.id||isMine(ch.id)) return;
+  const m=S.mine.find(x=>!x.id&&ch.handle&&normRef(x.ref)===normRef(ch.handle));
+  if(m){ Object.assign(m,mineData(ch,m.ref),{err:false}); mineDedupe(); saveMine(); }
+}
+function simSection(r,sample){
+  const me=r.ch;
+  const host=h('div',{class:'stack',id:'oxshash',role:'region','aria-label':"O'xshash kanallar"});
+  if(sample){
+    host.append(secHead("Sizga o'xshash kanallar","Shu mavzudagi raqiblar va ularda hozir eng yaxshi ishlayotgan videolar"),
+      emptyBox('users',"Kalit kiritilgach shu yerda chiqadi","Dastur kanalingiz mavzusini teglar va sarlavhalardan aniqlaydi, o'xshash kanallarni topadi va ularning hozir trenddagi videolarini ko'rsatadi — bir bosishda ko'rasiz.",
+        h('a',{class:'btn',href:'#settings',text:'Kalitni kiritish'})));
+    return host;
+  }
+  let cfg=simGet(me.id), res=null, filt='all', running=false, showAll=false;
+  const alive=()=>V.channel.rep===r;
+  const st=statusEl(), kw=h('div',{class:'sim-kw'}), body=h('div',{class:'stack',style:'gap:22px'});
+  const refBtn=h('button',{class:'btn sec sm',type:'button',hidden:true,title:"Saqlangan natijani emas, YouTube'dan yangisini olish",onclick:()=>run(true)},icon('refresh',14,2),'Yangilash');
+  const curTerms=()=>res?res.terms:(cfg.q?parseTerms(cfg.q):simTerms(r,chLang(r.vids)));
+  /* kalit so'z muharriri */
+  const edInp=h('input',{class:'inp',id:'simKw',placeholder:'masalan: 한국 역사 | 옛날 서울 | 북한 이야기',autocomplete:'off',spellcheck:'false'});
+  const ed=h('form',{class:'formbar',hidden:true,onsubmit:e=>{ e.preventDefault();
+      const t=parseTerms(edInp.value); if(!t.length){ edInp.focus(); return; }
+      cfg=simGet(me.id); cfg.q=t.join(' | '); cfg.mode='auto'; simSet(me.id,cfg); ed.hidden=true; run(false); }},
+    h('div',{class:'field grow'},h('label',{for:'simKw',text:"Mavzu so'zlari — | bilan ajrating (2–4 ta eng yaxshi)"}),edInp),
+    h('button',{class:'btn',type:'submit'},icon('search',15,2),`Qidirish (≈${SIM_COST} birlik)`),
+    h('button',{class:'btn line',type:'button',title:"Dastur o'zi tanlagan so'zlarga qaytish",onclick:()=>{ cfg=simGet(me.id); cfg.q=null; simSet(me.id,cfg); ed.hidden=true; run(false); }},"Avtomatik so'zlar"),
+    h('button',{class:'btn line',type:'button',onclick:()=>{ ed.hidden=true; }},'Bekor qilish'));
+  const openEd=()=>{ ed.hidden=false; edInp.value=curTerms().join(' | '); edInp.focus(); };
+  const drawKw=()=>{
+    cfg=simGet(me.id);
+    const lang=res?res.lang:chLang(r.vids), region=res?res.region:(me.country||LANG_REG[lang]||'');
+    const np=cfg.pins.length, pinsOnly=cfg.mode==='pins'&&np;
+    kw.replaceChildren(...[
+      h('span',{class:'lbl',text:pinsOnly?'Manba':'Mavzu'}),
+      ...(pinsOnly?[h('span',{class:'chip kw',text:`Faqat saqlangan raqiblarim (${np})`})]:curTerms().map(t=>h('span',{class:'chip kw',text:t}))),
+      h('button',{class:'linkbtn',type:'button',onclick:openEd},icon('type',13,2),"O'zgartirish"),
+      h('span',{class:'hint',text:`${LANG_UZ[lang]||lang} tili${region?' · '+region:' · barcha mamlakatlar'} · oxirgi 4 oy${cfg.q&&!pinsOnly?" · so'zlarni o'zingiz tanlagansiz":''}`}),
+      np?h('span',{style:'margin-left:auto'},segCtl([['auto','Avtomatik topish'],['pins',`Faqat raqiblarim (${np})`]],cfg.mode,k=>{ cfg=simGet(me.id); cfg.mode=k; simSet(me.id,cfg); run(false); })):null].filter(Boolean));
+  };
+  const togglePin=c=>{
+    cfg=simGet(me.id);
+    if(cfg.pins.some(p=>p.id===c.id)){ cfg.pins=cfg.pins.filter(p=>p.id!==c.id); c.pin=false; if(!cfg.pins.length) cfg.mode='auto'; toast("Raqiblar ro'yxatidan olib tashlandi"); }
+    else { cfg.pins.push({id:c.id,title:c.title,thumb:c.thumb}); c.pin=true; toast("Raqib sifatida saqlandi — keyingi safar doim ko'rsatiladi"); }
+    simSet(me.id,cfg); draw();
+  };
+  const hideCh=c=>{ cfg=simGet(me.id); if(!cfg.hide.includes(c.id)) cfg.hide.push(c.id); cfg.pins=cfg.pins.filter(p=>p.id!==c.id); simSet(me.id,cfg); toast("«"+c.title+"» yashirildi"); draw(); };
+  const relTxt=c=>{ const f=x=>x<10?x.toFixed(1).replace(/\.0$/,''):String(Math.round(x));
+    return c.ratio==null?"hajmi noma'lum":c.ratio>=1.5?`sizdan ${f(c.ratio)}× katta`:c.ratio<=1/1.5?`sizdan ${f(1/c.ratio)}× kichik`:'hajmi sizga yaqin'; };
+  const chCard=c=>{
+    const vs=c.vids||[], byScore=[...vs].sort((a,b)=>b.score-a.score);
+    const best=byScore.find(v=>v.age<=60&&v.age>=0.25)||byScore[0];
+    return h('div',{class:'card sc'+(c.pin?' pin':'')},
+      h('div',{class:'top'},avatar(c.thumb,c.title,'sm'),
+        h('div',{class:'tx'},h('b',{title:c.title,text:c.title}),h('small',{text:[c.subs!=null?compact(c.subs)+' obunachi':'obunachi yashirin',relTxt(c)].join(' · ')})),
+        h('button',{class:'iconbtn sc-x',type:'button',title:"O'xshash emas — yashirish",'aria-label':"O'xshash emas — yashirish",onclick:()=>hideCh(c)},icon('x',14,2.2))),
+      h('div',{class:'st'},
+        c.pin?h('span',{class:'pill acc'},icon('pin',12,2),'Raqibim'):null,
+        c.hits?h('span',{class:'pill',title:"Qidiruv natijalarida shu kanaldan nechta video chiqdi",text:c.hits+' ta mos video'}):null,
+        c.base?h('span',{class:'pill',title:"Bitta videosi odatda (median)",text:'odatda '+compact(c.base)+" ko'rish"}):null,
+        c.perWeek!=null?h('span',{class:'pill',text:c.perWeek.toFixed(1).replace(/\.0$/,'')+' video / hafta'}):null),
+      best?h('button',{class:'bestv',type:'button',title:"Eng yaxshi so'nggi videosi — bosing, shu yerda ko'ring",onclick:()=>playVideo(best,byScore)},
+          best.thumb?thumbImg(best.thumb):h('span',{class:'ph'}),h('span',null,h('b',{text:best.score.toFixed(1)+'×  '}),best.title)):
+        h('p',{class:'hint',text:c.err?"Videolarini olib bo'lmadi.":"Ochiq video yo'q."}),
+      h('div',{class:'acts'},
+        h('button',{class:'btn sec sm',type:'button',onclick:()=>go('channel',c.id)},icon('bar',13,2),'Tahlil'),
+        h('button',{class:'btn line sm',type:'button',title:"Shu kanalni o'zingiz bilan yonma-yon solishtirish",onclick:()=>{ CMP.list=[{ref:me.id,label:me.title},{ref:c.id,label:c.title}]; store.set('cmp',CMP.list); go('compare','auto'); }},icon('columns',13,2),'Men bilan'),
+        h('button',{class:'btn line sm',type:'button','aria-pressed':String(!!c.pin),title:c.pin?"Raqiblar ro'yxatidan olib tashlash":"Raqib sifatida saqlash — keyingi safar doim ko'rsatiladi",onclick:()=>togglePin(c)},icon(c.pin?'check':'pin',13,2),c.pin?'Saqlangan':'Raqib')));
+  };
+  const draw=()=>{
+    drawKw(); refBtn.hidden=false;
+    cfg=simGet(me.id);
+    const chans=res.chans.filter(c=>!cfg.hide.includes(c.id)).sort((a,b)=>(b.pin-a.pin)||(b.rel*0.65+b.fit*0.35)-(a.rel*0.65+a.fit*0.35));
+    const foot=h('div',{class:'row',style:'justify-content:space-between'},
+      h('p',{class:'hint',text:(res.spent>0?`Bu qidiruv ≈ ${res.spent} birlik sarfladi`:"Saqlangan natija — limit sarflanmadi")+(res.searched?" · qidiruv 24 soat, kanallar 6 soat saqlanadi":" · faqat saqlangan raqiblaringiz (qidiruvsiz, arzon)")}),
+      cfg.hide.length?h('button',{class:'linkbtn',type:'button',onclick:()=>{ cfg=simGet(me.id); cfg.hide=[]; simSet(me.id,cfg); run(false); }},icon('refresh',13,2),`${cfg.hide.length} ta yashirilgan kanalni qaytarish`):null);
+    if(!chans.length){
+      body.replaceChildren(emptyBox('users',"O'xshash kanal topilmadi","Mavzu so'zlarini o'zgartirib ko'ring — kanalingiz mavzusini 2–3 so'z bilan yozing (masalan: 한국 역사 | 옛날 서울).",
+        h('button',{class:'btn',type:'button',onclick:openEd},icon('type',15,2),"So'zlarni o'zgartirish")),foot);
+      return;
+    }
+    const T=simTrending(chans,filt,12);
+    const winTxt=T.win===30?'oxirgi 30 kun':T.win===60?'oxirgi 2 oy':'oxirgi 4 oy';
+    const trendList=T.list.length?T.list:simTrending(chans,'all',12).list;
+    const gap=simGap(r,chans);
+    body.replaceChildren(
+      h('div',{class:'stack'},
+        h('div',{class:'sim-sub'},
+          h('div',null,h('h3',{text:'🔥 Raqiblarda hozir trenddagi videolar'}),h('p',{text:`${winTxt} · o'z kanali odatiysidan ko'p ko'rilgan · bosing — shu yerda ko'rasiz`})),
+          h('div',{class:'row'},segCtl([['all','Hammasi'],['long','Uzun'],['short','Shorts']],filt,k=>{ filt=k; draw(); }),
+            T.list.length?h('button',{class:'btn sm',type:'button',title:"Hammasini birin-ketin ko'rish (← → tugmalari bilan)",onclick:()=>playVideo(T.list[0],T.list)},icon('play',14,2),"Ketma-ket ko'rish"):null,
+            T.list.length?h('button',{class:'btn line sm',type:'button',title:"Shu videolarni AvtoVideo'ga g'oya fayli sifatida yuborish",onclick:()=>avtoVideo(T.list,{bolim:'oxshash_kanallar',kanal:me.title})},icon('film',14,2),'AvtoVideo'):null)),
+        T.list.length?h('div',{class:'vgrid'},T.list.slice(0,showAll?99:6).map(v=>videoCard(v,{channel:true,list:T.list,vph:true,scoreLabel:"O'z kanali odatiysiga nisbatan necha barobar"}))):
+          emptyBox('flame',"Hozir trendda video yo'q",filt==='all'?"Raqiblarning so'nggi videolari odatdagidek ko'rilmoqda.":"Bu turdagi videolar orasida trend yo'q — «Hammasi»ni tanlang."),
+        !showAll&&T.list.length>6?h('div',{class:'more'},h('button',{class:'btn line sm',type:'button',onclick:()=>{ showAll=true; draw(); },text:`Yana ko'rsatish (${T.list.length-6} ta)`})):null),
+      h('div',{class:'stack'},
+        h('div',{class:'sim-sub'},h('div',null,h('h3',{text:`O'xshash kanallar (${chans.length})`}),h('p',{text:"Mavzusi mos va hajmi sizga yaqin kanallar oldinda. 📌 Raqib — doim kuzatiladi, ✕ — o'xshash emas."}))),
+        h('div',{class:'simch'},chans.map(chCard))),
+      h('div',{class:'stack'},
+        h('div',{class:'sim-sub'},
+          h('div',null,h('h3',{text:"💡 Raqiblarda ishlagan, sizda hali yo'q mavzular"}),h('p',{text:"Raqiblarning hit videolari sarlavhalarida bor, sizning sarlavhalaringizda yo'q so'zlar. Bosing — kalit so'z tadqiqoti."})),
+          h('button',{class:'btn sm',type:'button',title:"Claude yoki Gemini'ga qo'yish uchun tayyor so'rov",onclick:()=>copy(simPrompt(r,res,trendList))},icon('spark',14,2),"AI uchun g'oya so'rovini nusxalash")),
+        gap.length?h('div',{class:'chips'},gap.map(g=>h('button',{class:'chip',type:'button',title:`${g.c} ta raqib kanalda, ${g.n} ta hit videoda · odatda ${g.s.toFixed(1)}×`,onclick:()=>go('keyword',g.w)},g.w,h('b',{text:g.c+' kanal'})))):
+          h('p',{class:'hint',text:"Hozircha aniq farq topilmadi — raqiblar siz bilan bir xil mavzularda ishlayapti."})),
+      foot);
+  };
+  const run=async fresh=>{
+    if(running) return; running=true; refBtn.disabled=true; ed.hidden=true;
+    const q0=quotaGet();
+    setStatus(st,'loading',"O'xshash kanallar qidirilmoqda…");
+    body.replaceChildren(h('div',{class:'vgrid'},Array.from({length:4},()=>h('div',{class:'skel',style:'height:230px'}))));
+    try{
+      const out=await withApi(fresh,()=>findSimilar(r,{alive,onStep:t=>{ if(alive()) setStatus(st,'loading',t); }}));
+      if(!alive()) return;
+      res=out; res.spent=Math.max(0,quotaGet()-q0);
+      setStatus(st,null); draw();
+    }catch(e){
+      if(e.code==='cancel'||!alive()) return;
+      body.replaceChildren(); errorStatus(st,e); drawKw(); if(e.code==='noterms') openEd();
+    }finally{ running=false; refBtn.disabled=false; }
+  };
+  const start=()=>{
+    drawKw();
+    const cheap=cfg.mode==='pins'&&cfg.pins.length;
+    body.replaceChildren(h('div',{class:'sim-start'},
+      h('p',null,"Shu kanal mavzusidagi o'xshash kanallarni va ularning hozir trenddagi videolarini topaman. Narxi: ",h('b',{text:`≈ ${cheap?1+2*cfg.pins.length:SIM_COST} birlik`}),
+        ` (bugungi bepul limitning ~${Math.max(1,Math.round((cheap?1+2*cfg.pins.length:SIM_COST)/100))}%). «Mening kanallarim»dagi kanallar uchun bu o'zi avtomatik ishlaydi.`),
+      h('button',{class:'btn',type:'button',onclick:()=>run(false)},icon('users',16,2),"O'xshash kanallarni topish")));
+  };
+  host.append(h('div',{class:'card pad stack sim-card'},
+    h('div',{class:'sec-h'},h('div',null,h('h2',{text:"Sizga o'xshash kanallar"}),h('p',{text:"Shu mavzudagi raqiblar va ularda hozir eng yaxshi ishlayotgan videolar"})),refBtn),
+    kw,ed,st,body));
+  if(isMine(me.id)) setTimeout(()=>{ if(alive()) run(false); },0); else start();
+  return host;
+}
+
 function backupNow(){
-  download('youtube-tahlil-zaxira-'+d10(new Date())+'.json',JSON.stringify({v:2,saved:S.saved,mine:S.mine,settings:S.set,recent:S.recent,cmp:CMP.list},null,1),'application/json');
+  download('youtube-tahlil-zaxira-'+d10(new Date())+'.json',JSON.stringify({v:3,saved:S.saved,mine:S.mine,settings:S.set,recent:S.recent,cmp:CMP.list,sim:store.get('sim',{})},null,1),'application/json');
   store.set('lastBackup',Date.now()); toast('Zaxira yuklab olindi');
 }
 /* ======================= SETTINGS ======================= */
@@ -1737,7 +2141,7 @@ V.settings={
       segCtl([['auto','Avtomatik'],['light',"Yorug'"],['dark',"Qorong'i"]],S.set.theme,k=>{ S.set.theme=k; saveSettings(); applyTheme(); })));
     // costs
     el.append(h('div',{class:'two'},
-      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Bepul limit qancha ketadi'}),h('p',{text:"YouTube kuniga 10 000 birlik beradi. Koreya vaqti bilan har kuni ~16:00 (qishda 17:00) da yangilanadi. Chapdagi hisoblagich taxminiy — haqiqiy sarfni Google Cloud'dagi «Quotas» sahifasi ko'rsatadi. Saqlangan natijalar limit sarflamaydi."})),
+      h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Bepul limit qancha ketadi'}),h('p',{text:`YouTube kuniga 10 000 birlik beradi. Sizning vaqtingiz bilan har kuni ${resetText()} da yangilanadi (Koreyada qishda 17:00, yozda 16:00). Chapdagi hisoblagich taxminiy — haqiqiy sarfni Google Cloud'dagi «Quotas» sahifasi ko'rsatadi. Saqlangan natijalar limit sarflamaydi.`})),
         h('table',{class:'costtbl'},h('tbody',null,[
           ['Kanal tahlili (100 video)','≈ 4 birlik'],['Kanal tahlili (500 video)','≈ 22 birlik'],['Kanalni nomi bilan qidirish (@ siz)','+100 birlik'],
           ['Video tahlili','≈ 5 birlik'],["Kalit so'z qidiruvi",'≈ 102 birlik'],["Kalit so'z g'oyalari (takliflar)",'bepul'],
@@ -1806,13 +2210,13 @@ V.settings={
   },
   dataCard(){
     const fi=h('input',{type:'file',accept:'application/json,.json',hidden:true});
-    fi.onchange=()=>{ const f=fi.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.saved) S.saved=d.saved; if(d.settings) S.set=Object.assign(S.set,d.settings); if(d.recent) S.recent=d.recent; if(d.cmp) CMP.list=d.cmp; if(Array.isArray(d.mine)){ S.mine=d.mine; saveMine(); }
+    fi.onchange=()=>{ const f=fi.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.saved) S.saved=d.saved; if(d.settings) S.set=Object.assign(S.set,d.settings); if(d.recent) S.recent=d.recent; if(d.cmp) CMP.list=d.cmp; if(Array.isArray(d.mine)){ S.mine=d.mine; saveMine(); } if(d.sim&&typeof d.sim==='object') store.set('sim',d.sim);
       saveSaved(); saveSettings(); store.set('recent',S.recent); store.set('cmp',CMP.list); applyTheme(); toast('Zaxira tiklandi'); }catch(e){ toast("Fayl noto'g'ri",'err'); } }; rd.readAsText(f); fi.value=''; };
     let arm=false;
     const clr=h('button',{class:'btn danger',type:'button'},icon('trash',16,2),'Hammasini tozalash');
     clr.onclick=()=>{ if(!arm){ arm=true; clr.lastChild.textContent='Ishonchingiz komilmi? Yana bosing'; setTimeout(()=>{ arm=false; clr.lastChild.textContent='Hammasini tozalash'; },4000); return; }
-      for(const k of ['saved','recent','cmp','settings','quota','lastRefresh']) store.del(k);
-      S.saved=[]; S.recent=[]; CMP.list=[]; toast("Ma'lumotlar tozalandi (kalit saqlab qolindi)"); arm=false; clr.lastChild.textContent='Hammasini tozalash'; };
+      for(const k of ['saved','recent','cmp','settings','quota','lastRefresh','sim']) store.del(k);
+      S.saved=[]; S.recent=[]; CMP.list=[]; S.set=Object.assign({theme:'auto',niche:'vlog',rpmMin:0.5,rpmMax:2,sMin:0.03,sMax:0.08},{rememberKey:S.set.rememberKey}); applyTheme(); quotaShow(); toast("Ma'lumotlar tozalandi (kalit saqlab qolindi)"); arm=false; clr.lastChild.textContent='Hammasini tozalash'; };
     return h('div',{class:'card pad stack'},h('div',null,h('h3',{text:"Ma'lumotlar va zaxira"}),h('p',{text:"Mening kanallarim, kuzatuvdagi kanallar va sozlamalarni faylga saqlab, boshqa kompyuterda tiklashingiz mumkin. Kalit zaxiraga kirmaydi."})),
       h('div',{class:'row'},
         h('button',{class:'btn sec',type:'button',onclick:()=>backupNow()},icon('download',16,2),'Zaxira olish'),
@@ -1870,7 +2274,7 @@ V.video={
     const thumbBox=h('div',{class:'vthumb'});
     const im=h('img',{src:'https://i.ytimg.com/vi/'+v.id+'/maxresdefault.jpg',alt:'',referrerpolicy:'no-referrer'});
     im.onerror=()=>{ if(!im.dataset.f){ im.dataset.f=1; im.src=v.thumbHi||v.thumb; } else im.remove(); };
-    thumbBox.append(im,h('span',{class:'dur',text:dur(v.durSec)}));
+    thumbBox.append(im,h('span',{class:'dur',text:dur(v.durSec)}),h('button',{class:'vplay',type:'button','aria-label':"Videoni shu yerda ko'rish",onclick:()=>playVideo(v)},icon('play',30,2)));
     out.append(h('div',{class:'vhero'},
       h('div',{class:'stack'},thumbBox),
       h('div',{class:'stack'},
@@ -2051,7 +2455,7 @@ V.keyword={
     const outs=vids.filter(v=>v.ratio!=null).sort((a,b)=>b.ratio-a.ratio).slice(0,8);
     out.append(h('div',{class:'stack'},secHead('Eng kuchli breakoutlar',"Kanal hajmiga nisbatan eng ko'p ko'rilgan videolar — raqam: ko'rish ÷ obunachi",
         outs.length?h('button',{class:'btn sm',type:'button',onclick:()=>avtoVideo(outs,{bolim:'kalit_soz',kalit_soz:q})},icon('film',15,2),"Breakoutlar → AvtoVideo"):null),
-      h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{scoreVal:v.ratio,scoreLabel:"Ko'rish ÷ obunachi",channel:true})))));
+      h('div',{class:'vgrid'},outs.map(v=>videoCard(v,{scoreVal:v.ratio,scoreLabel:"Ko'rish ÷ obunachi",channel:true,list:outs})))));
     // channels, tags
     const byCh={};
     for(const v of vids){ const c=byCh[v.channelId]=byCh[v.channelId]||{id:v.channelId,title:v.channelTitle,subs:v.subs,thumb:v.chThumb,n:0,views:0}; c.n++; c.views+=v.views; }
@@ -2075,7 +2479,7 @@ V.keyword={
       h('div',{class:'card pad stack'},h('div',null,h('h3',{text:'Qanday uzunlik ishlaydi'}),h('p',{text:"Bu mavzuda uzunlik bo'yicha odatiy ko'rish"})),hbars(durs))));
     // table
     const cols=[
-      {k:'title',l:'Video',f:v=>vtCell(v,{channel:true})},
+      {k:'title',l:'Video',f:v=>vtCell(v,{channel:true,list:vids})},
       {k:'subs',l:'Obunachi',n:1,f:v=>v.subs==null?'—':compact(v.subs)},
       {k:'views',l:"Ko'rish",n:1,f:v=>full(v.views)},
       {k:'ratio',l:"Ko'rish ÷ obuna",n:1,f:v=>v.ratio==null?'—':scoreChip(v.ratio,"Ko'rish ÷ obunachi")},
@@ -2146,7 +2550,7 @@ V.trends={
       h('div',{class:'row'},h('button',{class:'btn sm',type:'button',title:"Eng yaxshi 10 ta videoni AvtoVideo'ga yuborish",onclick:()=>avtoVideo(list.slice(0,10),{bolim:'trendlar',mamlakat:this.region.value,toifa:this.cat.value})},icon('film',15,2),"Top 10 → AvtoVideo"),
       h('button',{class:'btn sec sm',type:'button',onclick:()=>csv('trend_'+this.region.value+'_'+d10(new Date())+'.csv',['#','Sarlavha','Havola','Kanal','Obunachi',"Ko'rish","Soatiga",'Chiqqan','Uzunlik','Teglar'],
         list.map(v=>[v.rank,v.title,'https://youtu.be/'+v.id,v.channelTitle,v.subs,v.views,Math.round(v.vph),d10(v.published),dur(v.durSec),(v.tags||[]).join(' | ')]))},icon('download',15,2),'Excel (CSV)'))),
-      h('div',{class:'vgrid'},list.map(v=>videoCard(v,{rank:v.rank,score:false,vph:true,channel:true})))));
+      h('div',{class:'vgrid'},list.map(v=>videoCard(v,{rank:v.rank,score:false,vph:true,channel:true,list})))));
   }
 };
 
@@ -2230,7 +2634,7 @@ V.compare={
       })));
     out.append(h('div',{class:'stack'},secHead('Batafsil solishtirish',"Yashil raqam — shu ko'rsatkich bo'yicha eng yaxshi kanal"),h('div',{class:'tscroll'},tbl)));
     out.append(h('div',{class:'stack'},secHead('Har kanalning eng kuchli videolari',"Har birining kanal odatiysiga nisbatan eng yaxshi 2 ta videosi"),
-      h('div',{class:'vgrid'},reps.flatMap(r=>[...r.vids].sort((a,b)=>b.score-a.score).slice(0,2).map(v=>videoCard(v,{channel:true}))))));
+      (()=>{ const best=reps.flatMap(r=>[...r.vids].sort((a,b)=>b.score-a.score).slice(0,2)); return h('div',{class:'vgrid'},best.map(v=>videoCard(v,{channel:true,list:best}))); })()));
   }
 };
 
