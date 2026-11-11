@@ -1,0 +1,44 @@
+name: Kunlik hisobot
+
+# Har kuni 08:07 UTC = 17:07 Koreya vaqti (YouTube limiti yangilangandan keyin).
+# Qo'lda ishga tushirish: Actions → «Kunlik hisobot» → Run workflow.
+on:
+  schedule:
+    - cron: '7 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kunlik-hisobot
+  cancel-in-progress: false
+
+jobs:
+  hisobot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Kanallarni tekshirish va Telegram'ga yuborish
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: node youtube-tahlil/scripts/kunlik-hisobot.mjs
+
+      - name: Tarixni saqlash (dastur grafiklari uchun)
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add youtube-tahlil/data/history.json
+          if git diff --cached --quiet; then echo "O'zgarish yo'q"; exit 0; fi
+          git commit -m "Kunlik ma'lumot: $(date -u +%F)"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
