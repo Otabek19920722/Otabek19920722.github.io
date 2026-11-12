@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add youtube-tahlil/data/history.json
+          git add youtube-tahlil/data/history.json youtube-tahlil/data/latest.json
           if git diff --cached --quiet; then echo "O'zgarish yo'q"; exit 0; fi
           git commit -m "Kunlik ma'lumot: $(date -u +%F)"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true

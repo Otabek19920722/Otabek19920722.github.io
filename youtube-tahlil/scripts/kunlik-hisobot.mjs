@@ -209,7 +209,7 @@ async function main() {
   const scheduled = process.env.GITHUB_EVENT_NAME === 'schedule';
   if (scheduled && hist.sentDay === day) { log(`ℹ️ ${day} hisoboti allaqachon yuborilgan — o'tkazib yuborildi.`); return; }
   // Rejali ishga tushish erta kelsa, belgilangan vaqtgacha (06:20) kutamiz — GitHub vaqtida aniq emas
-  if (scheduled) {
+  if (scheduled && TG && CHAT) {
     const wait = kstAt(process.env.SEND_AT || '06:20') - Date.now();
     if (wait > 0 && wait <= 75 * 60e3) { log(`⏳ ${Math.round(wait / 6e4)} daqiqa kutiladi (${process.env.SEND_AT || '06:20'} gacha)`); await sleep(wait); }
   }
@@ -219,7 +219,8 @@ async function main() {
   const riv = await resolveRefs(cfg.raqiblar || [], hist);
   if (!own.ids.length) throw new Error("kanallar.json'dagi o'z kanallaringizdan birortasi ham topilmadi: " + own.missing.join(', '));
   const chans = await channelsById(own.ids);
-  const ownRes = [], ownVids = {};
+  const ownRes = [], ownVids = {}, ownOut = [];
+  const vid = v => ({ id: v.id, sarlavha: v.title, korishlar: v.views, yoshi_kun: +v.age.toFixed(1), tezlik: +v.score.toFixed(2), shorts: !!v.isShort });
 
   const lines = [`📊 <b>YouTube Tahlil</b> — ${day}`];
   for (const id of own.ids) {
@@ -257,6 +258,7 @@ async function main() {
     }
     const best = vs.filter(v => !v.isShort && v.age >= 3 && v.age <= 60 && v.score >= 2).sort((a, b) => b.score - a.score)[0];
     if (best && !fresh.includes(best)) L.push(`💡 Eng yaxshi uzun video: «${esc(best.title)}» (${best.score.toFixed(1)}×) — undan Shorts kesing.`);
+    ownOut.push({ nom: c.title, obunachi: c.subs, obunachi_ortishi_1kun: s1, obunachi_ortishi_7kun: s7, korish_ortishi_1kun: v1, videolar_30kun: vs.filter(v => v.age <= 30).sort((a, b) => b.score - a.score).slice(0, 12).map(vid) });
     lines.push(L.join('\n'));
   }
   if (own.missing.length) lines.push(`⚠️ Topilmadi: ${esc(own.missing.join(', '))} — kanallar.json'ni tekshiring.`);
@@ -281,6 +283,8 @@ async function main() {
   const most = rivVs.filter(v => v.age <= 7).sort((a, b) => b.views - a.views).slice(0, 3);
   if (most.length) lines.push("👁 <b>Raqiblarda eng ko'p ko'rilgan (7 kun)</b>\n" + most.map(v => `• ${link(v)} — ${esc(v.chTitle)}, ${compact(v.views)}`).join('\n'));
   const ex = expert(ownRes, rivVs);
+  const rivOut = rivIds.filter(id => chans[id]).map(id => ({ nom: chans[id].title, obunachi: chans[id].subs, videolar_14kun: rivVs.filter(v => v.ch === id && v.age <= 14).sort((a, b) => b.score - a.score).slice(0, 8).map(vid) }));
+  await fs.writeFile(path.join(DIR, 'latest.json'), JSON.stringify({ izoh: "Kunlik hisobot ma'lumoti (tezlik = video odatdagidan necha marta tez ko'rilyapti)", kun: day, yangilandi: new Date().toISOString(), mening_kanallarim: ownOut, raqiblar: rivOut, qoidali_xulosa: ex.map(x => x.replace(/<[^>]+>/g, '')) }, null, 1) + '\n');
   if (ex.length) lines.push('🎓 <b>Mutaxassis xulosasi va tavsiyalar</b>\n' + ex.join('\n'));
   else if (!rivVs.length) lines.push("ℹ️ Raqiblar topilmadi — data/kanallar.json dagi «raqiblar» ro'yxatiga kanal qo'shing.");
   lines.push(`🔗 <a href="${SITE}#report">To'liq hisobot</a> · raqiblar: ${rivIds.length} ta · limitdan ≈ ${used} birlik`);
