@@ -1,10 +1,11 @@
 {
-  "izoh": "YouTube Tahlil — kunlik hisobot uchun kanallar. «mening_kanallarim» — o'z kanallaringiz, «raqiblar» — kuzatiladigan raqiblar (ixtiyoriy, 15 tagacha).",
+  "izoh": "YouTube Tahlil — kunlik hisobot uchun kanallar. «mening_kanallarim» — o'z kanallaringiz, «raqiblar» — kuzatiladigan raqiblar (qo'lda, 15 tagacha). «avto_raqiblar» yoqilgan bo'lsa, o'xshash kanallar haftada bir marta o'zi topiladi.",
   "mening_kanallarim": [
     { "nom": "한국의 어제와 오늘", "ref": "@한국의어제와오늘" },
     { "nom": "ActivMusic", "ref": "@ActivMusic-OK" },
     { "nom": "Vortex World", "ref": "@Vortex_World-new" },
     { "nom": "HopBeat", "ref": "@HopBeatMusic" }
   ],
+  "avto_raqiblar": true,
   "raqiblar": []
 }

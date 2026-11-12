@@ -1,5 +1,6 @@
 // YouTube Tahlil — kunlik ma'lumot yig'uvchi va Telegram hisoboti.
-// GitHub Actions har kuni 17:07 (Koreya vaqti) da ishga tushiradi (.github/workflows/kunlik-hisobot.yml).
+// GitHub Actions har kuni ertalab ishga tushiradi (.github/workflows/kunlik-hisobot.yml) va hisobotni
+// Koreya vaqti bilan 06:20 da yuboradi (erta kelsa shu vaqtgacha kutadi, kechiksa darrov yuboradi).
 // Kerakli maxfiy qiymatlar (GitHub → Settings → Secrets → Actions):
 //   YT_API_KEY   — YouTube Data API v3 kaliti (majburiy)
 //   TG_BOT_TOKEN — Telegram bot tokeni (ixtiyoriy)
@@ -39,6 +40,12 @@ const signed = x => x == null || !Number.isFinite(x) ? '—' : (x > 0 ? '+' : x 
 const full = n => n == null ? '—' : Math.round(n).toLocaleString('ru-RU');
 function parseDur(iso) { const m = /P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || ''); return m ? (+m[1] || 0) * 86400 + (+m[2] || 0) * 3600 + (+m[3] || 0) * 60 + (+m[4] || 0) : 0; }
 function ago(ms) { const h = ms / 36e5; if (h < 1) return 'hozirgina'; if (h < 24) return Math.floor(h) + ' soat oldin'; return Math.floor(h / 24) + ' kun oldin'; }
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const STOP = new Set('the and for with from this that how why what you your video videos official full new best top shorts short live part'.split(' '));
+function words(t) { return (String(t).toLowerCase().match(/[\p{L}\p{N}]+/gu) || []).filter(w => !STOP.has(w) && !/^\d+$/.test(w) && (/[ㄱ-힝]/.test(w) ? w.length >= 2 : w.length >= 4)); }
+// bugungi Koreya sanasidagi hh:mm ning UTC millisekund qiymati
+function kstAt(hhmm) { const [h, m] = hhmm.split(':').map(Number); return Date.parse(today() + 'T00:00:00Z') + ((h - 9) * 60 + m) * 6e4; }
 
 async function api(p, params, cost = 1) {
   const u = new URL(p, YT);
@@ -124,6 +131,55 @@ function speedText(v, hist) {
   return { r, txt: `${r.toFixed(1)}× ${word}${peers.length >= 3 ? '' : ' (taxminiy)'}` };
 }
 
+// Raqiblarni avtomatik topish: har bir o'z kanalingizning eng yaxshi video mavzusi bo'yicha o'xshash kanallar (haftada 1 marta, ≈400 birlik)
+async function discoverRivals(ownIds, chans, ownVids, hist) {
+  const A = hist.auto = hist.auto || { at: 0, ids: [] };
+  if (A.ids.length && Date.now() - A.at < 7 * DAY_MS) return A.ids;
+  const per = [];
+  for (const id of ownIds) {
+    const vs = ownVids[id] || [];
+    const best = vs.filter(v => !v.isShort).sort((a, b) => b.score - a.score)[0] || vs[0];
+    const q = (best ? best.title : chans[id].title).replace(/[#\[\]()|【】「」『』"'!?]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 70);
+    try {
+      const j = await api('search', { part: 'snippet', type: 'channel', q, maxResults: 8 }, 100);
+      per.push((j.items || []).map(it => (it.snippet || {}).channelId || (it.id || {}).channelId).filter(cid => cid && !ownIds.includes(cid)));
+    } catch (e) { log('⚠️ raqib qidirish:', e.message); break; }
+  }
+  const ids = [];
+  for (let i = 0; i < 4; i++) for (const g of per) if (g[i] && !ids.includes(g[i])) ids.push(g[i]);
+  if (ids.length) { A.ids = ids.slice(0, 12); A.at = Date.now(); }
+  return A.ids;
+}
+
+// Mutaxassis xulosasi: qoidaga asoslangan (bepul) tahlil — formatlar, viral naqshlar, mavzular, keyingi video g'oyalari
+function expert(ownRes, rivVs) {
+  const L = [];
+  for (const o of ownRes) {
+    const vs = o.vs.filter(v => v.age <= 60), sh = vs.filter(v => v.isShort), lg = vs.filter(v => !v.isShort), bits = [];
+    if (sh.length >= 3 && lg.length >= 3) {
+      const a = median(sh.map(v => v.score)), b = median(lg.map(v => v.score));
+      if (a && b && a / b >= 1.5) bits.push(`Shorts uzun videolardan ${(a / b).toFixed(1)}× yaxshi ishlayapti — Shorts'ni ko'paytiring`);
+      else if (a && b && b / a >= 1.5) bits.push(`uzun videolar Shorts'dan ${(b / a).toFixed(1)}× yaxshi — kuchni uzun videoga bering`);
+    }
+    const top = vs.filter(v => v.age >= 3).sort((a, b) => b.score - a.score)[0];
+    if (top && top.score >= 1.8) bits.push(`eng kuchlisi «${esc(top.title)}» (${top.score.toFixed(1)}×) — shu mavzu va sarlavha uslubida davom/seriya qiling`);
+    if (o.vs.length && !o.vs.some(v => v.age <= 14)) bits.push("14 kundan beri yangi video yo'q — muntazamlik algoritm uchun muhim");
+    if (bits.length) L.push(`• <b>${esc(o.c.title)}</b>: ${bits.join('; ')}.`);
+  }
+  const hot = rivVs.filter(v => v.age <= 14 && v.age >= 0.25 && v.score >= 1.5).sort((a, b) => b.score - a.score);
+  if (hot.length >= 2) {
+    const sc = {}, cnt = {};
+    for (const v of hot) for (const t of new Set(words(v.title))) { sc[t] = (sc[t] || 0) + v.score; cnt[t] = (cnt[t] || 0) + 1; }
+    const kw = Object.keys(sc).filter(t => cnt[t] >= 2).sort((a, b) => sc[b] - sc[a]).slice(0, 6);
+    if (kw.length) L.push(`🔑 Raqiblarda ko'tarilayotgan so'zlar: ${esc(kw.join(', '))}`);
+    const n = hot.length, num = hot.filter(v => /\d/.test(v.title)).length, q = hot.filter(v => /[?？]/.test(v.title)).length, shn = hot.filter(v => v.isShort).length;
+    const avg = Math.round(hot.reduce((s, v) => s + [...v.title].length, 0) / n);
+    L.push(`📐 Viral ${n} ta videoda: ${num} tasida raqam, ${q} tasida savol, ${shn} tasi Shorts; sarlavha o'rtacha ${avg} belgi`);
+    for (const v of hot.slice(0, 2)) L.push(`💡 G'oya: «${esc(v.title)}» (${esc(v.chTitle)}, ${v.score.toFixed(1)}×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.`);
+  }
+  return L;
+}
+
 async function sendTelegram(text) {
   const parts = [];
   let cur = '';
@@ -149,13 +205,21 @@ async function main() {
   let hist;
   try { hist = JSON.parse(await fs.readFile(HIST_FILE, 'utf8')); } catch { hist = {}; }
   hist = Object.assign({ v: 1, updated: null, ids: {}, channels: {}, videos: {} }, hist);
-  const day = today(), now = Date.now();
+  const day = today();
+  const scheduled = process.env.GITHUB_EVENT_NAME === 'schedule';
+  if (scheduled && hist.sentDay === day) { log(`ℹ️ ${day} hisoboti allaqachon yuborilgan — o'tkazib yuborildi.`); return; }
+  // Rejali ishga tushish erta kelsa, belgilangan vaqtgacha (06:20) kutamiz — GitHub vaqtida aniq emas
+  if (scheduled) {
+    const wait = kstAt(process.env.SEND_AT || '06:20') - Date.now();
+    if (wait > 0 && wait <= 75 * 60e3) { log(`⏳ ${Math.round(wait / 6e4)} daqiqa kutiladi (${process.env.SEND_AT || '06:20'} gacha)`); await sleep(wait); }
+  }
+  const now = Date.now();
 
   const own = await resolveRefs(cfg.mening_kanallarim || [], hist);
   const riv = await resolveRefs(cfg.raqiblar || [], hist);
-  const rivIds = riv.ids.filter(id => !own.ids.includes(id)).slice(0, 15);
   if (!own.ids.length) throw new Error("kanallar.json'dagi o'z kanallaringizdan birortasi ham topilmadi: " + own.missing.join(', '));
-  const chans = await channelsById([...own.ids, ...rivIds]);
+  const chans = await channelsById(own.ids);
+  const ownRes = [], ownVids = {};
 
   const lines = [`📊 <b>YouTube Tahlil</b> — ${day}`];
   for (const id of own.ids) {
@@ -170,6 +234,7 @@ async function main() {
     h.days[day] = [c.subs, c.views, c.videos];
     let vs = [];
     try { vs = await uploads(c, 25); } catch (e) { if (fatal(e)) throw e; log('⚠️', c.title, e.message); }
+    ownRes.push({ c, vs }); ownVids[id] = vs;
     for (const v of vs) {
       if (v.age > 30) continue;
       const e = hist.videos[v.id] = hist.videos[v.id] || { c: id, s: v.isShort ? 1 : 0, pub: v.pub, t: v.title, p: [] };
@@ -196,32 +261,42 @@ async function main() {
   }
   if (own.missing.length) lines.push(`⚠️ Topilmadi: ${esc(own.missing.join(', '))} — kanallar.json'ni tekshiring.`);
 
-  const hits = [];
+  // raqiblar: qo'lda kiritilganlar + avtomatik topilganlar
+  let auto = [];
+  if (cfg.avto_raqiblar !== false) { try { auto = await discoverRivals(own.ids, chans, ownVids, hist); } catch (e) { log('⚠️', e.message); } }
+  const rivIds = [...new Set([...riv.ids, ...auto])].filter(id => !own.ids.includes(id)).slice(0, 15);
+  const need = rivIds.filter(id => !chans[id]);
+  if (need.length) { try { Object.assign(chans, await channelsById(need)); } catch (e) { if (fatal(e)) throw e; log('⚠️', e.message); } }
+  const rivVs = [];
   for (const id of rivIds) {
     const c = chans[id]; if (!c) continue;
     const h = hist.channels[id] = hist.channels[id] || { title: c.title, days: {}, raqib: true };
     h.title = c.title; h.raqib = true; h.days[day] = [c.subs, c.views, c.videos];
-    try { hits.push(...(await uploads(c, 12)).filter(v => v.age <= 7 && v.age >= 0.25 && v.score >= 1.5)); }
+    try { rivVs.push(...(await uploads(c, 20)).filter(v => v.age >= 0.25)); }
     catch (e) { if (fatal(e)) throw e; log('⚠️', c.title, e.message); }
   }
-  if (hits.length) {
-    hits.sort((a, b) => b.score - a.score);
-    lines.push('🔥 <b>Raqiblarda bu hafta</b>\n' + hits.slice(0, 5).map(v => `• <a href="https://youtu.be/${v.id}">${esc(v.title)}</a> — ${esc(v.chTitle)}, ${compact(v.views)} ko'rish, ${v.score.toFixed(1)}×`).join('\n'));
-  }
-  lines.push(`🔗 <a href="${SITE}#report">To'liq hisobot</a> · limitdan ≈ ${used} birlik`);
+  const link = v => `<a href="https://youtu.be/${v.id}">${esc(v.title)}</a>`;
+  const hits = rivVs.filter(v => v.age <= 7 && v.score >= 1.5).sort((a, b) => b.score - a.score);
+  if (hits.length) lines.push('🔥 <b>Raqiblarda viral (7 kun)</b>\n' + hits.slice(0, 5).map(v => `• ${link(v)} — ${esc(v.chTitle)}, ${compact(v.views)} ko'rish, ${v.score.toFixed(1)}×`).join('\n'));
+  const most = rivVs.filter(v => v.age <= 7).sort((a, b) => b.views - a.views).slice(0, 3);
+  if (most.length) lines.push("👁 <b>Raqiblarda eng ko'p ko'rilgan (7 kun)</b>\n" + most.map(v => `• ${link(v)} — ${esc(v.chTitle)}, ${compact(v.views)}`).join('\n'));
+  const ex = expert(ownRes, rivVs);
+  if (ex.length) lines.push('🎓 <b>Mutaxassis xulosasi va tavsiyalar</b>\n' + ex.join('\n'));
+  else if (!rivVs.length) lines.push("ℹ️ Raqiblar topilmadi — data/kanallar.json dagi «raqiblar» ro'yxatiga kanal qo'shing.");
+  lines.push(`🔗 <a href="${SITE}#report">To'liq hisobot</a> · raqiblar: ${rivIds.length} ta · limitdan ≈ ${used} birlik`);
 
   // eski yozuvlarni tozalash
   for (const [id, e] of Object.entries(hist.videos)) if (!e || now - e.pub > 40 * DAY_MS) delete hist.videos[id];
   for (const h of Object.values(hist.channels)) { const ks = Object.keys(h.days || {}).sort(); while (ks.length > 800) delete h.days[ks.shift()]; }
   hist.updated = new Date().toISOString();
-  await fs.writeFile(HIST_FILE, JSON.stringify(hist) + '\n');
 
   const text = lines.join('\n\n');
   log(text.replace(/<[^>]+>/g, ''));
   if (TG && CHAT) {
-    try { const n = await sendTelegram(text); log(`✅ Telegram'ga yuborildi (${n} ta xabar)`); }
+    try { const n = await sendTelegram(text); hist.sentDay = day; log(`✅ Telegram'ga yuborildi (${n} ta xabar)`); }
     catch (e) { console.error('❌', e.message); process.exitCode = 1; }
   } else log("ℹ️ TG_BOT_TOKEN / TG_CHAT_ID qo'shilmagan — faqat tarix yozildi.");
+  await fs.writeFile(HIST_FILE, JSON.stringify(hist) + '\n');
 }
 
 main().catch(async e => {
