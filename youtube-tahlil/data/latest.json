@@ -1,7 +1,7 @@
 {
  "izoh": "Kunlik hisobot ma'lumoti (tezlik = video odatdagidan necha marta tez ko'rilyapti)",
  "kun": "2026-11-21",
- "yangilandi": "2026-11-21T01:36:13.315Z",
+ "yangilandi": "2026-11-21T02:47:58.403Z",
  "mening_kanallarim": [
   {
    "nom": "한국의 어제와 오늘",
@@ -15,7 +15,7 @@
      "sarlavha": "미·중·러가 만났다… 그럼 한국은 어떻게 되나? #shorts",
      "korishlar": 1173,
      "yoshi_kun": 1.6,
-     "tezlik": 1.92,
+     "tezlik": 1.91,
      "shorts": true
     },
     {
@@ -23,14 +23,14 @@
      "sarlavha": "핵무기 90% 가진 세 나라가 처음 한자리에… 새로운 세계 질서 시작되나? #shorts",
      "korishlar": 1115,
      "yoshi_kun": 1.6,
-     "tezlik": 1.83,
+     "tezlik": 1.81,
      "shorts": true
     },
     {
      "id": "IqYszHQgfgo",
      "sarlavha": "사람이 70년 못 들어간 땅에 생긴 일 #shorts",
      "korishlar": 1136,
-     "yoshi_kun": 3.6,
+     "yoshi_kun": 3.7,
      "tezlik": 1.34,
      "shorts": true
     },
@@ -39,21 +39,21 @@
      "sarlavha": "한국인도 몰랐던 대한민국의 비밀 7곳",
      "korishlar": 1218,
      "yoshi_kun": 4.5,
-     "tezlik": 1.32,
+     "tezlik": 1.31,
      "shorts": true
     },
     {
      "id": "RSZyp3da2pw",
      "sarlavha": "지금의 남북 경계는 38선이 아니다? #shorts",
      "korishlar": 1014,
-     "yoshi_kun": 2.9,
-     "tezlik": 1.3,
+     "yoshi_kun": 3,
+     "tezlik": 1.29,
      "shorts": true
     },
     {
      "id": "PR9B7_m9rg4",
      "sarlavha": "북한에서 가장 높은 105층 피라미드 호텔 #shorts",
-     "korishlar": 973,
+     "korishlar": 974,
      "yoshi_kun": 2.7,
      "tezlik": 1.29,
      "shorts": true
@@ -62,23 +62,23 @@
      "id": "h_lyOezpxos",
      "sarlavha": "서울까지 52km, 북한이 판 땅굴 #shorts",
      "korishlar": 1035,
-     "yoshi_kun": 3.1,
-     "tezlik": 1.29,
+     "yoshi_kun": 3.2,
+     "tezlik": 1.28,
      "shorts": true
     },
     {
      "id": "mJyixvd0iDk",
      "sarlavha": "판문점 건물 이름이 70년째 '임시'인 이유 #shorts",
      "korishlar": 1074,
-     "yoshi_kun": 3.6,
-     "tezlik": 1.27,
+     "yoshi_kun": 3.7,
+     "tezlik": 1.26,
      "shorts": true
     },
     {
      "id": "fRZi5W-0nac",
      "sarlavha": "남과 북의 깃대 높이 경쟁, 승자는? #shorts",
      "korishlar": 1032,
-     "yoshi_kun": 3.5,
+     "yoshi_kun": 3.6,
      "tezlik": 1.23,
      "shorts": true
     },
@@ -113,22 +113,22 @@
    "obunachi": 70,
    "obunachi_ortishi_1kun": 0,
    "obunachi_ortishi_7kun": null,
-   "korish_ortishi_1kun": 670,
+   "korish_ortishi_1kun": 817,
    "videolar_30kun": [
     {
      "id": "2RC_Q7ryx-A",
      "sarlavha": "Activ -- Stay Longer – Deep House Summer Vibes 🌊 Chill Beach Music 2026",
-     "korishlar": 5251,
+     "korishlar": 5247,
      "yoshi_kun": 22.4,
-     "tezlik": 35.75,
+     "tezlik": 35.72,
      "shorts": false
     },
     {
      "id": "_qAkFazVW4s",
      "sarlavha": "Activ -- Midnight Without You | Deep House Summer Mix | Relaxing Beach Vibes",
-     "korishlar": 775,
+     "korishlar": 782,
      "yoshi_kun": 9.7,
-     "tezlik": 7.38,
+     "tezlik": 7.43,
      "shorts": false
     },
     {
@@ -143,7 +143,7 @@
      "id": "SwAN1wD4LPU",
      "sarlavha": "Activ -- Sunlit Echoes | Relaxing Summer Chill Music",
      "korishlar": 124,
-     "yoshi_kun": 15.5,
+     "yoshi_kun": 15.6,
      "tezlik": 0.98,
      "shorts": false
     },
@@ -159,7 +159,7 @@
      "id": "obXCRjXPpQ0",
      "sarlavha": "Activ -- Echoes in the Dark | Sunset Pier & Ocean Waves Music Video",
      "korishlar": 39,
-     "yoshi_kun": 16.5,
+     "yoshi_kun": 16.6,
      "tezlik": 0.3,
      "shorts": false
     },
@@ -167,7 +167,7 @@
      "id": "tzg3SkFzaYE",
      "sarlavha": "Activ -- Long Way | Melodic Deep House for Slow Days",
      "korishlar": 14,
-     "yoshi_kun": 19.5,
+     "yoshi_kun": 19.6,
      "tezlik": 0.1,
      "shorts": false
     },
@@ -175,7 +175,7 @@
      "id": "U5qJuFEosSM",
      "sarlavha": "Activ -- Glow (Original Mix) | Deep House & Chill Pop",
      "korishlar": 12,
-     "yoshi_kun": 17.5,
+     "yoshi_kun": 17.6,
      "tezlik": 0.09,
      "shorts": false
     },
@@ -183,7 +183,7 @@
      "id": "oBysX8PxGdg",
      "sarlavha": "Activ -- Fuego Lento | Sunset Chill Beach Music",
      "korishlar": 9,
-     "yoshi_kun": 14.5,
+     "yoshi_kun": 14.6,
      "tezlik": 0.07,
      "shorts": false
     }
@@ -232,7 +232,7 @@
     {
      "id": "-0fpONKVVKk",
      "sarlavha": "Yall some real ones 🙎🏾‍♂️👹 #ESTGee",
-     "korishlar": 29025,
+     "korishlar": 29067,
      "yoshi_kun": 9.3,
      "tezlik": 4.25,
      "shorts": true
@@ -240,9 +240,9 @@
     {
      "id": "0_nTV-Mfsf4",
      "sarlavha": "I folded my dog food up in aluminum foil and I tucked it twice #ESTGee #BiggerThanTheDevil",
-     "korishlar": 4906,
+     "korishlar": 4918,
      "yoshi_kun": 4.2,
-     "tezlik": 0.99,
+     "tezlik": 0.98,
      "shorts": true
     }
    ]
@@ -254,8 +254,8 @@
     {
      "id": "a6CC_CagCX0",
      "sarlavha": "I Spent 24 Hours With Dru*g Addicts!",
-     "korishlar": 1383316,
-     "yoshi_kun": 5.6,
+     "korishlar": 1383659,
+     "yoshi_kun": 5.7,
      "tezlik": 0.76,
      "shorts": false
     }
@@ -268,17 +268,17 @@
     {
      "id": "sByxlQQj-6E",
      "sarlavha": "A CHILD DOESN’T HAVE TO UNDERSTAND ABANDONMENT TO FEEL ITS EFFECTS PSYCHOLOGICALLY 🧠 ",
-     "korishlar": 11719,
+     "korishlar": 12001,
      "yoshi_kun": 1,
-     "tezlik": 2.53,
+     "tezlik": 2.54,
      "shorts": false
     },
     {
      "id": "vZp1DONxegM",
      "sarlavha": "YOU CAN BE FULLY GROWN BIOLOGICALLY AND STILL HAVE SOME GROWING UP TO DO PSYCHOLOGICALLY ! 🧠 🔥 ",
-     "korishlar": 2575,
+     "korishlar": 2898,
      "yoshi_kun": 0.3,
-     "tezlik": 0.95,
+     "tezlik": 0.99,
      "shorts": false
     }
    ]
@@ -290,64 +290,64 @@
     {
      "id": "s2a1b7AaNm8",
      "sarlavha": "I Cut Down 10,000 Pieces Of Bamboo And Regret Nothing",
-     "korishlar": 209079,
-     "yoshi_kun": 0.9,
-     "tezlik": 1.56,
+     "korishlar": 216581,
+     "yoshi_kun": 1,
+     "tezlik": 1.59,
      "shorts": false
     },
     {
      "id": "9-TvVG5DPUE",
      "sarlavha": "Absolute S Tier Incremental",
-     "korishlar": 573364,
-     "yoshi_kun": 11.9,
+     "korishlar": 574039,
+     "yoshi_kun": 12,
      "tezlik": 1.55,
      "shorts": false
     },
     {
      "id": "ckjATae4VS8",
      "sarlavha": "One Of The Best Games In Months",
-     "korishlar": 414156,
-     "yoshi_kun": 5.9,
+     "korishlar": 415284,
+     "yoshi_kun": 6,
      "tezlik": 1.48,
      "shorts": false
     },
     {
      "id": "E_PEvl0S47M",
      "sarlavha": "I Chopped Down An Impossibly Big Tree",
-     "korishlar": 353839,
-     "yoshi_kun": 4.9,
+     "korishlar": 354414,
+     "yoshi_kun": 5,
      "tezlik": 1.36,
      "shorts": false
     },
     {
      "id": "xvlFwsIb9NU",
      "sarlavha": "I Built An Entire Pyramid By Myself And It Was Magical",
-     "korishlar": 398759,
-     "yoshi_kun": 7.9,
+     "korishlar": 399229,
+     "yoshi_kun": 8,
      "tezlik": 1.27,
      "shorts": false
     },
     {
      "id": "xDJHPpRBqQk",
      "sarlavha": "10,000 Nails",
-     "korishlar": 458938,
-     "yoshi_kun": 12.9,
+     "korishlar": 459153,
+     "yoshi_kun": 13,
      "tezlik": 1.2,
      "shorts": false
     },
     {
      "id": "zO0D1dIvQoo",
      "sarlavha": "I Survived An Impossible Storm With Broken Upgrades",
-     "korishlar": 245679,
-     "yoshi_kun": 3.9,
-     "tezlik": 1.04,
+     "korishlar": 246394,
+     "yoshi_kun": 4,
+     "tezlik": 1.03,
      "shorts": false
     },
     {
      "id": "dgko-XZSAB4",
      "sarlavha": "I've been waiting for this update",
-     "korishlar": 324928,
-     "yoshi_kun": 10.9,
+     "korishlar": 325196,
+     "yoshi_kun": 11,
      "tezlik": 0.91,
      "shorts": false
     }
@@ -360,15 +360,15 @@
     {
      "id": "Qguc4rZ-zLc",
      "sarlavha": "HUNGER GAMES : LEVER DE SOLEIL SUR LA MOISSON | Critique (spoilers à 23:00)",
-     "korishlar": 78627,
-     "yoshi_kun": 2.3,
-     "tezlik": 2.16,
+     "korishlar": 79439,
+     "yoshi_kun": 2.4,
+     "tezlik": 2.17,
      "shorts": false
     },
     {
      "id": "AFXOk5P2hAQ",
      "sarlavha": "JOSH O'CONNOR a refusé JAMES BOND et MARVEL ment sur DOOM ! (Jack Lowden, Visionquest ...)",
-     "korishlar": 72021,
+     "korishlar": 72157,
      "yoshi_kun": 3.4,
      "tezlik": 1.7,
      "shorts": false
@@ -376,23 +376,23 @@
     {
      "id": "6_vqFWdN6Wk",
      "sarlavha": "je juge les films préférés des participants du Final Slam #film #cinema #movie",
-     "korishlar": 58006,
-     "yoshi_kun": 3.7,
+     "korishlar": 58206,
+     "yoshi_kun": 3.8,
      "tezlik": 1.31,
      "shorts": false
     },
     {
      "id": "ap2q-7Bld6w",
      "sarlavha": "je juge les films préférés de Miki #film #cinema #movie",
-     "korishlar": 47630,
-     "yoshi_kun": 3.6,
+     "korishlar": 47811,
+     "yoshi_kun": 3.7,
      "tezlik": 1.09,
      "shorts": false
     },
     {
      "id": "_3LKD_XiwxY",
      "sarlavha": "Mr Beast fait un horrible Hunger Games #film #cinema #movie",
-     "korishlar": 35809,
+     "korishlar": 36034,
      "yoshi_kun": 1.9,
      "tezlik": 1.07,
      "shorts": false
@@ -400,24 +400,24 @@
     {
      "id": "g_P4JybRgr8",
      "sarlavha": "je réalise le rêve niche de cette personne #film #cinema #movie",
-     "korishlar": 23186,
-     "yoshi_kun": 0.7,
-     "tezlik": 1.01,
-     "shorts": false
-    },
-    {
-     "id": "awbSspAVXDQ",
-     "sarlavha": "la prochaine James Bond Girl #film #cinema #movie",
-     "korishlar": 43401,
-     "yoshi_kun": 3.6,
-     "tezlik": 1,
+     "korishlar": 24314,
+     "yoshi_kun": 0.8,
+     "tezlik": 1.03,
      "shorts": false
     },
     {
      "id": "mOAGdRiNMtU",
      "sarlavha": "Mathis Charbonnier m'a détruit",
-     "korishlar": 42899,
+     "korishlar": 43306,
      "yoshi_kun": 3.5,
+     "tezlik": 1,
+     "shorts": false
+    },
+    {
+     "id": "awbSspAVXDQ",
+     "sarlavha": "la prochaine James Bond Girl #film #cinema #movie",
+     "korishlar": 43443,
+     "yoshi_kun": 3.6,
      "tezlik": 1,
      "shorts": false
     }
@@ -431,8 +431,8 @@
      "id": "D9UaFdDzsdc",
      "sarlavha": "Personal Health Monitoring Device | Health Care Project | IoT & Cloud Based",
      "korishlar": 4453,
-     "yoshi_kun": 4.4,
-     "tezlik": 0.9,
+     "yoshi_kun": 4.5,
+     "tezlik": 0.89,
      "shorts": false
     }
    ]
