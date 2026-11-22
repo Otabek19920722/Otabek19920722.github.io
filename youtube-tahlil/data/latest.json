@@ -1,7 +1,7 @@
 {
  "izoh": "Kunlik hisobot ma'lumoti (tezlik = video odatdagidan necha marta tez ko'rilyapti)",
  "kun": "2026-11-22",
- "yangilandi": "2026-11-22T00:27:33.579Z",
+ "yangilandi": "2026-11-22T01:33:19.390Z",
  "mening_kanallarim": [
   {
    "nom": "한국의 어제와 오늘",
@@ -14,8 +14,8 @@
      "id": "-vD7Ol3vkOQ",
      "sarlavha": "사상 첫 미·중·러 정상회담, 선언문에 빠진 것은? #shorts",
      "korishlar": 1170,
-     "yoshi_kun": 0.6,
-     "tezlik": 2.75,
+     "yoshi_kun": 0.7,
+     "tezlik": 2.68,
      "shorts": true
     },
     {
@@ -23,22 +23,22 @@
      "sarlavha": "젠슨 황 없는 엔비디아, 첫 성적표는 사상 최대 #shorts",
      "korishlar": 1135,
      "yoshi_kun": 0.7,
-     "tezlik": 2.61,
+     "tezlik": 2.55,
      "shorts": true
     },
     {
      "id": "dNp1draMj0E",
      "sarlavha": "러시아 주장, 하룻밤 드론 1,336대… 개전 이후 최대 공격 #shorts",
      "korishlar": 1025,
-     "yoshi_kun": 0.6,
-     "tezlik": 2.41,
+     "yoshi_kun": 0.7,
+     "tezlik": 2.35,
      "shorts": true
     },
     {
      "id": "4LXNjIN2fco",
      "sarlavha": "미·중·러가 만났다… 그럼 한국은 어떻게 되나? #shorts",
      "korishlar": 1175,
-     "yoshi_kun": 2.5,
+     "yoshi_kun": 2.6,
      "tezlik": 1.57,
      "shorts": true
     },
@@ -46,7 +46,7 @@
      "id": "G_q6bu3tawg",
      "sarlavha": "핵무기 90% 가진 세 나라가 처음 한자리에… 새로운 세계 질서 시작되나? #shorts",
      "korishlar": 1116,
-     "yoshi_kun": 2.5,
+     "yoshi_kun": 2.6,
      "tezlik": 1.49,
      "shorts": true
     },
@@ -54,7 +54,7 @@
      "id": "59r7fEXHRuk",
      "sarlavha": "한국인도 몰랐던 대한민국의 비밀 7곳",
      "korishlar": 1220,
-     "yoshi_kun": 5.4,
+     "yoshi_kun": 5.5,
      "tezlik": 1.2,
      "shorts": true
     },
@@ -94,7 +94,7 @@
      "id": "PR9B7_m9rg4",
      "sarlavha": "북한에서 가장 높은 105층 피라미드 호텔 #shorts",
      "korishlar": 974,
-     "yoshi_kun": 3.6,
+     "yoshi_kun": 3.7,
      "tezlik": 1.13,
      "shorts": true
     },
@@ -102,7 +102,7 @@
      "id": "ivUr2LJCOEM",
      "sarlavha": "분당 출근길 버스 연쇄 추돌, 차량 32대 피해 #shorts",
      "korishlar": 1214,
-     "yoshi_kun": 6.4,
+     "yoshi_kun": 6.5,
      "tezlik": 1.12,
      "shorts": true
     }
@@ -118,25 +118,25 @@
     {
      "id": "2RC_Q7ryx-A",
      "sarlavha": "Activ -- Stay Longer – Deep House Summer Vibes 🌊 Chill Beach Music 2026",
-     "korishlar": 5308,
-     "yoshi_kun": 23.3,
-     "tezlik": 36.09,
+     "korishlar": 5315,
+     "yoshi_kun": 23.4,
+     "tezlik": 36.13,
      "shorts": false
     },
     {
      "id": "_qAkFazVW4s",
      "sarlavha": "Activ -- Midnight Without You | Deep House Summer Mix | Relaxing Beach Vibes",
-     "korishlar": 799,
-     "yoshi_kun": 10.6,
-     "tezlik": 7.44,
+     "korishlar": 796,
+     "yoshi_kun": 10.7,
+     "tezlik": 7.4,
      "shorts": false
     },
     {
      "id": "4k57BKijXWw",
      "sarlavha": "Activ -- Euphoria | Melodic Deep House & Tropical House",
-     "korishlar": 405,
+     "korishlar": 407,
      "yoshi_kun": 28.4,
-     "tezlik": 2.55,
+     "tezlik": 2.56,
      "shorts": false
     },
     {
@@ -151,7 +151,7 @@
      "id": "y6DuxeJpRuc",
      "sarlavha": "Activ -- Muse | Deep House & Tropical Chill Vibes",
      "korishlar": 65,
-     "yoshi_kun": 7.5,
+     "yoshi_kun": 7.6,
      "tezlik": 0.69,
      "shorts": false
     },
@@ -192,7 +192,7 @@
      "sarlavha": "Midnight Whisper 🌙 Deep Chill House Music for Late Night Vibes, Study & Relax",
      "korishlar": 1,
      "yoshi_kun": 0.4,
-     "tezlik": 0.04,
+     "tezlik": 0.03,
      "shorts": false
     }
    ]
@@ -208,7 +208,7 @@
      "id": "f6ivE1azhAo",
      "sarlavha": "The Farmer Who Uncovered an Ancient Giant Beneath His Field",
      "korishlar": 8,
-     "yoshi_kun": 29.4,
+     "yoshi_kun": 29.5,
      "tezlik": 0.23,
      "shorts": true
     }
@@ -240,16 +240,16 @@
     {
      "id": "-0fpONKVVKk",
      "sarlavha": "Yall some real ones 🙎🏾‍♂️👹 #ESTGee",
-     "korishlar": 29332,
-     "yoshi_kun": 10.2,
+     "korishlar": 29359,
+     "yoshi_kun": 10.3,
      "tezlik": 4.17,
      "shorts": true
     },
     {
      "id": "0_nTV-Mfsf4",
      "sarlavha": "I folded my dog food up in aluminum foil and I tucked it twice #ESTGee #BiggerThanTheDevil",
-     "korishlar": 5212,
-     "yoshi_kun": 5.1,
+     "korishlar": 5254,
+     "yoshi_kun": 5.2,
      "tezlik": 0.98,
      "shorts": true
     }
@@ -262,9 +262,9 @@
     {
      "id": "a6CC_CagCX0",
      "sarlavha": "I Spent 24 Hours With Dru*g Addicts!",
-     "korishlar": 1451055,
+     "korishlar": 1451577,
      "yoshi_kun": 6.6,
-     "tezlik": 0.76,
+     "tezlik": 0.75,
      "shorts": false
     }
    ]
@@ -276,31 +276,31 @@
     {
      "id": "qrpchCPTlrQ",
      "sarlavha": "From CONSCIOUSNESS TO CONSTRUCTION A Historic Conversation with Dr.Yahki Awakened & Dr.Umar Johnson",
-     "korishlar": 82823,
+     "korishlar": 87153,
      "yoshi_kun": 1,
-     "tezlik": 18,
+     "tezlik": 18.6,
      "shorts": false
     },
     {
      "id": "sByxlQQj-6E",
      "sarlavha": "A CHILD DOESN’T HAVE TO UNDERSTAND ABANDONMENT TO FEEL ITS EFFECTS PSYCHOLOGICALLY 🧠 ",
-     "korishlar": 13425,
-     "yoshi_kun": 1.9,
-     "tezlik": 2.22,
+     "korishlar": 13457,
+     "yoshi_kun": 2,
+     "tezlik": 2.2,
      "shorts": false
     },
     {
      "id": "vZp1DONxegM",
      "sarlavha": "YOU CAN BE FULLY GROWN BIOLOGICALLY AND STILL HAVE SOME GROWING UP TO DO PSYCHOLOGICALLY ! 🧠 🔥 ",
-     "korishlar": 4512,
-     "yoshi_kun": 1.2,
-     "tezlik": 0.9,
+     "korishlar": 4525,
+     "yoshi_kun": 1.3,
+     "tezlik": 0.89,
      "shorts": false
     },
     {
      "id": "QgmFpNtMyqs",
      "sarlavha": "THE NEUROSCIENCE OF MEN WHO LEARNED TO SURVIVE BUT NEVER LEARNED TO EXPRESS THEIR EMOTIONS! 🧠",
-     "korishlar": 3768,
+     "korishlar": 3839,
      "yoshi_kun": 1.1,
      "tezlik": 0.79,
      "shorts": false
@@ -314,7 +314,7 @@
     {
      "id": "s2a1b7AaNm8",
      "sarlavha": "I Cut Down 10,000 Pieces Of Bamboo And Regret Nothing",
-     "korishlar": 285892,
+     "korishlar": 288638,
      "yoshi_kun": 1.9,
      "tezlik": 1.81,
      "shorts": false
@@ -322,7 +322,7 @@
     {
      "id": "9-TvVG5DPUE",
      "sarlavha": "Absolute S Tier Incremental",
-     "korishlar": 583614,
+     "korishlar": 584027,
      "yoshi_kun": 12.9,
      "tezlik": 1.72,
      "shorts": false
@@ -330,7 +330,7 @@
     {
      "id": "ckjATae4VS8",
      "sarlavha": "One Of The Best Games In Months",
-     "korishlar": 430006,
+     "korishlar": 430842,
      "yoshi_kun": 6.9,
      "tezlik": 1.63,
      "shorts": false
@@ -338,7 +338,7 @@
     {
      "id": "E_PEvl0S47M",
      "sarlavha": "I Chopped Down An Impossibly Big Tree",
-     "korishlar": 360882,
+     "korishlar": 361313,
      "yoshi_kun": 5.9,
      "tezlik": 1.45,
      "shorts": false
@@ -346,7 +346,7 @@
     {
      "id": "xvlFwsIb9NU",
      "sarlavha": "I Built An Entire Pyramid By Myself And It Was Magical",
-     "korishlar": 407875,
+     "korishlar": 408266,
      "yoshi_kun": 8.9,
      "tezlik": 1.39,
      "shorts": false
@@ -354,7 +354,7 @@
     {
      "id": "xDJHPpRBqQk",
      "sarlavha": "10,000 Nails",
-     "korishlar": 463259,
+     "korishlar": 463481,
      "yoshi_kun": 13.9,
      "tezlik": 1.32,
      "shorts": false
@@ -362,15 +362,15 @@
     {
      "id": "joi-NxHKDqw",
      "sarlavha": "This Game Is Free And Really Fun",
-     "korishlar": 152491,
+     "korishlar": 156789,
      "yoshi_kun": 0.9,
-     "tezlik": 1.3,
+     "tezlik": 1.32,
      "shorts": false
     },
     {
      "id": "zO0D1dIvQoo",
      "sarlavha": "I Survived An Impossible Storm With Broken Upgrades",
-     "korishlar": 257904,
+     "korishlar": 258611,
      "yoshi_kun": 4.9,
      "tezlik": 1.12,
      "shorts": false
@@ -384,23 +384,23 @@
     {
      "id": "Qguc4rZ-zLc",
      "sarlavha": "HUNGER GAMES : LEVER DE SOLEIL SUR LA MOISSON | Critique (spoilers à 23:00)",
-     "korishlar": 89782,
+     "korishlar": 91039,
      "yoshi_kun": 3.3,
-     "tezlik": 2.2,
+     "tezlik": 2.21,
      "shorts": false
     },
     {
      "id": "AFXOk5P2hAQ",
      "sarlavha": "JOSH O'CONNOR a refusé JAMES BOND et MARVEL ment sur DOOM ! (Jack Lowden, Visionquest ...)",
-     "korishlar": 74706,
-     "yoshi_kun": 4.3,
+     "korishlar": 74831,
+     "yoshi_kun": 4.4,
      "tezlik": 1.63,
      "shorts": false
     },
     {
      "id": "6_vqFWdN6Wk",
      "sarlavha": "je juge les films préférés des participants du Final Slam #film #cinema #movie",
-     "korishlar": 61039,
+     "korishlar": 61206,
      "yoshi_kun": 4.7,
      "tezlik": 1.29,
      "shorts": false
@@ -408,23 +408,23 @@
     {
      "id": "ap2q-7Bld6w",
      "sarlavha": "je juge les films préférés de Miki #film #cinema #movie",
-     "korishlar": 52145,
+     "korishlar": 52461,
      "yoshi_kun": 4.6,
-     "tezlik": 1.11,
+     "tezlik": 1.12,
      "shorts": false
     },
     {
      "id": "mOAGdRiNMtU",
      "sarlavha": "Mathis Charbonnier m'a détruit",
-     "korishlar": 48861,
-     "yoshi_kun": 4.4,
+     "korishlar": 49223,
+     "yoshi_kun": 4.5,
      "tezlik": 1.06,
      "shorts": false
     },
     {
      "id": "g_P4JybRgr8",
      "sarlavha": "je réalise le rêve niche de cette personne #film #cinema #movie",
-     "korishlar": 32569,
+     "korishlar": 32964,
      "yoshi_kun": 1.7,
      "tezlik": 1.04,
      "shorts": false
@@ -432,15 +432,15 @@
     {
      "id": "_3LKD_XiwxY",
      "sarlavha": "Mr Beast fait un horrible Hunger Games #film #cinema #movie",
-     "korishlar": 39127,
-     "yoshi_kun": 2.8,
+     "korishlar": 39395,
+     "yoshi_kun": 2.9,
      "tezlik": 1.01,
      "shorts": false
     },
     {
      "id": "uT2MDCSUAzY",
      "sarlavha": "j'ai vu Hunger Games : Lever de Soleil sur la Moisson #film #cinema #movie",
-     "korishlar": 37098,
+     "korishlar": 37450,
      "yoshi_kun": 2.6,
      "tezlik": 1,
      "shorts": false
@@ -454,7 +454,7 @@
     {
      "id": "D9UaFdDzsdc",
      "sarlavha": "Personal Health Monitoring Device | Health Care Project | IoT & Cloud Based",
-     "korishlar": 4880,
+     "korishlar": 4885,
      "yoshi_kun": 5.4,
      "tezlik": 0.9,
      "shorts": false
@@ -477,7 +477,7 @@
   "• Vortex World: 14 kundan beri yangi video yo'q — muntazamlik algoritm uchun muhim.",
   "🔑 Raqiblarda ko'tarilayotgan so'zlar: games",
   "📐 Viral 8 ta videoda: 2 tasida raqam, 0 tasida savol, 1 tasi Shorts; sarlavha o'rtacha 62 belgi",
-  "💡 G'oya: «From CONSCIOUSNESS TO CONSTRUCTION A Historic Conversation with Dr.Yahki Awakened &amp; Dr.Umar Johnson» (Yahki Awakened, 18.0×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
+  "💡 G'oya: «From CONSCIOUSNESS TO CONSTRUCTION A Historic Conversation with Dr.Yahki Awakened &amp; Dr.Umar Johnson» (Yahki Awakened, 18.6×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
   "💡 G'oya: «Yall some real ones 🙎🏾‍♂️👹 #ESTGee» (EST Gee, 4.2×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan."
  ]
 }
