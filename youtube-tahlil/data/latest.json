@@ -1,21 +1,21 @@
 {
  "izoh": "Kunlik hisobot ma'lumoti (tezlik = video odatdagidan necha marta tez ko'rilyapti)",
  "kun": "2026-11-24",
- "yangilandi": "2026-11-24T04:50:54.943Z",
+ "yangilandi": "2026-11-24T05:29:40.564Z",
  "mening_kanallarim": [
   {
    "nom": "한국의 어제와 오늘",
    "obunachi": 96,
    "obunachi_ortishi_1kun": 4,
    "obunachi_ortishi_7kun": 12,
-   "korish_ortishi_1kun": 3783,
+   "korish_ortishi_1kun": 5267,
    "videolar_30kun": [
     {
      "id": "qYelnrfYtRU",
      "sarlavha": "산소 0%인 지구에 떨어지면? 버틸 시간은 15초 ⏳ #shorts",
      "korishlar": 1093,
      "yoshi_kun": 0.8,
-     "tezlik": 2.42,
+     "tezlik": 2.4,
      "shorts": true
     },
     {
@@ -30,7 +30,7 @@
      "id": "yVWr6C3fGiA",
      "sarlavha": "젠슨 황 없는 엔비디아, 첫 성적표는 사상 최대 #shorts",
      "korishlar": 1133,
-     "yoshi_kun": 2.8,
+     "yoshi_kun": 2.9,
      "tezlik": 1.52,
      "shorts": true
     },
@@ -70,7 +70,7 @@
      "id": "IqYszHQgfgo",
      "sarlavha": "사람이 70년 못 들어간 땅에 생긴 일 #shorts",
      "korishlar": 1136,
-     "yoshi_kun": 6.7,
+     "yoshi_kun": 6.8,
      "tezlik": 1.08,
      "shorts": true
     },
@@ -86,7 +86,7 @@
      "id": "mJyixvd0iDk",
      "sarlavha": "판문점 건물 이름이 70년째 '임시'인 이유 #shorts",
      "korishlar": 1074,
-     "yoshi_kun": 6.7,
+     "yoshi_kun": 6.8,
      "tezlik": 1.02,
      "shorts": true
     },
@@ -223,7 +223,7 @@
     {
      "id": "-0fpONKVVKk",
      "sarlavha": "Yall some real ones 🙎🏾‍♂️👹 #ESTGee",
-     "korishlar": 29759,
+     "korishlar": 29761,
      "yoshi_kun": 12.4,
      "tezlik": 3.96,
      "shorts": true
@@ -231,8 +231,8 @@
     {
      "id": "0_nTV-Mfsf4",
      "sarlavha": "I folded my dog food up in aluminum foil and I tucked it twice #ESTGee #BiggerThanTheDevil",
-     "korishlar": 5805,
-     "yoshi_kun": 7.3,
+     "korishlar": 5809,
+     "yoshi_kun": 7.4,
      "tezlik": 0.95,
      "shorts": true
     }
@@ -245,7 +245,7 @@
     {
      "id": "D9UaFdDzsdc",
      "sarlavha": "Personal Health Monitoring Device | Health Care Project | IoT & Cloud Based",
-     "korishlar": 5738,
+     "korishlar": 5724,
      "yoshi_kun": 7.6,
      "tezlik": 0.91,
      "shorts": false
@@ -264,15 +264,15 @@
     {
      "id": "GNM9q62lPlg",
      "sarlavha": "Hot Wheels & Monster Jam TRANSFORMERS Monster Trucks Racing on a Transforming Track",
-     "korishlar": 99369,
+     "korishlar": 99606,
      "yoshi_kun": 3.7,
-     "tezlik": 1.26,
+     "tezlik": 1.25,
      "shorts": false
     },
     {
      "id": "EaQNcLHMJRc",
      "sarlavha": "GIVEAWAY🎄We TRAPPED the GRINCH! (Christmas Scavenger Hunt | 2026 REWIND)",
-     "korishlar": 88289,
+     "korishlar": 88355,
      "yoshi_kun": 10.7,
      "tezlik": 0.73,
      "shorts": false
@@ -286,15 +286,15 @@
     {
      "id": "__qUgiQrOGc",
      "sarlavha": "Raq baby - Button Over Fully (Official Music Video)",
-     "korishlar": 360594,
+     "korishlar": 361790,
      "yoshi_kun": 5.3,
-     "tezlik": 75.21,
+     "tezlik": 75.28,
      "shorts": false
     },
     {
      "id": "G5zQD-mbDUQ",
      "sarlavha": "IM BACK 🌂 out everywhere #raqbaby #atlanta",
-     "korishlar": 8377,
+     "korishlar": 8402,
      "yoshi_kun": 2.5,
      "tezlik": 2.36,
      "shorts": true
@@ -302,8 +302,8 @@
     {
      "id": "XyKIMCaeWDM",
      "sarlavha": "🌂🫗🫗 I ain’t go anywhere !! Out now everywhere #raqbaby #atlanta",
-     "korishlar": 5430,
-     "yoshi_kun": 1.2,
+     "korishlar": 5477,
+     "yoshi_kun": 1.3,
      "tezlik": 2.02,
      "shorts": true
     }
@@ -316,7 +316,7 @@
     {
      "id": "s2a1b7AaNm8",
      "sarlavha": "I Cut Down 10,000 Pieces Of Bamboo And Regret Nothing",
-     "korishlar": 361453,
+     "korishlar": 362227,
      "yoshi_kun": 4.1,
      "tezlik": 1.54,
      "shorts": false
@@ -324,7 +324,7 @@
     {
      "id": "ckjATae4VS8",
      "sarlavha": "One Of The Best Games In Months",
-     "korishlar": 460409,
+     "korishlar": 460730,
      "yoshi_kun": 9.1,
      "tezlik": 1.42,
      "shorts": false
@@ -332,7 +332,7 @@
     {
      "id": "diDJQUpkAcg",
      "sarlavha": "I Literally Mined An Entire Asteroid To Save Earth",
-     "korishlar": 182002,
+     "korishlar": 184542,
      "yoshi_kun": 1.1,
      "tezlik": 1.32,
      "shorts": false
@@ -340,7 +340,7 @@
     {
      "id": "E_PEvl0S47M",
      "sarlavha": "I Chopped Down An Impossibly Big Tree",
-     "korishlar": 374596,
+     "korishlar": 374730,
      "yoshi_kun": 8.1,
      "tezlik": 1.21,
      "shorts": false
@@ -348,7 +348,7 @@
     {
      "id": "xvlFwsIb9NU",
      "sarlavha": "I Built An Entire Pyramid By Myself And It Was Magical",
-     "korishlar": 421593,
+     "korishlar": 421729,
      "yoshi_kun": 11.1,
      "tezlik": 1.2,
      "shorts": false
@@ -356,7 +356,7 @@
     {
      "id": "joi-NxHKDqw",
      "sarlavha": "This Game Is Free And Really Fun",
-     "korishlar": 249746,
+     "korishlar": 250364,
      "yoshi_kun": 3.1,
      "tezlik": 1.19,
      "shorts": false
@@ -364,7 +364,7 @@
     {
      "id": "zO0D1dIvQoo",
      "sarlavha": "I Survived An Impossible Storm With Broken Upgrades",
-     "korishlar": 292802,
+     "korishlar": 293465,
      "yoshi_kun": 7.1,
      "tezlik": 1,
      "shorts": false
@@ -372,9 +372,9 @@
     {
      "id": "IJteyAdbZl8",
      "sarlavha": "I Was Given A Bucket And Told Not To Drain The Lake",
-     "korishlar": 142595,
+     "korishlar": 143052,
      "yoshi_kun": 2.1,
-     "tezlik": 0.8,
+     "tezlik": 0.79,
      "shorts": false
     }
    ]
@@ -391,12 +391,12 @@
   }
  ],
  "qoidali_xulosa": [
-  "• 한국의 어제와 오늘: Shorts uzun videolardan 68.5× yaxshi ishlayapti — Shorts'ni ko'paytiring.",
+  "• 한국의 어제와 오늘: Shorts uzun videolardan 68.6× yaxshi ishlayapti — Shorts'ni ko'paytiring.",
   "• ActivMusic: eng kuchlisi «ACTIV --  Cold Glass Sight» (99.4×) — shu mavzu va sarlavha uslubida davom/seriya qiling.",
   "• Vortex World: 14 kundan beri yangi video yo'q — muntazamlik algoritm uchun muhim.",
   "🔑 Raqiblarda ko'tarilayotgan so'zlar: everywhere, raqbaby, atlanta",
   "📐 Viral 5 ta videoda: 1 tasida raqam, 0 tasida savol, 3 tasi Shorts; sarlavha o'rtacha 49 belgi",
-  "💡 G'oya: «Raq baby - Button Over Fully (Official Music Video)» (Raq baby, 75.2×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
+  "💡 G'oya: «Raq baby - Button Over Fully (Official Music Video)» (Raq baby, 75.3×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
   "💡 G'oya: «Yall some real ones 🙎🏾‍♂️👹 #ESTGee» (EST Gee, 4.0×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan."
  ]
 }
