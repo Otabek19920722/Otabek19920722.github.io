@@ -1,60 +1,68 @@
 {
  "izoh": "Kunlik hisobot ma'lumoti (tezlik = video odatdagidan necha marta tez ko'rilyapti)",
- "kun": "2026-11-27",
- "yangilandi": "2026-11-27T03:46:13.380Z",
+ "kun": "2026-11-28",
+ "yangilandi": "2026-11-28T02:47:50.911Z",
  "mening_kanallarim": [
   {
    "nom": "한국의 어제와 오늘",
-   "obunachi": 100,
-   "obunachi_ortishi_1kun": 2,
-   "obunachi_ortishi_7kun": 11,
-   "korish_ortishi_1kun": 1308,
+   "obunachi": 107,
+   "obunachi_ortishi_1kun": 7,
+   "obunachi_ortishi_7kun": 17,
+   "korish_ortishi_1kun": 14,
    "videolar_30kun": [
+    {
+     "id": "dxD1J6kSMp8",
+     "sarlavha": "조선소도 없이 지폐 한 장으로 배를 판 남자",
+     "korishlar": 1239,
+     "yoshi_kun": 0.7,
+     "tezlik": 3.56,
+     "shorts": false
+    },
     {
      "id": "syuzhBSn4us",
      "sarlavha": "여의도 도로 밑에서 나온 기록 없는 비밀방",
-     "korishlar": 1183,
-     "yoshi_kun": 0.7,
-     "tezlik": 3.19,
+     "korishlar": 1182,
+     "yoshi_kun": 1.7,
+     "tezlik": 2.38,
      "shorts": false
     },
     {
      "id": "V_PPAtBsf6Q",
      "sarlavha": "5억 년 전 공기를 마시면 어떻게 될까? 😱 #shorts",
      "korishlar": 1025,
-     "yoshi_kun": 2.7,
-     "tezlik": 1.62,
+     "yoshi_kun": 3.7,
+     "tezlik": 1.51,
      "shorts": true
     },
     {
      "id": "qYelnrfYtRU",
      "sarlavha": "산소 0%인 지구에 떨어지면? 버틸 시간은 15초 ⏳ #shorts",
-     "korishlar": 1096,
-     "yoshi_kun": 3.8,
-     "tezlik": 1.52,
+     "korishlar": 1097,
+     "yoshi_kun": 4.7,
+     "tezlik": 1.46,
      "shorts": true
     },
     {
      "id": "-vD7Ol3vkOQ",
      "sarlavha": "사상 첫 미·중·러 정상회담, 선언문에 빠진 것은? #shorts",
      "korishlar": 1171,
-     "yoshi_kun": 5.8,
-     "tezlik": 1.37,
+     "yoshi_kun": 6.7,
+     "tezlik": 1.35,
      "shorts": true
     },
     {
      "id": "yVWr6C3fGiA",
      "sarlavha": "젠슨 황 없는 엔비디아, 첫 성적표는 사상 최대 #shorts",
      "korishlar": 1132,
-     "yoshi_kun": 5.8,
-     "tezlik": 1.32,
+     "yoshi_kun": 6.8,
+     "tezlik": 1.31,
      "shorts": true
     },
     {
      "id": "4LXNjIN2fco",
      "sarlavha": "미·중·러가 만났다… 그럼 한국은 어떻게 되나? #shorts",
      "korishlar": 1179,
-     "yoshi_kun": 7.7,
+     "yoshi_kun": 8.6,
      "tezlik": 1.23,
      "shorts": true
     },
@@ -62,15 +70,15 @@
      "id": "dNp1draMj0E",
      "sarlavha": "러시아 주장, 하룻밤 드론 1,336대… 개전 이후 최대 공격 #shorts",
      "korishlar": 1020,
-     "yoshi_kun": 5.8,
-     "tezlik": 1.19,
+     "yoshi_kun": 6.7,
+     "tezlik": 1.18,
      "shorts": true
     },
     {
      "id": "G_q6bu3tawg",
      "sarlavha": "핵무기 90% 가진 세 나라가 처음 한자리에… 새로운 세계 질서 시작되나? #shorts",
      "korishlar": 1116,
-     "yoshi_kun": 7.7,
+     "yoshi_kun": 8.6,
      "tezlik": 1.17,
      "shorts": true
     },
@@ -78,32 +86,24 @@
      "id": "IqYszHQgfgo",
      "sarlavha": "사람이 70년 못 들어간 땅에 생긴 일 #shorts",
      "korishlar": 1138,
-     "yoshi_kun": 9.7,
-     "tezlik": 1.08,
+     "yoshi_kun": 10.7,
+     "tezlik": 1.09,
      "shorts": true
     },
     {
      "id": "mJyixvd0iDk",
      "sarlavha": "판문점 건물 이름이 70년째 '임시'인 이유 #shorts",
      "korishlar": 1074,
-     "yoshi_kun": 9.7,
-     "tezlik": 1.02,
+     "yoshi_kun": 10.7,
+     "tezlik": 1.03,
      "shorts": true
-    },
-    {
-     "id": "y9yLWBT2hr8",
-     "sarlavha": "2만 년 전부터 45억 년 전까지, 타임머신 생존 실험 8단계",
-     "korishlar": 792,
-     "yoshi_kun": 4.6,
-     "tezlik": 1.02,
-     "shorts": false
     },
     {
      "id": "h_lyOezpxos",
      "sarlavha": "서울까지 52km, 북한이 판 땅굴 #shorts",
      "korishlar": 1037,
-     "yoshi_kun": 9.2,
-     "tezlik": 1.01,
+     "yoshi_kun": 10.2,
+     "tezlik": 1.02,
      "shorts": true
     }
    ]
@@ -113,21 +113,21 @@
    "obunachi": 71,
    "obunachi_ortishi_1kun": 0,
    "obunachi_ortishi_7kun": 1,
-   "korish_ortishi_1kun": 126,
+   "korish_ortishi_1kun": 114,
    "videolar_30kun": [
     {
      "id": "2RC_Q7ryx-A",
      "sarlavha": "Activ -- Stay Longer – Deep House Summer Vibes 🌊 Chill Beach Music 2026",
-     "korishlar": 5545,
-     "yoshi_kun": 28.4,
-     "tezlik": 39.74,
+     "korishlar": 5567,
+     "yoshi_kun": 29.4,
+     "tezlik": 40.07,
      "shorts": false
     },
     {
      "id": "_qAkFazVW4s",
      "sarlavha": "Activ -- Midnight Without You | Deep House Summer Mix | Relaxing Beach Vibes",
-     "korishlar": 877,
-     "yoshi_kun": 15.8,
+     "korishlar": 883,
+     "yoshi_kun": 16.7,
      "tezlik": 7.96,
      "shorts": false
     },
@@ -135,7 +135,7 @@
      "id": "SwAN1wD4LPU",
      "sarlavha": "Activ -- Sunlit Echoes | Relaxing Summer Chill Music",
      "korishlar": 125,
-     "yoshi_kun": 21.6,
+     "yoshi_kun": 22.6,
      "tezlik": 1,
      "shorts": false
     },
@@ -143,7 +143,7 @@
      "id": "y6DuxeJpRuc",
      "sarlavha": "Activ -- Muse | Deep House & Tropical Chill Vibes",
      "korishlar": 72,
-     "yoshi_kun": 12.7,
+     "yoshi_kun": 13.6,
      "tezlik": 0.71,
      "shorts": false
     },
@@ -151,7 +151,7 @@
      "id": "obXCRjXPpQ0",
      "sarlavha": "Activ -- Echoes in the Dark | Sunset Pier & Ocean Waves Music Video",
      "korishlar": 41,
-     "yoshi_kun": 22.6,
+     "yoshi_kun": 23.6,
      "tezlik": 0.32,
      "shorts": false
     },
@@ -159,7 +159,7 @@
      "id": "tzg3SkFzaYE",
      "sarlavha": "Activ -- Long Way | Melodic Deep House for Slow Days",
      "korishlar": 14,
-     "yoshi_kun": 25.6,
+     "yoshi_kun": 26.6,
      "tezlik": 0.1,
      "shorts": false
     },
@@ -167,7 +167,7 @@
      "id": "U5qJuFEosSM",
      "sarlavha": "Activ -- Glow (Original Mix) | Deep House & Chill Pop",
      "korishlar": 12,
-     "yoshi_kun": 23.6,
+     "yoshi_kun": 24.6,
      "tezlik": 0.09,
      "shorts": false
     },
@@ -175,7 +175,7 @@
      "id": "oBysX8PxGdg",
      "sarlavha": "Activ -- Fuego Lento | Sunset Chill Beach Music",
      "korishlar": 10,
-     "yoshi_kun": 20.6,
+     "yoshi_kun": 21.6,
      "tezlik": 0.08,
      "shorts": false
     },
@@ -183,7 +183,7 @@
      "id": "D62sO1Z9AQM",
      "sarlavha": "Midnight Whisper 🌙 Deep Chill House Music for Late Night Vibes, Study & Relax",
      "korishlar": 2,
-     "yoshi_kun": 5.5,
+     "yoshi_kun": 6.5,
      "tezlik": 0.03,
      "shorts": false
     }
@@ -208,7 +208,7 @@
      "id": "A-Kep-_lSEY",
      "sarlavha": "Which Puppy Hero Wins? 4-Lane Tiles Hop Challenge 🎵",
      "korishlar": 0,
-     "yoshi_kun": 6.5,
+     "yoshi_kun": 7.5,
      "tezlik": 0,
      "shorts": false
     }
@@ -223,9 +223,9 @@
     {
      "id": "0_nTV-Mfsf4",
      "sarlavha": "I folded my dog food up in aluminum foil and I tucked it twice #ESTGee #BiggerThanTheDevil",
-     "korishlar": 5929,
-     "yoshi_kun": 10.3,
-     "tezlik": 0.87,
+     "korishlar": 5958,
+     "yoshi_kun": 11.2,
+     "tezlik": 0.85,
      "shorts": true
     }
    ]
@@ -237,9 +237,9 @@
     {
      "id": "D9UaFdDzsdc",
      "sarlavha": "Personal Health Monitoring Device | Health Care Project | IoT & Cloud Based",
-     "korishlar": 6486,
-     "yoshi_kun": 10.5,
-     "tezlik": 0.91,
+     "korishlar": 6683,
+     "yoshi_kun": 11.5,
+     "tezlik": 0.9,
      "shorts": false
     }
    ]
@@ -256,56 +256,88 @@
     {
      "id": "GNM9q62lPlg",
      "sarlavha": "Hot Wheels & Monster Jam TRANSFORMERS Monster Trucks Racing on a Transforming Track",
-     "korishlar": 125460,
-     "yoshi_kun": 6.7,
-     "tezlik": 1.23,
+     "korishlar": 130184,
+     "yoshi_kun": 7.6,
+     "tezlik": 1.58,
      "shorts": false
     },
     {
-     "id": "EaQNcLHMJRc",
-     "sarlavha": "GIVEAWAY🎄We TRAPPED the GRINCH! (Christmas Scavenger Hunt | 2026 REWIND)",
-     "korishlar": 96195,
-     "yoshi_kun": 13.7,
-     "tezlik": 0.71,
+     "id": "lm9iqdrOGxg",
+     "sarlavha": "Monster Jam & Hot Wheels Monster Trucks 💦 WET & WILD Water Racing! COMPILATION",
+     "korishlar": 25586,
+     "yoshi_kun": 0.6,
+     "tezlik": 0.85,
      "shorts": false
     }
    ]
   },
   {
    "nom": "Raq baby",
-   "obunachi": 281000,
+   "obunachi": 282000,
    "videolar_14kun": [
     {
-     "id": "__qUgiQrOGc",
-     "sarlavha": "Raq baby - Button Over Fully (Official Music Video)",
-     "korishlar": 500360,
-     "yoshi_kun": 8.2,
-     "tezlik": 71.39,
+     "id": "il2WjfDGhKg",
+     "sarlavha": "Raq baby - Okay (Official Audio)",
+     "korishlar": 19537,
+     "yoshi_kun": 0.9,
+     "tezlik": 2.82,
      "shorts": false
     },
     {
-     "id": "qk-u3-8PyPk",
-     "sarlavha": "FRIDAY I GOT Y’ALL 🔥 B4ROBERT TAPE #raqbaby",
-     "korishlar": 9611,
-     "yoshi_kun": 1.2,
-     "tezlik": 3.01,
+     "id": "ak1OZWq2CIE",
+     "sarlavha": "Raq baby - Russia (Official Audio)",
+     "korishlar": 13303,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.92,
+     "shorts": false
+    },
+    {
+     "id": "m-wTzasEtKA",
+     "sarlavha": "Raq baby - Kani Gitter (Official Audio)",
+     "korishlar": 12470,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.8,
+     "shorts": false
+    },
+    {
+     "id": "gCE4ToTl9eI",
+     "sarlavha": "Raq baby - Slugs (Official Audio)",
+     "korishlar": 12404,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.79,
+     "shorts": false
+    },
+    {
+     "id": "h8dbOmufgYA",
+     "sarlavha": "All dem songs ya always ask for OUT NOW yn !! #raqbaby #atlanta",
+     "korishlar": 6190,
+     "yoshi_kun": 0.4,
+     "tezlik": 1.21,
      "shorts": true
     },
     {
-     "id": "XyKIMCaeWDM",
-     "sarlavha": "🌂🫗🫗 I ain’t go anywhere !! Out now everywhere #raqbaby #atlanta",
-     "korishlar": 11267,
-     "yoshi_kun": 4.2,
-     "tezlik": 2.1,
-     "shorts": true
+     "id": "HbF3fzTHumQ",
+     "sarlavha": "Raq baby - Money Calling (Official Audio)",
+     "korishlar": 8043,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.16,
+     "shorts": false
     },
     {
-     "id": "G5zQD-mbDUQ",
-     "sarlavha": "IM BACK 🌂 out everywhere #raqbaby #atlanta",
-     "korishlar": 9891,
-     "yoshi_kun": 5.4,
-     "tezlik": 1.67,
-     "shorts": true
+     "id": "-9DckR5jgeU",
+     "sarlavha": "Raq baby - Biggest Dumper (Official Audio)",
+     "korishlar": 7996,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.15,
+     "shorts": false
+    },
+    {
+     "id": "CW60PK6NRfc",
+     "sarlavha": "Raq baby - Smoke & F***k (Official Audio)",
+     "korishlar": 7503,
+     "yoshi_kun": 0.9,
+     "tezlik": 1.08,
+     "shorts": false
     }
    ]
   },
@@ -314,66 +346,66 @@
    "obunachi": 2780000,
    "videolar_14kun": [
     {
+     "id": "wU613pWdvEY",
+     "sarlavha": "Every. Last. Grain.",
+     "korishlar": 588386,
+     "yoshi_kun": 1,
+     "tezlik": 4.09,
+     "shorts": false
+    },
+    {
      "id": "HHBskgWxKkk",
      "sarlavha": "The full game is finally here",
-     "korishlar": 315612,
-     "yoshi_kun": 3,
-     "tezlik": 1.37,
+     "korishlar": 341177,
+     "yoshi_kun": 4,
+     "tezlik": 1.36,
      "shorts": false
     },
     {
      "id": "jA7tvHX3Rh8",
      "sarlavha": "I Had To Cut Every Piece Of Grass",
-     "korishlar": 186321,
-     "yoshi_kun": 1,
-     "tezlik": 1.24,
-     "shorts": false
-    },
-    {
-     "id": "s2a1b7AaNm8",
-     "sarlavha": "I Cut Down 10,000 Pieces Of Bamboo And Regret Nothing",
-     "korishlar": 394565,
-     "yoshi_kun": 7,
-     "tezlik": 1.22,
+     "korishlar": 237880,
+     "yoshi_kun": 2,
+     "tezlik": 1.25,
      "shorts": false
     },
     {
      "id": "ckjATae4VS8",
      "sarlavha": "One Of The Best Games In Months",
-     "korishlar": 483952,
-     "yoshi_kun": 12,
-     "tezlik": 1.21,
+     "korishlar": 490079,
+     "yoshi_kun": 13,
+     "tezlik": 1.22,
+     "shorts": false
+    },
+    {
+     "id": "s2a1b7AaNm8",
+     "sarlavha": "I Cut Down 10,000 Pieces Of Bamboo And Regret Nothing",
+     "korishlar": 398941,
+     "yoshi_kun": 8,
+     "tezlik": 1.2,
      "shorts": false
     },
     {
      "id": "mvbIoup6DSs",
      "sarlavha": "Literally One Billion Dollars",
-     "korishlar": 226385,
-     "yoshi_kun": 2,
-     "tezlik": 1.15,
+     "korishlar": 239489,
+     "yoshi_kun": 3,
+     "tezlik": 1.07,
      "shorts": false
     },
     {
      "id": "diDJQUpkAcg",
      "sarlavha": "I Literally Mined An Entire Asteroid To Save Earth",
-     "korishlar": 267790,
-     "yoshi_kun": 4,
-     "tezlik": 1.04,
-     "shorts": false
-    },
-    {
-     "id": "joi-NxHKDqw",
-     "sarlavha": "This Game Is Free And Really Fun",
-     "korishlar": 304310,
-     "yoshi_kun": 6,
-     "tezlik": 1,
+     "korishlar": 281271,
+     "yoshi_kun": 5,
+     "tezlik": 1.03,
      "shorts": false
     },
     {
      "id": "E_PEvl0S47M",
      "sarlavha": "I Chopped Down An Impossibly Big Tree",
-     "korishlar": 386582,
-     "yoshi_kun": 11,
+     "korishlar": 391089,
+     "yoshi_kun": 12,
      "tezlik": 1,
      "shorts": false
     }
@@ -391,12 +423,12 @@
   }
  ],
  "qoidali_xulosa": [
-  "• 한국의 어제와 오늘: Shorts uzun videolardan 5.0× yaxshi ishlayapti — Shorts'ni ko'paytiring.",
-  "• ActivMusic: eng kuchlisi «ACTIV --  Cold Glass Sight» (108.1×) — shu mavzu va sarlavha uslubida davom/seriya qiling.",
+  "• 한국의 어제와 오늘: Shorts uzun videolardan 1.5× yaxshi ishlayapti — Shorts'ni ko'paytiring.",
+  "• ActivMusic: eng kuchlisi «ACTIV --  Cold Glass Sight» (109.6×) — shu mavzu va sarlavha uslubida davom/seriya qiling.",
   "• Vortex World: 14 kundan beri yangi video yo'q — muntazamlik algoritm uchun muhim.",
-  "🔑 Raqiblarda ko'tarilayotgan so'zlar: raqbaby, everywhere, atlanta",
-  "📐 Viral 4 ta videoda: 1 tasida raqam, 0 tasida savol, 3 tasi Shorts; sarlavha o'rtacha 50 belgi",
-  "💡 G'oya: «Raq baby - Button Over Fully (Official Music Video)» (Raq baby, 71.4×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
-  "💡 G'oya: «FRIDAY I GOT Y’ALL 🔥 B4ROBERT TAPE #raqbaby» (Raq baby, 3.0×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan."
+  "🔑 Raqiblarda ko'tarilayotgan so'zlar: baby, audio",
+  "📐 Viral 6 ta videoda: 0 tasida raqam, 0 tasida savol, 0 tasi Shorts; sarlavha o'rtacha 40 belgi",
+  "💡 G'oya: «Every. Last. Grain.» (DangerouslyFunny, 4.1×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan.",
+  "💡 G'oya: «Raq baby - Okay (Official Audio)» (Raq baby, 2.8×) mavzusini o'z burchagingiz bilan qiling — nusxa emas, o'zingizning ma'lumot va hikoyangiz bilan."
  ]
 }
